@@ -4,6 +4,7 @@
  *  Created on: 9 Nov 2022
  *      Author: MR.MAHMOUD
  */
+#include "io.h"
 #include"dio.h"
 void DIO_setupPinDirection(char port_number,char pin_number,char direction){
 
