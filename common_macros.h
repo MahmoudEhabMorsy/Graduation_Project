@@ -24,5 +24,11 @@
 #define BIT_IS_CLEAR(REG,BIT) ( !(REG & (1<<BIT)) )
 
 #define GET_BIT(REG,BIT) ( ( REG & (1<<BIT) ) >> BIT )
+/*** 	NULL DEFINITION		***/
+#define NULL 		( (void*) 0 )
+
+/***   ERRORS DEFINITION    ***/ 
+#define ERROR 		1
+#define NO_ERROR 	0
 
 #endif
