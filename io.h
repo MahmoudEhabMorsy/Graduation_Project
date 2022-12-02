@@ -52,9 +52,12 @@
 #define ADCL    _SFR_IO8(0x04)
 
  /*-----------------------------------------------------------------------*
- |                                                                        |
+ |                           Interrupt vectors                            |
  *-----------------------------------------------------------------------*/
 
-
+/* ADC Conversion Complete */
+#define ADC_vect_num			16
+#define ADC_vect				_VECTOR(16)
+#define SIG_ADC					_VECTOR(16)
 
 #endif
