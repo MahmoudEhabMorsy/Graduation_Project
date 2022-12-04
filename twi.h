@@ -31,7 +31,7 @@
  *                      Functions Prototypes                                   *
  *******************************************************************************/
 
-void TWI_init(const TWI_Configurations * config);
+void TWI_init(void);
 void TWI_start(void);
 void TWI_stop(void);
 void TWI_writeByte(uint8 data);
