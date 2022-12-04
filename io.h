@@ -23,7 +23,7 @@
  /*-----------------------------------------------------------------------*
  |                                   ADC                                  |
  *-----------------------------------------------------------------------*/
-#define ADMUX   _SFR_IO8(0x07)
+#define ADMUX   (*(volatile uint8*)0x27)
 
 #define MUX0      0
 #define MUX1      1
@@ -35,7 +35,7 @@
 #define REFS1     7
 
 
-#define ADCSRA  _SFR_IO8(0x06)
+#define ADCSRA  (*(volatile uint8*)0x26)
 
 #define ADPS0     0
 #define ADPS1     1
@@ -47,9 +47,9 @@
 #define ADEN      7
 
 
-#define ADCH    _SFR_IO8(0x05)
+#define ADCH    (*(volatile uint8*)0x25)
 
-#define ADCL    _SFR_IO8(0x04)
+#define ADCL    (*(volatile uint8*)0x24)
 
  /*-----------------------------------------------------------------------*
  |                           Interrupt vectors                            |
