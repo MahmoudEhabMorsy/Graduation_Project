@@ -1,24 +1,24 @@
 #ifndef IO_H_
 #define IO_H_
-
+#include"std_types.h"
  /*-----------------------------------------------------------------------*
  |                                  DIO                                   |
  *-----------------------------------------------------------------------*/
-#define PORTA _SFR_IO8(0x1B)
-#define DDRA _SFR_IO8(0x1A)
-#define PINA _SFR_IO8(0x19)
+#define PORTA (*volatile uint8)(0x3B)
+#define DDRA (*volatile uint8)(0x3A)
+#define PINA (*volatile uint8)(0x39)
 
-#define PORTB _SFR_IO8(0x18)
-#define DDRB _SFR_IO8(0x17)
-#define PINB _SFR_IO8(0x16)
+#define PORTB (*volatile uint8)(0x38)
+#define DDRB (*volatile uint8)(0x37)
+#define PINB (*volatile uint8)(0x36)
 
-#define PORTC _SFR_IO8(0x15)
-#define DDRC _SFR_IO8(0x14)
-#define PINC _SFR_IO8(0x13)
+#define PORTC (*volatile uint8)(0x35)
+#define DDRC (*volatile uint8)(0x34)
+#define PINC (*volatile uint8)(0x33)
 
-#define PORTD _SFR_IO8(0x12)
-#define DDRD _SFR_IO8(0x11)
-#define PIND _SFR_IO8(0x10)
+#define PORTD (*volatile uint8)(0x32)
+#define DDRD (*volatile uint8)(0x31)
+#define PIND (*volatile uint8)(0x30)
 
  /*-----------------------------------------------------------------------*
  |                                   ADC                                  |
