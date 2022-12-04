@@ -8,6 +8,7 @@
 #ifndef DIO_H_
 #define DIO_H_
 #include "std_types.h"
+#include "io.h"
 
  /*******************************************************************************
   *                                Definitions                                  *

@@ -4,7 +4,7 @@
  *  Created on: 9 Nov 2022
  *      Author: MR.MAHMOUD
  */
-#include "io.h"
+
 #include"dio.h"
 #include "common_macros.h"
 void DIO_setupPinDirection(uint8 port_number, uint8 pin_number, uint8 direction){
