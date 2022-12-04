@@ -74,7 +74,7 @@ void DIO_writePin_test(void) {
 		DIO_writePin(PORTD_ID, PIN6_ID, LOGIC_HIGH);
 		DIO_writePin(PORTD_ID, PIN7_ID, LOGIC_HIGH);
 
-		_ms_delay(1000);
+		_delay_ms(1000);
 
 		DIO_writePin(PORTA_ID, PIN0_ID, LOGIC_LOW);
 		DIO_writePin(PORTA_ID, PIN1_ID, LOGIC_LOW);
@@ -112,7 +112,7 @@ void DIO_writePin_test(void) {
 		DIO_writePin(PORTD_ID, PIN6_ID, LOGIC_LOW);
 		DIO_writePin(PORTD_ID, PIN7_ID, LOGIC_LOW);
 
-		_ms_delay(1000);
+		_delay_ms(1000);
 
 	}
 }

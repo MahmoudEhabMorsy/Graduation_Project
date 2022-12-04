@@ -10,12 +10,12 @@ void DIO_writePort_test(void) {
 		DIO_writePort(PORTA_ID, LOGIC_HIGH);
 		DIO_writePort(PORTA_ID, LOGIC_HIGH);
 		DIO_writePort(PORTA_ID, LOGIC_HIGH);
-		_ms_delay(1000);
+		_delay_ms(1000);
 		DIO_writePort(PORTA_ID, LOGIC_LOW);
 		DIO_writePort(PORTA_ID, LOGIC_LOW);
 		DIO_writePort(PORTA_ID, LOGIC_LOW);
 		DIO_writePort(PORTA_ID, LOGIC_LOW);
-		_ms_delay(1000);
+		_delay_ms(1000);
 
 	}
 }
