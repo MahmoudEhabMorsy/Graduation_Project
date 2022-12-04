@@ -6,8 +6,6 @@
  *
  * Description: Source file for the TWI(I2C) AVR driver
  *
- * Author: Mohamed Tarek
- *
  *******************************************************************************/
  
 #include "twi.h"
@@ -17,7 +15,7 @@
 #include "twi_config.h"
 #include "twi_map.h"
 
-void TWI_init(const TWI_Configurations * config)
+void TWI_init(void)
 {
    /* Bit Rate Configuration */
 #if BIT_RATE >= MINIMUM_BIT_RATE
