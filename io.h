@@ -51,13 +51,5 @@
 
 #define ADCL    (*(volatile uint8*)0x24)
 
- /*-----------------------------------------------------------------------*
- |                           Interrupt vectors                            |
- *-----------------------------------------------------------------------*/
-
-/* ADC Conversion Complete */
-#define ADC_vect_num			16
-#define ADC_vect				_VECTOR(16)
-#define SIG_ADC					_VECTOR(16)
 
 #endif
