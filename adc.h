@@ -14,18 +14,17 @@
 #define ADC_H_
 
 
-
 #include "std_types.h"
 
 /*******************************************************************************
  *                                Definitions                                  *
  *******************************************************************************/
  
-#define IREF 					3
+#define IREF_REG 					3
 /* ADC_REF_VOLT_VALUE is the voltage value itself. */
-#define ADC_REF_VOLT_VALUE   	2.56
-#define F_CPU_128 				7
-#define ADC_MAXIMUM_VALUE    	1023
+#define ADC_REF_VOLT_VALUE   		2.56
+#define F_CPU_128 					7
+#define ADC_MAXIMUM_VALUE    		1023
 
 /*******************************************************************************
  *                       External Variables                                    *
