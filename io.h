@@ -1,13 +1,13 @@
 /*=======================================================================
- =																		                                                    =
- = [FILE NAME]:		io.h																																																			=
- =																																																																		 			=
- = [AUTHOR]:		Ahmed Y Kaead , Mahmoud Ehab																														=
- =																																																																			 		=
- = [DATE CREATED]:	02/12/2022  																																									=
- =																																																																				 	=
- = [DESCRIPTION]:	AVR atrmega 32 io header file.																						 	=
- =																																																																				 	=
+ =																		=
+ = [FILE NAME]:		io.h												=
+ =																		=
+ = [AUTHOR]:		Ahmed Y Kaead , Mahmoud Ehab						=
+ =																		=
+ = [DATE CREATED]:	02/12/2022  										=
+ =																		=
+ = [DESCRIPTION]:	AVR atrmega 32 io header file.						=
+ =																		=
  =======================================================================*/
 
 #ifndef IO_H_
@@ -100,7 +100,7 @@
 #define EXTRF     1
 #define BORF      2
 #define WDRF      3
-#define JTRF	     4
+#define JTRF	  4
 #define ISC2      6
 #define JTD       7
 
