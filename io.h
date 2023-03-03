@@ -1,3 +1,15 @@
+/*=======================================================================
+ =																		                                                    =
+ = [FILE NAME]:		io.h																																																			=
+ =																																																																		 			=
+ = [AUTHOR]:		Ahmed Y Kaead , Mahmoud Ehab																														=
+ =																																																																			 		=
+ = [DATE CREATED]:	02/12/2022  																																									=
+ =																																																																				 	=
+ = [DESCRIPTION]:	AVR atrmega 32 io header file.																						 	=
+ =																																																																				 	=
+ =======================================================================*/
+
 #ifndef IO_H_
 #define IO_H_
 #include"std_types.h"
@@ -51,5 +63,45 @@
 
 #define ADCL    (*(volatile uint8*)0x24)
 
+/*-----------------------------------------------------------------------*
+ |                    	    External Interrupts                           |
+ *-----------------------------------------------------------------------*/
+#define GICR    (*(volatile uint8*)0x5B)
+
+#define IVCE     0
+#define IVSEL    1
+#define INT2     5
+#define INT1     6
+#define INT0     7
+
+
+#define GIFR    (*(volatile uint8*)0x5A)
+
+#define INTF2     5
+#define INTF1     6
+#define INTF0     7
+
+
+#define MCUCR    (*(volatile uint8*)0x55)
+
+#define ISC00     0
+#define ISC01     1
+#define ISC10     2
+#define ISC11     3
+#define SM0	      4
+#define SM1       5
+#define SM2       6
+#define SE        7
+
+
+#define MCUCSR    (*(volatile uint8*)0x54)
+
+#define PORF      0
+#define EXTRF     1
+#define BORF      2
+#define WDRF      3
+#define JTRF	     4
+#define ISC2      6
+#define JTD       7
 
 #endif
