@@ -2,11 +2,11 @@
  ================================================================================================
  Name        : ultrasonicMain.c
 
- Author      : Abdelrahman Hesham
+ Author      : 
 
  Description : Measure distance using ultrasonic and display it on an LCD.
 
- Created on  : Jun 27, 2022
+ Created on  : 
  ================================================================================================
  */
 #include "ultrasonic.h"
