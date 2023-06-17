@@ -283,11 +283,6 @@ uint16 Ultrasonic_readDistance(void)
 	 	else{
 	 	return distance;
 		}
-
-	 	return 1;
-
-
-
 }
 
 
