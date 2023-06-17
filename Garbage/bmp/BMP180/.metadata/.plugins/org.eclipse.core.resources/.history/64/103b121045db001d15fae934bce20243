@@ -1,0 +1,102 @@
+/************************************************************************
+ *																		*
+ * [FILE NAME]:		bmp_test.c											*
+ *																		*
+ * [AUTHOR]:		Ahmed Y Kaead										*
+ *																		*
+ * [DATE CREATED]:	15/04/2023											*
+ *																		*
+ * [DESCRIPTION]:	BMP180 - Test case for BMP180 Module				*
+ *																		*
+ ************************************************************************/
+
+#include "lcd.h"
+#include "dio.h"
+#include "bmp180.h"
+#include <util/delay.h>
+
+
+void LCD_displayTemp(float32 temperature)
+{
+	LCD_moveCursor(1,7);
+	if(100 <= temperature)
+	{
+		LCD_intgerToString(temperature);
+	}
+	else if((10 <= temperature) && (100 > temperature))
+	{
+		LCD_intgerToString(temperature);
+		LCD_displayCharacter(' ');
+	}
+	else if((0 <= temperature) && (10 > temperature))
+	{
+		LCD_intgerToString(temperature);
+		LCD_displayCharacter('    ');
+	}
+	else
+	{
+
+	}
+}
+
+void LCD_displayPress(float32 pressure)
+{
+	LCD_moveCursor(0,8);
+	if(10000 <= pressure)
+	{
+		LCD_intgerToString(pressure);
+	}
+	else if((1000 <= pressure) && (10000 > pressure))
+	{
+		LCD_intgerToString(pressure);
+		LCD_displayCharacter(' ');
+	}
+	else if((100 <= pressure) && (1000 > pressure))
+	{
+		LCD_intgerToString(pressure);
+		LCD_displayCharacter('  ');
+	}
+	else if((10 <= pressure) && (100 > pressure))
+	{
+		LCD_intgerToString(pressure);
+		LCD_displayCharacter('   ');
+	}
+	else if((0 <= pressure) && (10 > pressure))
+	{
+		LCD_intgerToString(pressure);
+		LCD_displayCharacter('    ');
+	}
+	else
+	{
+
+	}
+}
+
+
+int main(void)
+{
+	float32 temperature = 0;
+	float32 pressure = 0;
+
+
+
+	LCD_init();
+	TWI_init();
+	BMP180_Start();
+
+	LCD_displayStringRowColumn(0,0,"Press = ");
+	LCD_displayStringRowColumn(0,14,"Pa");
+	LCD_displayStringRowColumn(1,0,"Temp = ");
+	LCD_displayStringRowColumn(1,10,"C");
+
+	while(1)
+	{
+		temperature = BMP180_calculateTemperature();
+		pressure = BMP180_calculatePressure();
+		LCD_displayPress(pressure);
+		_delay_ms(1000);
+		LCD_displayTemp(temperature);
+		_delay_ms(1000);
+	}
+	return 0;
+}

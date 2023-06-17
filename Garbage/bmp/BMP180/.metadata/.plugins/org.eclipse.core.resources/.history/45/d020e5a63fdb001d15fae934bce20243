@@ -1,0 +1,33 @@
+/*
+ * bmp_reg.h
+ *
+ *  Created on: Apr 14, 2023
+ *      Author: Ahmed Y Kaead
+ */
+
+#ifndef BMP_REG_H_
+#define BMP_REG_H_
+
+// Register Table From Data Sheet
+
+/* define the address of BMP180 sensor */
+#define BMP180_ADDRESS_W 					0xEE
+/* define the address of BMP180 sensor */
+#define BMP180_ADDRESS_R 					0xEF
+/* define the address of Temperature CTL register */
+#define	BMP180_COMMAND_TEMPERATURE		0x2E
+/* define the address of Pressure CTL register at OSS = 0*/
+#define	BMP180_COMMAND_PRESSURE0 		0x34
+/* define the address of Pressure CTL register at OSS = 1*/
+#define	BMP180_COMMAND_PRESSURE1		0x74
+/* define the address of Pressure CTL register at OSS = 2*/
+#define	BMP180_COMMAND_PRESSURE2	 	0xB4
+/* define the address of Pressure CTL register at OSS = 3*/
+#define	BMP180_COMMAND_PRESSURE3	 	0xF4
+
+#define OSS			1
+
+
+
+
+#endif /* BMP_REG_H_ */

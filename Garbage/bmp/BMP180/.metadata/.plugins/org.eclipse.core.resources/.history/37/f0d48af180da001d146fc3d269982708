@@ -1,0 +1,23 @@
+/*
+ * bmp_reg.h
+ *
+ *  Created on: Apr 14, 2023
+ *      Author: Ahmed Y Kaead
+ */
+
+#ifndef BMP_REG_H_
+#define BMP_REG_H_
+
+// Register Table From Data Sheet
+
+
+
+
+
+
+
+
+
+
+
+#endif /* BMP_REG_H_ */

@@ -1,0 +1,147 @@
+/*=======================================================================
+ =																		=
+ = [FILE NAME]:		a3144.c												=
+ =																		=
+ = [AUTHOR]:		Ahmed Y Kaead , Nour Atef , Rady Magdy  			=
+ =																		=
+ = [DATE CREATED]:	28/02/2023  										=
+ =																		=
+ = [DESCRIPTION]:	WSS - wheel speed sensor source file				=
+ =																		=
+ =======================================================================*/
+
+#include "io.h"
+#include "interrupts.h"
+#include "timer.h"
+#include "dio.h"
+#include "a3144_wss.h"
+#include "std_types.h"
+
+
+/*------------------------------------------------------------------------------
+ |                          Global Variables                                   |
+ ------------------------------------------------------------------------------*/
+
+/* number of wheel revolutions */
+uint16 g_revolutions = 0;
+
+/* flag for one second timer */
+uint8  g_oneSecFlag = 0;
+
+/*number of wheel pulses in one second */
+uint16 g_pulsesPerSecond = 0;
+
+/*------------------------------------------------------------------------------
+ |                          ISR's Definitions                                  |
+ ------------------------------------------------------------------------------*/
+
+/* ISR for INT0 external interrupt triggered by WSS */
+ISR(INT0_vect)
+{
+	/* checks on the flag if flag = 1 the one second must be elapsed */
+	if(g_oneSecFlag == 1)
+	{
+		/* Store number of wheel pulses in one second */
+		g_pulsesPerSecond = g_revolutions;
+
+		/* Reset one second flag of the timer */
+		g_oneSecFlag = 0;
+
+		/* Reset the number of revolutions of the wheel */
+		g_revolutions = 0;
+	}
+	/* if flag not equal to one then continue counting revolutions */
+	else if(g_oneSecFlag == 0)
+	{
+		g_revolutions++;
+	}
+}
+
+/*-----------------------------------------------------------------------*
+ |                         Function Definitions                          |
+ *-----------------------------------------------------------------------*/
+
+/*======================================================================*
+ * [Function Name]:	INT0_Init()											*
+ * [Description]:	Function to initialize external interrupt INT0 		*
+ * 					for WSS. 											*
+ * 																		*
+ * [Args]			void												*
+ * [Return]			void												*
+ *======================================================================*/
+void INT0_Init(void)
+{
+	/* Set the direction of external interrupt 0 to be input */
+	DIO_setupPinDirection(INT0_PORT_ID,INT0_PIN_ID,PIN_INPUT);
+
+	/************************** MCUCR Description **************************
+	 * ISC00:01	= 1	The rising edge of INT0 generates an interrupt request
+	 ***********************************************************************/
+	MCUCR |= (1<<ISC01) | (1<<ISC00);
+
+	/************************** GICR Description **************************
+	 * INT0	= 1	External Interrupt Request 0 Enable
+	 **********************************************************************/
+	GICR |= (1<<INT0);
+
+	//SREG |= (1<<7);
+}
+
+
+/*======================================================================*
+ * [Function Name]:	WSS_timeCounter()									*
+ * [Description]:	Function called by timer interrupt every one second *
+ * 					to set one second timer flag 						*
+ * 																		*
+ * [Args]			void												*
+ * [Return]			void												*
+ *======================================================================*/
+void WSS_timeCounter(void)
+{
+	/* Set one second timer flag */
+	g_oneSecFlag = 1;
+}
+
+
+/*======================================================================*
+ * [Function Name]:	WSS_Init()											*
+ * [Description]:	Function to initialize WSS module.				 	*
+ * 																		*
+ * [Args]			void												*
+ * [Return]			void												*
+ *======================================================================*/
+void WSS_Init(void)
+{
+	/* Timer configuration struct specifying which Timer, mode of
+	 * operation, initial count value, compare value (corresponding
+	 * to one second), prescaler value, and ISR */
+	Timer_configuration Config = {Timer1,CTC,0,15625,Prescaler_1024,WSS_timeCounter};
+
+	Timer_init(&Config);
+	INT0_Init();
+}
+
+
+/*======================================================================*
+ * [Function Name]:	WSS_getRPM()										*
+ * [Description]:	Function to calculate wheel speed in RPM based on	*
+ * 					number of pulses counted in one second then convert	*
+ * 					it to number of one complete cycles in one minute	*
+ * 					which means RPM										*
+ * 																		*
+ * [Args]			void												*
+ * [Return]			RPM value											*
+ *======================================================================*/
+uint16 WSS_getRPM(void)
+{
+	uint16 rpm = 0;
+
+	/* Calculate wheel speed in pulses per minute */
+	rpm = g_pulsesPerSecond * 60 ;
+
+	/* Convert pulses per minute to RPM */
+	rpm = rpm / PULSEPERREVOLUTION;
+
+	return rpm;
+}
+

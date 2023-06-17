@@ -1,0 +1,227 @@
+/************************************************************************
+ *																		*
+ * [FILE NAME]:		bmp180.c											*
+ *																		*
+ * [AUTHOR]:		Ahmed Y Kaead										*
+ *																		*
+ * [DATE CREATED]:	13/04/2023											*
+ *																		*
+ * [DESCRIPTION]:	BMP180 - source file for BMP180 Module				*
+ *																		*
+ ************************************************************************/
+
+#include "twi.h"
+#include "bmp180.h"
+#include "bmp_reg.h"
+#include "common_macros.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include "lcd.h"
+
+/*
+#define BMP180_ADDRESS 0x77
+#define BMP180_CTRL_MEAS_REG 0xF4
+#define BMP180_TEMP_MEASURE_CMD 0x2E
+#define BMP180_PRESSURE_MEASURE_CMD 0x34
+ */
+
+/* Callibration Data */
+sint16 AC1 = 0, AC2 = 0, AC3 = 0, B1 = 0;
+sint16 B2 = 0, MB = 0, MC = 0, MD = 0;
+uint16 AC4 = 0, AC5 = 0, AC6 = 0;
+
+
+/*
+uint8 BPM_writeByte(uint16 u16addr, uint8 u8data)
+{
+	 Send the Start Bit
+	TWI_Start();
+
+	 Send the device address
+	TWI_WriteByte(0xEE);
+
+	 Send the memory location address
+	TWI_WriteByte((uint8)(u16addr >> 8));
+	TWI_WriteByte((uint8)(u16addr & 0xFF));
+
+	 Write byte to EEPROM
+	TWI_WriteByte(u8data);
+
+	 Send the Stop Bit
+	TWI_Stop();
+
+	return 1;
+}
+
+uint8 EEPROM_readByte(uint16 u16addr, uint8 *u8data)
+{
+	 Send the Start Bit
+	TWI_Start();
+
+	 Send the device address
+	TWI_WriteByte(0xEE);
+
+	 Send the memory location address
+	TWI_WriteByte((uint8)(u16addr >> 8));
+	TWI_WriteByte((uint8)(u16addr & 0xFF));
+
+	 Send the Repeated Start Bit
+	TWI_Start();
+
+	 Send the device address with read bit set
+	TWI_WriteByte(0xEF);
+
+	 Read Byte from Memory without send ACK
+	*u8data = TWI_ReadByteWithNACK();
+
+	 Send the Stop Bit
+	TWI_Stop();
+
+	return 1;
+}
+
+*/
+
+
+void BMP180_ReadCalb(void)
+{
+
+	uint8_t Callib_Data[22] = {0};
+	uint16_t Callib_Start = 0xAA;
+
+	TWI_Start(BMP180_ADDRESS_W << 1);		// To write
+	TWI_WriteByte(Callib_Start);
+	TWI_Start((BMP180_ADDRESS_W << 1) | 1);	// To read
+	for (int i = 0; i < 22; i++)
+	{
+		Callib_Data[i] = TWI_ReadByteWithACK();
+	}
+	TWI_Stop();
+
+	AC1 = ((Callib_Data[0] << 8) | Callib_Data[1]);
+	AC2 = ((Callib_Data[2] << 8) | Callib_Data[3]);
+	AC3 = ((Callib_Data[4] << 8) | Callib_Data[5]);
+	AC4 = ((Callib_Data[6] << 8) | Callib_Data[7]);
+	AC5 = ((Callib_Data[8] << 8) | Callib_Data[9]);
+	AC6 = ((Callib_Data[10] << 8) | Callib_Data[11]);
+	B1 = ((Callib_Data[12] << 8) | Callib_Data[13]);
+	B2 = ((Callib_Data[14] << 8) | Callib_Data[15]);
+	MB = ((Callib_Data[16] << 8) | Callib_Data[17]);
+	MC = ((Callib_Data[18] << 8) | Callib_Data[19]);
+	MD = ((Callib_Data[20] << 8) | Callib_Data[21]);
+
+}
+
+sint32 BMP180_readUncompensatedTemperature()
+{
+	BMP180_write8(BMP180_CTRL_MEAS_REG, BMP180_TEMP_MEASURE_CMD);
+	_delay_ms(5); // wait for conversion
+	return BMP180_read16u(0xF6);
+}
+
+sint32 BMP180_readUncompensatedPressure()
+{
+	BMP180_write8(BMP180_CTRL_MEAS_REG, BMP180_PRESSURE_MEASURE_CMD + (3 << 6));
+	_delay_ms(26); // wait for conversion
+	return ((BMP180_read16u(0xF6) << 8) | BMP180_read16u(0xF8)) >> (8 - 3);
+}
+
+uint32_t Get_UPress(void) // oversampling setting 0, 1, 2, 3
+{
+	// calculate the value to write to the BMP180 control register based on the oversampling setting
+    uint8_t datatowrite = 0x34 + (OSS << 6);
+    // array to store the raw pressure data
+    uint8_t Press_RAW[3] = {0};
+
+    // start the I2C communication with BMP180 by sending its address
+    i2c_start(BMP180_ADDRESS_W << 1);
+    // send the address of the BMP180 control register to initiate the pressure measurement
+    i2c_write(0xF4);
+    // send the value calculated above to start the measurement with the selected oversampling setting
+    i2c_write(datatowrite);
+    // stop the I2C communication with BMP180
+    i2c_stop();
+
+    // wait for the measurement to complete based on the oversampling setting
+    switch (OSS)
+    {
+        case (0):
+            _delay_ms(5);
+            break;
+        case (1):
+            _delay_ms(8);
+            break;
+        case (2):
+            _delay_ms(14);
+            break;
+        case (3):
+            _delay_ms(26);
+            break;
+    }
+
+    // start the I2C communication with BMP180 in read mode by sending its address with the read bit set
+    i2c_start((BMP180_ADDRESS << 1) | 1);
+    // read the MSB of the raw pressure data and acknowledge the read
+    Press_RAW[0] = i2c_read_ack();
+    // read the middle byte of the raw pressure data and acknowledge the read
+    Press_RAW[1] = i2c_read_ack();
+    // read the LSB of the raw pressure data and don't acknowledge the read
+    Press_RAW[2] = i2c_read_nack();
+    // stop the I2C communication with BMP180
+    i2c_stop();
+
+    // combine the raw pressure data into a single 24-bit value and shift it right to adjust for the oversampling setting
+    return (((Press_RAW[0] << 16) + (Press_RAW[1] << 8) + Press_RAW[2]) >> (8 - oss));
+}
+
+
+
+
+
+float32 BMP180_calculateTemperature(void)
+{
+	sint32 X1 = 0, X2 = 0, B5 = 0, UT =0;
+	float32 temperature = 0;
+
+	UT = BMP180_readUncompensatedTemperature()
+	X1 = ((UT - AC6) * AC5) >> 15;
+	X2 = (MC << 11) / (X1 + MD);
+	B5 = X1 + X2;
+	temperature = (B5 + 8) >> 4;
+	temperature /= 10.0;
+	return temperature;
+}
+
+sint32 BMP180_calculatePressure(sint32 UP)
+{
+	sint32 X1 = 0, X2 = 0, X3 = 0, B3 = 0;
+	sint32 B5 = 0, B6 = 0, P = 0;
+	uint32 B4 = 0, B7 = 0;
+
+	B5 = BMP180_calculateTemperature(BMP180_readUncompensatedTemperature());
+	B6 = B5 - 4000;
+	X1 = (B2 * ((B6 * B6) >> 12)) >> 11;
+	X2 = (AC2 * B6) >> 11;
+	X3 = X1 + X2;
+	B3 = (((AC1 * 4 + X3) << 3) + 2) >> 2;  // OSS = 3 here
+	X1 = (AC3 * B6) >> 13;
+	X2 = (B1 * ((B6 * B6) >> 12)) >> 16;
+	X3 = ((X1 + X2) + 2) >> 2;
+	B4 = (AC4 * (uint32)(X3 + 32768)) >> 15;
+	B7 = ((uint32)UP - B3) * (50000 >> 3);  // OSS = 3 here
+
+	if (B7 < 0x80000000)
+	{
+		P = (B7 << 1) / B4;
+	}
+	else
+	{
+		P = (B7 / B4) << 1;
+	}
+	X1 = (P >> 8) * (P >> 8);
+	X1 = (X1 * 3038) >> 16;
+	X2 = (-7357 * P) >> 16;
+	P = P + (X1 + X2 + 3791) >> 4;
+	return P;
+}

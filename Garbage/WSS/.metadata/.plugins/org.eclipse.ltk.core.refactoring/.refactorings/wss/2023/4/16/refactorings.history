@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;wss/APP_SteeringLock&apos; to &apos;APP_SteeringLock.c&apos;" description="Rename resource &apos;APP_SteeringLock&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="APP_SteeringLock" name="APP_SteeringLock.c" stamp="1681656820026" updateReferences="true"/>
+</session>

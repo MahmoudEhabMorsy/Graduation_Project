@@ -1,0 +1,64 @@
+
+
+#include "common_macros.h"
+#include "lcd.h"
+#include <util/delay.h>
+#include "dio.h"
+#include "a3144_wss.h"
+#include "interrupts.h"
+
+
+
+void LCD_displayRPM(uint32 rpm)
+{
+	LCD_moveCursor(0,7);
+	if(100000 <= rpm)
+	{
+		LCD_intgerToString(rpm);
+	}
+	else if((10000 <= rpm) && (100000 > rpm))
+	{
+		LCD_intgerToString(rpm);
+		LCD_displayCharacter(' ');
+	}
+	else if((1000 <= rpm) && (10000 > rpm))
+	{
+		LCD_intgerToString(rpm);
+		LCD_displayCharacter('  ');
+	}
+	else if((100 <= rpm) && (1000 > rpm))
+	{
+		LCD_intgerToString(rpm);
+		LCD_displayCharacter('   ');
+	}
+	else if((10 <= rpm) && (100 > rpm))
+	{
+		LCD_intgerToString(rpm);
+		LCD_displayCharacter('    ');
+	}
+	else if((0 <= rpm) && (10 > rpm))
+	{
+		LCD_intgerToString(rpm);
+		LCD_displayCharacter('     ');
+	}
+}
+
+
+
+
+int main(void)
+{
+//	uint16 rpm = 0;
+	LCD_init();
+//	WSS_Init();
+
+//	sei();
+	LCD_displayStringRowColumn(0,0,"rpm = ");
+	LCD_displayStringRowColumn(0,12,"rpm");
+
+	while(1)
+	{
+
+	}
+	return 0;
+}

@@ -1,0 +1,40 @@
+/************************************************************************
+ *																		*
+ * [FILE NAME]:		bmp180.c											*
+ *																		*
+ * [AUTHOR]:		Ahmed Y Kaead										*
+ *																		*
+ * [DATE CREATED]:	13/04/2023											*
+ *																		*
+ * [DESCRIPTION]:	BMP180 - source file for BMP180 Module				*
+ *																		*
+ ************************************************************************/
+
+#include "twi.h"
+#include "bmp.h"
+#include "common_macros.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include "lcd.h"
+
+void bmp180_init(uint8_t address) {
+	i2c_start();
+	i2c_write_byte((address << 1) | I2C_WRITE);
+	i2c_write_byte(0xF4);  // Control register address for BMP180
+	i2c_write_byte(0x2E);  // Temperature measurement command
+	i2c_stop();
+
+	_delay_ms(5);  // Wait for temperature measurement to complete
+
+	i2c_start();
+	i2c_write_byte((address << 1) | I2C_WRITE);
+	i2c_write_byte(0xF4);  // Control register address for BMP180
+	i2c_write_byte(0x34 | (OSS << 6));  // Pressure measurement command with OSS oversampling setting
+	i2c_stop();
+
+	_delay_ms(5);  // Wait for pressure measurement to complete
+}
+
+
+

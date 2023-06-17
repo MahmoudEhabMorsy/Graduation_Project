@@ -1,0 +1,24 @@
+/************************************************************************
+ *																		*
+ * [FILE NAME]:		bmp180.h											*
+ *																		*
+ * [AUTHOR]:		Ahmed Y Kaead										*
+ *																		*
+ * [DATE CREATED]:	13/04/2023											*
+ *																		*
+ * [DESCRIPTION]:	BMP180 - header file for BMP180 Module				*
+ *																		*
+ ************************************************************************/
+
+#ifndef BMP180_H_
+#define BMP180_H_
+
+#include "std_types.h"
+
+sint16 BMP180_read16(uint8 reg);
+uint16 BMP180_read16u(uint8 reg);
+sint32 BMP180_readUncompensatedTemperature();
+sint32 BMP180_readUncompensatedPressure();
+float32 BMP180_calculateTemperature(sint32 ut);
+
+#endif /* BMP180_H_ */

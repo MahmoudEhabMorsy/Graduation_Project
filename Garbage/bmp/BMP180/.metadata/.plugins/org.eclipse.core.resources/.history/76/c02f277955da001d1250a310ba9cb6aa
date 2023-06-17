@@ -1,0 +1,60 @@
+/*
+***********************************************************************
+ *																		*
+ * [FILE NAME]:		bmp180.h											*
+ *																		*
+ * [AUTHOR]:		Ahmed Y Kaead										*
+ *																		*
+ * [DATE CREATED]:	13/04/2023											*
+ *																		*
+ * [DESCRIPTION]:	BMP180 - header file for BMP180 Module				*
+ *																		*
+ ***********************************************************************
+
+#ifndef BMP180_H_
+#define BMP180_H_
+
+#include "std_types.h"
+
+#define BMP180_ADDR         0xEE // BMP180 I2C Address
+
+#define BMP180_CALIB_DATA_SIZE 22 // BMP180 Calibration Data size
+
+// BMP180 Registers
+#define BMP180_REG_CONTROL      0xF4
+#define BMP180_REG_RESULT       0xF6
+#define BMP180_COMMAND_TEMPERATURE 0x2E
+#define BMP180_COMMAND_PRESSURE0   0x34
+#define BMP180_COMMAND_PRESSURE1   0x74
+#define BMP180_COMMAND_PRESSURE2   0xB4
+#define BMP180_COMMAND_PRESSURE3   0xF4
+
+#define I2C_WRITE 0
+#define I2C_READ 1
+#define OSS 3  // Oversampling setting for BMP180 pressure measurement
+
+
+// BMP180 Sensor Structure
+typedef struct {
+    uint16_t AC1;
+    uint16_t AC2;
+    uint16_t AC3;
+    uint16_t AC4;
+    uint16_t AC5;
+    uint16_t AC6;
+    int16_t  B1;
+    int16_t  B2;
+    int16_t  MB;
+    int16_t  MC;
+    int16_t  MD;
+} bmp180_calib_data_t;
+
+// Function Prototypes
+void bmp180_init(uint8 address);
+sint16 bmp180_read_temperature(void);
+sint32 bmp180_read_pressure(void);
+void bmp180_read_calibration_data(uint8 address, uint8 *cal_data);
+sint32 bmp180_calculate_pressure(sint32 raw_pressure, const uint8 *cal_data);
+
+#endif  BMP180_H_
+*/

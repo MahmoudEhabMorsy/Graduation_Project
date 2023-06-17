@@ -1,0 +1,118 @@
+/*
+***********************************************************************
+ *																		*
+ * [FILE NAME]:		bmp180.c											*
+ *																		*
+ * [AUTHOR]:		Ahmed Y Kaead										*
+ *																		*
+ * [DATE CREATED]:	13/04/2023											*
+ *																		*
+ * [DESCRIPTION]:	BMP180 - source file for BMP180 Module				*
+ *																		*
+ ***********************************************************************
+
+#include "twi.h"
+#include "bmp.h"
+#include "common_macros.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <math.h>
+#include "lcd.h"
+
+void bmp180_init(uint8_t address) {
+	i2c_start();
+	i2c_write_byte((address << 1) | I2C_WRITE);
+	i2c_write_byte(0xF4);  // Control register address for BMP180
+	i2c_write_byte(0x2E);  // Temperature measurement command
+	i2c_stop();
+
+	_delay_ms(5);  // Wait for temperature measurement to complete
+
+	i2c_start();
+	i2c_write_byte((address << 1) | I2C_WRITE);
+	i2c_write_byte(0xF4);  // Control register address for BMP180
+	i2c_write_byte(0x34 | (OSS << 6));  // Pressure measurement command with OSS oversampling setting
+	i2c_stop();
+
+	_delay_ms(5);  // Wait for pressure measurement to complete
+}
+
+int16_t bmp180_read_temperature(uint8_t *cal_data) {
+    uint8_t buffer[2];
+
+    // Start temperature measurement
+    i2c_start(BMP180_ADDR, I2C_WRITE);
+    i2c_write(0xF4);
+    i2c_write(0x2E);
+    i2c_stop();
+
+    // Wait for temperature measurement to complete
+    _delay_ms(5);
+
+    // Read raw temperature value
+    i2c_start(BMP180_ADDR, I2C_WRITE);
+    i2c_write(0xF6);
+    i2c_start(BMP180_ADDR, I2C_READ);
+    buffer[0] = i2c_read_ack();
+    buffer[1] = i2c_read_nack();
+    i2c_stop();
+
+    int16_t raw_temperature = (buffer[0] << 8) | buffer[1];
+
+    // Calculate compensated temperature value
+    int32_t x1 = ((int32_t)raw_temperature - (int32_t)cal_data[0]) * (int32_t)cal_data[1] / 32768;
+    int32_t x2 = ((int32_t)cal_data[2] * 2048) / (x1 + (int32_t)cal_data[3]);
+    int16_t temperature = (x2 + 8) / 16;
+
+    return temperature;
+}
+
+int32_t bmp180_read_pressure(void) {
+    // Start pressure measurement
+    i2c_start(BMP180_ADDR, I2C_WRITE);
+    i2c_write(BMP180_CTRL_MEAS_REG);
+    i2c_write(BMP180_CTRL_MEAS_PRESS | (BMP180_OVERSAMPLING_SETTING << 6));
+    i2c_stop();
+
+    // Wait for conversion to complete
+    _delay_ms(2 + (3 << BMP180_OVERSAMPLING_SETTING));
+
+    // Read raw pressure data
+    uint8_t msb, lsb, xlsb;
+    i2c_start(BMP180_ADDR, I2C_WRITE);
+    i2c_write(BMP180_ADC_OUT_MSB_REG);
+    i2c_stop();
+    i2c_start(BMP180_ADDR, I2C_READ);
+    msb = i2c_read_ack();
+    lsb = i2c_read_ack();
+    xlsb = i2c_read_nack();
+    i2c_stop();
+    int32_t raw_pressure = ((int32_t)msb << 16 | (int32_t)lsb << 8 | (int32_t)xlsb) >> (8 - BMP180_OVERSAMPLING_SETTING);
+
+    // Calculate true pressure
+    const uint8_t *cal_data = bmp180_get_calibration_data();
+    int32_t x1 = ((int32_t)cal_data[4] * 128 + ((int32_t)cal_data[5] << 8) + raw_pressure * (int32_t)cal_data[6]) >> 17;
+    int32_t x2 = (((int32_t)cal_data[7] << 16) + ((int32_t)cal_data[8] << 8) + raw_pressure * (int32_t)cal_data[9]) >> 34;
+    int32_t x3 = x1 * x2;
+    int32_t b3 = ((int32_t)cal_data[0] * 4 + x3 + 2) >> 2;
+    x1 = ((int32_t)cal_data[1] * x3 + ((int32_t)cal_data[2] << 15)) >> 28;
+    x2 = (int32_t)cal_data[3] << 11;
+    x3 = ((int32_t)cal_data[6] * x1 * x1 + ((int32_t)cal_data[5] * x1) + x2) >> 2;
+    int32_t b4 = (int32_t)cal_data[4] * (x3 + 32768) >> 15;
+    uint32_t b7 = ((uint32_t)raw_pressure - b3) * (50000 >> BMP180_OVERSAMPLING_SETTING);
+    int32_t pressure;
+    if (b7 < 0x80000000) {
+        pressure = (b7 << 1) / b4;
+    } else {
+        pressure = (b7 / b4) << 1;
+    }
+    x1 = pressure >> 8;
+    x1 *= x1;
+    x1 = x1 * 3038 >> 16;
+    x2 = -7357 * pressure >> 16;
+    pressure += (x1 + x2 + 3791) >> 4;
+
+    return pressure;
+}
+
+*/
