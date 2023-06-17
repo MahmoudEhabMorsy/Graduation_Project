@@ -23,6 +23,7 @@
 #define MAXIMUM_LENGTH (6u)
 #define BAUD_RATE (115200u)
 #define DEFAULT_APP_BAUD_RATE (9600u)
+#define SERVER_IP (const uint8*) "34.122.187.191"
 
 void ESP_init(void);
 

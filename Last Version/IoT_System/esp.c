@@ -327,7 +327,9 @@ void ESP_sendCoordinatesToServer(const uint8* car_id, uint8 *longitude, uint8 *l
 	}
 
 	UART_sendString("POST /api/carconnect HTTP/1.1\r\n");
-	UART_sendString("Host:35.192.107.191\r\n");
+	UART_sendString("Host:");
+	UART_sendString(SERVER_IP);
+	UART_sendString("\r\n");
 	UART_sendString("Content-Type:application/json\r\n");
 	UART_sendString("Content-Length:");
 	UART_sendString(dataBodyLength);
@@ -400,7 +402,9 @@ void ESP_sendTiresState(const uint8* car_id, uint32 Temperature, uint32 Pressure
 		}
 	}
 	UART_sendString("POST /api/carconnect HTTP/1.1\r\n");
-	UART_sendString("Host:35.192.107.191\r\n");
+	UART_sendString("Host:");
+	UART_sendString(SERVER_IP);
+	UART_sendString("\r\n");
 	UART_sendString("Content-Type:application/json\r\n");
 	UART_sendString("Content-Length:");
 	UART_sendString(dataBodyLength);
