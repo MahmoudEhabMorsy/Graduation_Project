@@ -4,25 +4,24 @@
 
 #include "gps.h"
 
-#define SSID (const uint8*) "Mahmoud"
-#define PASSWORD (const uint8*) "12345678"
+#define SSID (const uint8*) "MQOTP"
+#define PASSWORD (const uint8*) "90900000"
 
 #define THINGSPEAK_SERVER_IP (const uint8*) "184.106.153.149"
 #define THINGSPEAK_SERVER_URL (const uint8*) "api.thingspeak.com"
-#define SW_TEAM_SERVER_IP (const uint8*) "35.192.107.191"
+#define SW_TEAM_SERVER_IP (const uint8*) "34.122.187.191"
 
-#define IP (const uint8*) "35.192.107.191"
+#define IP (const uint8*) "34.122.187.191"
 #define PORT (const uint8*) "80"
 #define API_KEY (const uint8*) "E3F314CY3VJGPB74"
 #define CAR_ID (const uint8*) "63d5343990599fb5c8ce4c48"
 
-/* "GET /update?api_key=E3F314CY3VJGPB74&field1=180.552\r\n" */
-
-int T1_Pressure = 23;
-int T1_Temperature = 37;
+uint32 Temperature = 37; // DUMMY
+uint32 Pressure = 1200; //DUMMY
 
 int main(void)
 {
+	/*Initialization*/
 	GPS_Coordinates t_GPS_Coordinates;
 	uint8 GPS_DataValidation;
 
@@ -44,8 +43,14 @@ int main(void)
 	_delay_ms(260);
 	LCD_clearScreen();
 
+
+	/*Super Loop*/
 	while(1)
 	{
+		// Receive Temperature and Pressure Values.
+
+
+		/*GPS PART*/
 		LCD_clearScreen();
 		GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
 		if(GPS_DataValidation == VALID_GPS_DATA)
@@ -67,6 +72,7 @@ int main(void)
 
 
 			ESP_sendCoordinatesToServer(CAR_ID,t_GPS_Coordinates.Longitude,t_GPS_Coordinates.Latitude);
+
 			ESP_deInit();
 
 			GPS_reInit();
@@ -100,4 +106,8 @@ int main(void)
 		_delay_ms(260);
 		_delay_ms(260);
 	}
+
+	/*TIRES STATE PART*/
+	ESP_sendTiresState(CAR_ID, Temperature, Pressure);
+
 }
