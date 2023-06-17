@@ -40,7 +40,9 @@ void ESP_readDataFromServer(uint8 *GET_Request, uint8 *Value);
 
 void ESP_writeDataToServer(uint8 *API_Key ,uint8 *fieldNumber,uint8 *Value);
 
-void ESP_sendCoordinatesToServer(uint8* car_id, uint8 *longitude, uint8 *latitude);
+void ESP_sendCoordinatesToServer(const uint8* car_id, uint8 *longitude, uint8 *latitude);
+
+void ESP_sendTiresState(const uint8* car_id, uint32 Temperature, uint32 Pressure);
 
 void ESP_sendDataToServer(uint8 *JSON_Request);
 

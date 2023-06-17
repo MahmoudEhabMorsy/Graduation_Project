@@ -6,11 +6,12 @@
  */
 
 #include "esp.h"
+#include "utilities.h"
 
 void ESP_init(void)
 {
-	GPIO_setupPinDirection(ESP_PORT, ESP_VCC_PIN, PIN_OUTPUT);
-	GPIO_writePin(ESP_PORT, ESP_VCC_PIN, LOGIC_HIGH);
+//	GPIO_setupPinDirection(ESP_PORT, ESP_VCC_PIN, PIN_OUTPUT);
+//	GPIO_writePin(ESP_PORT, ESP_VCC_PIN, LOGIC_HIGH);
 	/*Initialize UART*/
 	UART_init(BAUD_RATE);
 
@@ -284,7 +285,7 @@ Content-Length:14\r\n\r\n
 /*
  *
  * */
-void ESP_sendCoordinatesToServer(uint8* car_id, uint8 *longitude, uint8 *latitude)
+void ESP_sendCoordinatesToServer(const uint8* car_id, uint8 *longitude, uint8 *latitude)
 {
 	uint8 requestLength[MAXIMUM_LENGTH];
 	uint8 dataBodyLength[MAXIMUM_LENGTH];
@@ -352,6 +353,78 @@ void ESP_sendCoordinatesToServer(uint8* car_id, uint8 *longitude, uint8 *latitud
 	}
 }
 
+
+void ESP_sendTiresState(const uint8* car_id, uint32 Temperature, uint32 Pressure)
+{
+	uint8 Str_Temp[MAXIMUM_LENGTH];
+	uint8 Str_Press[MAXIMUM_LENGTH];
+	intToStr(Temperature, Str_Temp);
+	intToStr(Pressure, Str_Press);
+
+	uint8 requestLength[MAXIMUM_LENGTH];
+	uint8 dataBodyLength[MAXIMUM_LENGTH];
+	uint16 u16DataBodyLength = strlen(car_id) + strlen(Str_Temp) + strlen(Str_Press) \
+			+ strlen("{\"carID\":\"\",\"FLTT\":\"\",\"FLTP\":\"\"}\r\n");
+
+	uint16 u16RequestLength = strlen("POST /api/carconnect HTTP/1.1\r\n")\
+			+ strlen("Host:35.192.107.191\r\n")\
+			+ strlen("Content-Type:application/json\r\n")\
+			+ strlen("Content-Length:\r\n\r\n")\
+			+ u16DataBodyLength;
+
+	/*
+	AT+CIPSEND=118
+	POST /api/carconnect HTTP/1.1\r\n
+	Host:35.192.107.191\r\n
+	Content-Type:application/json\r\n
+	Content-Length:14\r\n\r\n
+	{\"ID\":\"640005cc524bdbb9e426b4f5\",\"Lon\":\"0.12345\"\"Lat\":63.42145}\r\n
+	*/
+
+	intToStr(u16DataBodyLength,dataBodyLength);
+	u16RequestLength += strlen(dataBodyLength);
+	intToStr(u16RequestLength,requestLength);
+
+	UART_sendString("AT+CIPSEND=");
+	UART_sendString(requestLength);
+	UART_sendString("\r\n");
+
+	while(1)
+	{
+		if(UART_receiveByte() == 'O')
+		{
+			if(UART_receiveByte() == 'K')
+			{
+				break;
+			}
+		}
+	}
+	UART_sendString("POST /api/carconnect HTTP/1.1\r\n");
+	UART_sendString("Host:35.192.107.191\r\n");
+	UART_sendString("Content-Type:application/json\r\n");
+	UART_sendString("Content-Length:");
+	UART_sendString(dataBodyLength);
+	UART_sendString("\r\n");
+	UART_sendString("\r\n");
+	UART_sendString("{\"carID\":\"");
+	UART_sendString(car_id);
+	UART_sendString("\",\"FLTT\":\"");
+	UART_sendString(Str_Temp);
+	UART_sendString("\",\"FLTP\":\"");
+	UART_sendString(Str_Press);
+	UART_sendString("\"}\r\n");
+
+	while(1)
+	{
+		if(UART_receiveByte() == 'O')
+		{
+			if(UART_receiveByte() == 'K')
+			{
+				break;
+			}
+		}
+	}
+}
 
 /*POST JSON REQUEST*/
 void ESP_sendDataToServer(uint8 *JSON_Request)
