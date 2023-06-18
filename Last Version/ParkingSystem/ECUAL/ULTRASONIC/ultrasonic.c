@@ -274,7 +274,6 @@ uint16 Ultrasonic_readDistance(void) {
 		/*Do nothing*/
 	}
 	// distance = (g_timeHigh*0.01715)/2+1;
-
 	/* (+1) because of ultrasonic tolerence*/
 	/*Also for calibration*/
 
