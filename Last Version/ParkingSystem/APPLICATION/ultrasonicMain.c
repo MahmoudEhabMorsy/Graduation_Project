@@ -25,11 +25,9 @@
 #define HIGH_RISK_DISTANCE_LOWER_LIMIT (10u)
 #define EXTREME_RISK_DISTANCE_UPPER_LIMIT (10u)
 
-
 void warning(uint16 Distance);
 
-typedef enum
-{
+typedef enum {
 	SAFE_DISTANCE, /*More Than 40 CMs*/
 	LOW_RISK_DISTANCE, /*Between 40 and 30 CMs*/
 	MODERATE_RISK_DISTANCE, /*Between 30 and 20 CMs*/
@@ -39,157 +37,136 @@ typedef enum
 
 t_ULTRASONIC_INTERVAL ultrasonicInterval;
 
-void timercallBckFunc(void)
-{static uint8 counter=0;
+void timercallBckFunc(void) {
 
-switch(ultrasonicInterval)
-{
-case LOW_RISK_DISTANCE:
+	static uint8 counter = 0;
+
+	switch (ultrasonicInterval) {
+	case LOW_RISK_DISTANCE:
 //we need to make the buzzer on for 400ms and off for 100ms
 //to make it on for 100ms we need the timer to overflow 6 times
 //to make it off for 100ms we need the timer to overflow 6 times
 //so the buzzer will toggle when counter is 24
-	if(counter == 24)
-	{
-		Buzzer_toggle();
-		LED_TOGGLE(LED_PORT,LED_PIN);
-		counter = 0;
-	}
-	else
-	{
-		counter++;
-	}
-	break;
+		if (counter == 24) {
+			Buzzer_toggle();
+			LED_TOGGLE(LED_PORT, LED_PIN);
+			counter = 0;
+		} else {
+			counter++;
+		}
+		break;
 
-case MODERATE_RISK_DISTANCE:
+	case MODERATE_RISK_DISTANCE:
 //we need to make the buzzer toggle each 300ms
 //so it will toggle when counter is 18
-if(counter > 18)
-{
-	counter = 0;
-}
-	if(counter == 18)
-	{
-		Buzzer_toggle();
-		LED_TOGGLE(LED_PORT,LED_PIN);
-		counter = 0;
-	}
-	else
-	{
-		counter++;
-	}
-	break;
+		if (counter > 18) {
+			counter = 0;
+		}
+		if (counter == 18) {
+			Buzzer_toggle();
+			LED_TOGGLE(LED_PORT, LED_PIN);
+			counter = 0;
+		} else {
+			counter++;
+		}
+		break;
 
-case HIGH_RISK_DISTANCE:
+	case HIGH_RISK_DISTANCE:
 //we need to make the buzzer toggle each 200ms
 //so it will toggle when counter is 12
-if(counter > 12)
-{
-	counter = 0;
-}
-	if(counter == 12)
-	{
-		Buzzer_toggle();
-		LED_TOGGLE(LED_PORT,LED_PIN);
-		counter = 0;
-	}
-	else
-	{
-		counter++;
-	}
-	break;
+		if (counter > 12) {
+			counter = 0;
+		}
+		if (counter == 12) {
+			Buzzer_toggle();
+			LED_TOGGLE(LED_PORT, LED_PIN);
+			counter = 0;
+		} else {
+			counter++;
+		}
+		break;
 
-case EXTREME_RISK_DISTANCE:
+	case EXTREME_RISK_DISTANCE:
 //we need to make the buzzer toggle each 100ms
 //so it will toggle when counter is 6
-if(counter > 6)
-{
-	counter = 0;
-}
-	if(counter == 6)
-	{
-		Buzzer_toggle();
-		LED_TOGGLE(LED_PORT,LED_PIN);
-		counter = 0;
-	}
-	else
-	{
-		counter++;
-	}
-	break;
+		if (counter > 6) {
+			counter = 0;
+		}
+		if (counter == 6) {
+			Buzzer_toggle();
+			LED_TOGGLE(LED_PORT, LED_PIN);
+			counter = 0;
+		} else {
+			counter++;
+		}
+		break;
 
-default:
-	Buzzer_off();
-	LED_OFF(LED_PORT,LED_PIN);
-	counter = 0;
-	break;
-}
+	default:
+		Buzzer_off();
+		LED_OFF(LED_PORT, LED_PIN);
+		counter = 0;
+		break;
+	}
 }
 
 //Timer_configuration Timer0_Configuration={Timer0,Normal,TIMER_INITIAL_VALUE,NO_COMPARE_VALUE,Prescaler_1024,timercallBckFunc};
 
-
-int main()
-{
+int main() {
 
 	uint16 LCD_distance; /*distance shown on the LCD screen*/
 	LCD_init(); /*initializing LCD*/
 	Ultrasonic_init(); /*initializing Ultrasonic*/
 	//Buzzer_init();
 	//LED_init(LED_PORT,LED_PIN);
-	LCD_displayStringRowColumn(0, 0, "FRONT_US_D =   m");
-	LCD_displayStringRowColumn(1, 0, "REAR_US_D =   m");
+	LCD_displayStringRowColumn(0, 0, "FRONT_RIGHT =   m");
+	LCD_displayStringRowColumn(1, 0, "FRONT_LEFT =   m");
+	LCD_displayStringRowColumn(2, 0, "REAR_RIGHT =   m");
+	LCD_displayStringRowColumn(3, 0, "REAR_LEFT =   m");
 	//Timer_init(&Timer0_Configuration);
 	/*enabling global interrupt*/
 	sei();
-	while(1)
-	{
-		if(g_sensorID==FRONT){
+	while (1) {
+		if (g_sensorID == FRONT_RIGHT) {
 			LCD_moveCursor(0, 13); /*moving cursor to the first distance position*/
-		}
-		else{
+		} else if (g_sensorID == FRONT_LEFT) {
 			LCD_moveCursor(1, 12); /*moving cursor to the second distance position*/
+		} else if (g_sensorID == REAR_RIGHT) {
+			LCD_moveCursor(2, 13); /*moving cursor to the third distance position*/
+		} else if (g_sensorID == REAR_LEFT) {
+			LCD_moveCursor(3, 12); /*moving cursor to the fourth distance position*/
+		} else {
+			/*Do nothing*/
 		}
 		LCD_distance = Ultrasonic_readDistance(); /*storing the measured distance*/
 
-		if(LCD_distance >= 100)                  /*LCD handling*/
+		if (LCD_distance >= 100) /*LCD handling*/
 			LCD_intgerToString(LCD_distance);
-		else
-		{
+		else {
 			LCD_intgerToString(LCD_distance);
 			LCD_displayCharacter(' ');
 		}
-
 
 		//warning(LCD_distance); /*warning function*/
 	}
 }
 
-
-void warning(uint16 Distance)
-{
-	if(Distance <= LOW_RISK_DISTANCE_UPPER_LIMIT && Distance > LOW_RISK_DISTANCE_LOWER_LIMIT)
-	{
+void warning(uint16 Distance) {
+	if (Distance <= LOW_RISK_DISTANCE_UPPER_LIMIT
+			&& Distance > LOW_RISK_DISTANCE_LOWER_LIMIT) {
 		ultrasonicInterval = LOW_RISK_DISTANCE;
 		Timer_reset(Timer0);
-	}
-	else if(Distance <= MODERATE_RISK_DISTANCE_UPPER_LIMIT && Distance > MODERATE_RISK_DISTANCE_LOWER_LIMIT)
-	{
+	} else if (Distance <= MODERATE_RISK_DISTANCE_UPPER_LIMIT
+			&& Distance > MODERATE_RISK_DISTANCE_LOWER_LIMIT) {
 		ultrasonicInterval = MODERATE_RISK_DISTANCE;
 		Timer_reset(Timer0);
-	}
-	else if(Distance <= HIGH_RISK_DISTANCE_UPPER_LIMIT && Distance > HIGH_RISK_DISTANCE_LOWER_LIMIT)
-	{
+	} else if (Distance <= HIGH_RISK_DISTANCE_UPPER_LIMIT
+			&& Distance > HIGH_RISK_DISTANCE_LOWER_LIMIT) {
 		ultrasonicInterval = HIGH_RISK_DISTANCE;
 		Timer_reset(Timer0);
-	}
-	else if(Distance <= EXTREME_RISK_DISTANCE_UPPER_LIMIT)
-	{
+	} else if (Distance <= EXTREME_RISK_DISTANCE_UPPER_LIMIT) {
 		ultrasonicInterval = EXTREME_RISK_DISTANCE;
 		Timer_reset(Timer0);
-	}
-	else
-	{
+	} else {
 		ultrasonicInterval = SAFE_DISTANCE;
 		Timer_reset(Timer0);
 	}
