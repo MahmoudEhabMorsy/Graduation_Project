@@ -14,7 +14,7 @@
 #define LCD_H_
 
 #include "../../UTILITIES/std_types.h"
-#include "../../MCAL/DIO/gpio.h"
+#include "../../MCAL/DIO/dio.h"
 
 /*******************************************************************************
  *                                Definitions                                  *

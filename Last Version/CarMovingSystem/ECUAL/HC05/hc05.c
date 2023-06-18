@@ -21,10 +21,10 @@ void delay(uint8 seconds)
 void HC05_init(role Role)
 {
 	UART_init(HC05_COMMANDS_BAUD_RATE);
-	GPIO_setupPinDirection(EN_PORT,EN_PIN,PIN_OUTPUT);
-	GPIO_setupPinDirection(VCC_PORT,VCC_PIN,PIN_OUTPUT);
-	GPIO_writePin(EN_PORT,EN_PIN,LOGIC_LOW);
-	GPIO_writePin(VCC_PORT,VCC_PIN,LOGIC_LOW);
+	DIO_setupPinDirection(EN_PORT,EN_PIN,PIN_OUTPUT);
+	DIO_setupPinDirection(VCC_PORT,VCC_PIN,PIN_OUTPUT);
+	DIO_writePin(EN_PORT,EN_PIN,LOGIC_LOW);
+	DIO_writePin(VCC_PORT,VCC_PIN,LOGIC_LOW);
 
 	/*To start Command Mode:
 	 * Initially: VCC -> LOW, EN -> LOW
@@ -40,11 +40,11 @@ void HC05_init(role Role)
 
 	/*OPEN COMMAND MODE*/
 	_delay_ms(3);
-	GPIO_writePin(EN_PORT,EN_PIN,LOGIC_HIGH);
+	DIO_writePin(EN_PORT,EN_PIN,LOGIC_HIGH);
 	_delay_ms(5);
-	GPIO_writePin(VCC_PORT,VCC_PIN,LOGIC_HIGH);
+	DIO_writePin(VCC_PORT,VCC_PIN,LOGIC_HIGH);
 	delay(1); /*Optimized.*/
-	GPIO_writePin(EN_PORT,EN_PIN,LOGIC_LOW);
+	DIO_writePin(EN_PORT,EN_PIN,LOGIC_LOW);
 	delay(2); /*Optimized.*/
 
 	/*"AT+UART=115200,1,0\r\n"*/

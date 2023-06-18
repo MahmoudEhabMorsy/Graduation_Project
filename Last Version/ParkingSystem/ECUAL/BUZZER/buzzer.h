@@ -7,7 +7,7 @@
 
 #ifndef BUZZER_H_
 #define BUZZER_H_
-#include "../../MCAL/DIO/gpio.h"
+#include "../../MCAL/DIO/dio.h"
 
 /*******************************************************************************
  *                                   Definitions                               *

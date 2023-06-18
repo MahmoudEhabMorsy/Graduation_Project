@@ -44,7 +44,7 @@ void ESP_init(void)
 
 void ESP_deInit(void)
 {
-	GPIO_writePin(ESP_PORT, ESP_VCC_PIN, LOGIC_LOW);
+	DIO_writePin(ESP_PORT, ESP_VCC_PIN, LOGIC_LOW);
 	UART_init(DEFAULT_APP_BAUD_RATE);
 }
 void ESP_networkConnect(const uint8 *Username, const uint8 *Password)

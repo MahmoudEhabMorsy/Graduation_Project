@@ -1,5 +1,5 @@
-#include "motor_rc.h"
-#include "hc05.h"
+#include "../ECUAL/MOTOR/motor_rc.h"
+#include "../ECUAL/HC05/hc05.h"
 #include <avr/interrupt.h>
 
 void keep_Car_Safe(void);

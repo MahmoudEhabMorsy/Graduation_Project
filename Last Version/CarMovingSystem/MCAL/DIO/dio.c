@@ -287,7 +287,6 @@ uint8 DIO_readPort(uint8 port_number)
 
 	return value;
 }
-
 void DIO_togglePin(uint8 port_num, uint8 pin_num)
 {
 	if((pin_num >= NUM_OF_PINS_PER_PORT) || (port_num >= NUM_OF_PORTS))

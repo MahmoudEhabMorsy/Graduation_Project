@@ -22,19 +22,19 @@ uint8 GPS_DataValidation;
 
 void GPS_init(void)
 {
-	GPIO_setupPinDirection(GPS_PORT, GPS_VCC_PIN, PIN_OUTPUT);
-	GPIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_HIGH);
+	DIO_setupPinDirection(GPS_PORT, GPS_VCC_PIN, PIN_OUTPUT);
+	DIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_HIGH);
 	UART_init(9600);
 }
 
 void GPS_reInit(void)
 {
-	GPIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_HIGH);
+	DIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_HIGH);
 	UART_init(9600);
 }
 void GPS_deInit(void)
 {
-	GPIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_LOW);
+	DIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_LOW);
 }
 
 

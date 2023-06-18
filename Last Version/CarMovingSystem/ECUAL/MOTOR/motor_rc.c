@@ -23,17 +23,17 @@ void PWM_Timer0_Init(unsigned char set_duty_cycle) {
 
 void DC_Motor_Init(void) {
 	/*setup the direction for REAR_RIGHT_MOTOR pins through the GPIO driver.*/
-	GPIO_setupPinDirection(DC_MOTOR_PORT, REAR_RIGHT_MOTOR_PIN1, PIN_OUTPUT);
-	GPIO_setupPinDirection(DC_MOTOR_PORT, REAR_RIGHT_MOTOR_PIN2, PIN_OUTPUT);
+	DIO_setupPinDirection(DC_MOTOR_PORT, REAR_RIGHT_MOTOR_PIN1, PIN_OUTPUT);
+	DIO_setupPinDirection(DC_MOTOR_PORT, REAR_RIGHT_MOTOR_PIN2, PIN_OUTPUT);
 	/*setup the direction for REAR_LEFT_MOTOR pins through the GPIO driver.*/
-	GPIO_setupPinDirection(DC_MOTOR_PORT, REAR_LEFT_MOTOR_PIN1, PIN_OUTPUT);
-	GPIO_setupPinDirection(DC_MOTOR_PORT, REAR_LEFT_MOTOR_PIN2, PIN_OUTPUT);
+	DIO_setupPinDirection(DC_MOTOR_PORT, REAR_LEFT_MOTOR_PIN1, PIN_OUTPUT);
+	DIO_setupPinDirection(DC_MOTOR_PORT, REAR_LEFT_MOTOR_PIN2, PIN_OUTPUT);
 	/*setup the direction for FRONT_RIGHT_MOTOR pins through the GPIO driver.*/
-	GPIO_setupPinDirection(DC_MOTOR_PORT, FRONT_RIGHT_MOTOR_PIN1, PIN_OUTPUT);
-	GPIO_setupPinDirection(DC_MOTOR_PORT, FRONT_RIGHT_MOTOR_PIN2, PIN_OUTPUT);
+	DIO_setupPinDirection(DC_MOTOR_PORT, FRONT_RIGHT_MOTOR_PIN1, PIN_OUTPUT);
+	DIO_setupPinDirection(DC_MOTOR_PORT, FRONT_RIGHT_MOTOR_PIN2, PIN_OUTPUT);
 	/*setup the direction for FRONT_LEFT_MOTOR pins through the GPIO driver.*/
-	GPIO_setupPinDirection(DC_MOTOR_PORT, FRONT_LEFT_MOTOR_PIN1, PIN_OUTPUT);
-	GPIO_setupPinDirection(DC_MOTOR_PORT, FRONT_LEFT_MOTOR_PIN2, PIN_OUTPUT);
+	DIO_setupPinDirection(DC_MOTOR_PORT, FRONT_LEFT_MOTOR_PIN1, PIN_OUTPUT);
+	DIO_setupPinDirection(DC_MOTOR_PORT, FRONT_LEFT_MOTOR_PIN2, PIN_OUTPUT);
 
 	/*Stop at the DC-Motor at the beginning through the GPIO driver.*/
 	set_car_direction(BRAKE);

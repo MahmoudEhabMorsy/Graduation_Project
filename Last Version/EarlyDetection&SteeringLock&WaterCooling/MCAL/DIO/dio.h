@@ -59,5 +59,6 @@ void DIO_setupPortDirection(uint8 port_number, GPIO_PortDirectionType direction)
 void DIO_writePort(uint8 port_number, uint8 value);
 
 uint8 DIO_readPort(uint8 port_number);
+void DIO_togglePin(uint8 port_num, uint8 pin_num);
 
 #endif 

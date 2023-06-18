@@ -10,9 +10,9 @@
 
 /*Includes*/
 #include <util/delay.h>
-#include "uart.h"
-#include "gpio.h"
-#include "std_types.h"
+#include "../../MCAL/UART/uart.h"
+#include "../../MCAL/DIO/dio.h"
+
 
 /*Definitions*/
 #define HC05_COMMANDS_BAUD_RATE 38400
