@@ -1,12 +1,10 @@
 #ifndef RC_MOTOR_H_
 #define RC_MOTOR_H_
 
-#include "gpio.h"
-#include "std_types.h"
-#include "common_macros.h"
+#include "../../MCAL/DIO/dio.h"
 #include "avr/io.h"
-#include "uart.h"
-#include "hc05.h"
+#include "../../MCAL/UART/uart.h"
+#include "../HC05/hc05.h"
 
 
 
