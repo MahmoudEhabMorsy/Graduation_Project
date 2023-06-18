@@ -38,6 +38,7 @@
 #define ULTRASONIC_ECHO_PORT_ID  PORTD_ID
 #define ULTRASONIC_ECHO_PIN_ID	 PIN6_ID
 
+
 #define SOUND_SPEED 34000 /*sound speed in cm*/
 #define TIME_OF_INSTRUCTION 0.000001/*time needed to execute on instruction after prescalling*/
 
