@@ -5,10 +5,8 @@
  *      Author: Mahmoud Qotp
  */
 
-
 #include "buzzer.h"
 #include <avr/io.h>
-
 
 /*******************************************************************************
  *                      Functions Definitions                                  *
@@ -21,10 +19,9 @@
  * Outputs: No outputs.
  */
 
-void Buzzer_init(void)
-{
-	DIO_setupPinDirection(BUZZER_PORT,BUZZER_PIN,PIN_OUTPUT);
-	DIO_writePin(BUZZER_PORT,BUZZER_PIN,LOGIC_LOW);
+void Buzzer_init(void) {
+	DIO_setupPinDirection(BUZZER_PORT, BUZZER_PIN, PIN_OUTPUT);
+	DIO_writePin(BUZZER_PORT, BUZZER_PIN, LOGIC_LOW);
 }
 
 /*
@@ -33,24 +30,20 @@ void Buzzer_init(void)
  * Outputs: No outputs.
  */
 
-void Buzzer_on(void)
-{
-	DIO_writePin(BUZZER_PORT,BUZZER_PIN,LOGIC_HIGH);
+void Buzzer_on(void) {
+	DIO_writePin(BUZZER_PORT, BUZZER_PIN, LOGIC_HIGH);
 }
-
 
 /*
  * Description : Function to turn the Buzzer Off.
  * Inputs: No inputs
  * Outputs: No outputs.
  */
-void Buzzer_off(void)
-{
-	DIO_writePin(BUZZER_PORT,BUZZER_PIN,LOGIC_LOW);
+void Buzzer_off(void) {
+	DIO_writePin(BUZZER_PORT, BUZZER_PIN, LOGIC_LOW);
 }
 
-void Buzzer_toggle(void)
-{
-	DIO_togglePin(BUZZER_PORT,BUZZER_PIN);
+void Buzzer_toggle(void) {
+	DIO_togglePin(BUZZER_PORT, BUZZER_PIN);
 }
 
