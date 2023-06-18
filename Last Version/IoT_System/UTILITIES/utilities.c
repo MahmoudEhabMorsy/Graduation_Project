@@ -1,9 +1,9 @@
-/*
+/**
  * utilities.c
  *
  *  Created on: Feb 16, 2023
  *      Author: Mahmoud Qotp
- */
+ **/
 #include "utilities.h"
 
 

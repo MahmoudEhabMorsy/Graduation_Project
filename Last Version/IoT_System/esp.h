@@ -8,19 +8,19 @@
 #ifndef ESP_H_
 #define ESP_H_
 
-#include "../../UTILITIES/std_types.h"
-#include "../../MCAL/UART/uart.h"
+#include "std_types.h"
+#include "uart.h"
 #include <string.h>
 #include <util/delay.h>
 
-#include "../../MCAL/DIO/dio.h"
-#include "../../UTILITIES/utilities.h"
+#include "dio.h"
+#include "utilities.h"
 
 #define ESP_VCC_PIN PIN6_ID
 #define ESP_PORT PORTD_ID
 
-#define DISABLE_ECHO (const uint8*)"ATE0\r\n"
-#define STATION_MODE (const uint8*)"AT+CWMODE=1\r\n"
+#define DISABLE_ECHO "ATE0\r\n"
+#define STATION_MODE "AT+CWMODE=1\r\n"
 #define MAXIMUM_LENGTH (6u)
 #define BAUD_RATE (115200u)
 #define DEFAULT_APP_BAUD_RATE (9600u)

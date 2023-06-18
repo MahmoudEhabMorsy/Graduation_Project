@@ -1,9 +1,9 @@
-/*
+/**
  * utilities.h
  *
  *  Created on: Feb 16, 2023
  *      Author: Mahmoud Qotp
- */
+ **/
 
 #ifndef UTILITIES_H_
 #define UTILITIES_H_

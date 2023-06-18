@@ -7,8 +7,13 @@
 
 #ifndef GPS_H_
 #define GPS_H_
-#include "std_types.h"
-#include "gpio.h"
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "../../UTILITIES/std_types.h"
+#include "../../MCAL/UART/uart.h"
+#include "../../MCAL/DIO/dio.h"
 
 #define GPS_PORT PORTD_ID
 #define GPS_VCC_PIN PIN7_ID
@@ -22,6 +27,10 @@ typedef struct
 	uint8 Latitude[14];
 	uint8 Longitude[14];
 }GPS_Coordinates;
+
+
+extern GPS_Coordinates t_GPS_Coordinates;
+extern uint8 GPS_DataValidation;
 
 void GPS_init(void);
 

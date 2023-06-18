@@ -6,17 +6,17 @@
  *
  * Description: Header file for the LCD driver
  *
- * Author: Mohamed Tarek
+ * Author: Mahmoud Qotp
  *
  *******************************************************************************/
 
 #ifndef LCD_H_
 #define LCD_H_
 
-#include "std_types.h"
-#include "gpio.h"
+#include "../../UTILITIES/std_types.h"
 #include <util/delay.h> /* For the delay functions */
-#include "common_macros.h" /* For GET_BIT Macro */
+#include "../../UTILITIES/common_macros.h" /* For GET_BIT Macro */
+#include "../../MCAL/DIO/dio.h"
 
 /*******************************************************************************
  *                                Definitions                                  *

@@ -6,15 +6,15 @@
  *
  * Description: Header file for the AVR GPIO driver
  *
- * Author: Mohamed Tarek
+ * Author: Mahmoud Ehab
  *
  *******************************************************************************/
 
-#ifndef GPIO_H_
-#define GPIO_H_
+#ifndef DIO_H_
+#define DIO_H_
 
-#include "std_types.h"
-#include "common_macros.h" /* To use the macros like SET_BIT */
+#include "../../UTILITIES/std_types.h"
+#include "../../UTILITIES/common_macros.h" /* To use the macros like SET_BIT */
 #include <avr/io.h> /* To use the IO Ports Registers */
 
 /*******************************************************************************
@@ -101,4 +101,4 @@ void GPIO_writePort(uint8 port_num, uint8 value);
  */
 uint8 GPIO_readPort(uint8 port_num);
 
-#endif /* GPIO_H_ */
+#endif /* DIO_H_ */

@@ -6,7 +6,6 @@
  */
 
 #include "esp.h"
-#include "utilities.h"
 
 void ESP_init(void)
 {
@@ -52,11 +51,11 @@ void ESP_networkConnect(const uint8 *Username, const uint8 *Password)
 {
 	/*connect to Wi-Fi*/
 	/*AT+CWJAP_CUR="WiFi_Name","WiFi_Pass"*/
-	UART_sendString("AT+CWJAP_CUR=\"");
+	UART_sendString((const uint8*)"AT+CWJAP_CUR=\"");
 	UART_sendString(Username);
-	UART_sendString("\",\"");
+	UART_sendString((const uint8*)"\",\"");
 	UART_sendString(Password);
-	UART_sendString("\"\r\n");
+	UART_sendString((const uint8*)"\"\r\n");
 
 	while(1)
 	{
@@ -76,7 +75,7 @@ void ESP_serverConnect(const uint8 *IP, const uint8 *Port)
 	/*connect to server*/
 	/*8: AT+CIPSTART="mode","IP",Port*/
 	/*TCP Mode By Default*/
-	UART_sendString("AT+CIPSTATUS\r\n");
+	UART_sendString((const uint8*)"AT+CIPSTATUS\r\n");
 
 	while(1)
 	{
@@ -89,7 +88,7 @@ void ESP_serverConnect(const uint8 *IP, const uint8 *Port)
 
 	if(c == '3')
 	{
-		UART_sendString("AT+CIPCLOSE\r\n");
+		UART_sendString((const uint8*)"AT+CIPCLOSE\r\n");
 		while(1)
 		{
 			if(UART_receiveByte() == 'O')
@@ -102,11 +101,11 @@ void ESP_serverConnect(const uint8 *IP, const uint8 *Port)
 		}
 	}
 
-	UART_sendString("AT+CIPSTART=\"TCP\",\"");
+	UART_sendString((const uint8*)"AT+CIPSTART=\"TCP\",\"");
 	UART_sendString(IP);
-	UART_sendString("\",");
+	UART_sendString((const uint8*)"\",");
 	UART_sendString(Port);
-	UART_sendString("\r\n");
+	UART_sendString((const uint8*)"\r\n");
 
 	while(1)
 	{
@@ -132,9 +131,9 @@ void ESP_sendGETRequest(uint8 *GET_Request)
 
 	uint8 arr[20], i;
 	uint8 *tempLength;
-	UART_sendString("AT+CIPSEND=");
+	UART_sendString((const uint8*)"AT+CIPSEND=");
 	UART_sendString(stringLength);
-	UART_sendString("\r\n");
+	UART_sendString((const uint8*)"\r\n");
 
 	while(1)
 	{
@@ -170,9 +169,9 @@ void ESP_readDataFromServer(uint8 *GET_Request, uint8 *Value)
 
 	uint8 arr[20], i;
 	uint8 *tempLength;
-	UART_sendString("AT+CIPSEND=");
+	UART_sendString((const uint8*)"AT+CIPSEND=");
 	UART_sendString(stringLength);
-	UART_sendString("\r\n");
+	UART_sendString((const uint8*)"\r\n");
 
 	while(1)
 	{
@@ -229,9 +228,9 @@ void ESP_writeDataToServer(uint8 *API_Key ,uint8 *fieldNumber,uint8 *Value)
 			+ strlen(API_Key) + strlen(Value) + strlen(fieldNumber);
 	intToStr(integerLength,stringLength);
 
-	UART_sendString("AT+CIPSEND=");
+	UART_sendString((const uint8*)"AT+CIPSEND=");
 	UART_sendString(stringLength);
-	UART_sendString("\r\n");
+	UART_sendString((const uint8*)"\r\n");
 
 	while(1)
 	{
@@ -244,13 +243,13 @@ void ESP_writeDataToServer(uint8 *API_Key ,uint8 *fieldNumber,uint8 *Value)
 		}
 	}
 
-	UART_sendString("GET /update?api_key=");
+	UART_sendString((const uint8*)"GET /update?api_key=");
 	UART_sendString(API_Key);
-	UART_sendString("&field");
+	UART_sendString((const uint8*)"&field");
 	UART_sendString(fieldNumber);
 	UART_sendByte('=');
 	UART_sendString(Value);
-	UART_sendString("\r\n");
+	UART_sendString((const uint8*)"\r\n");
 
 	while(1)
 	{
@@ -311,9 +310,9 @@ void ESP_sendCoordinatesToServer(const uint8* car_id, uint8 *longitude, uint8 *l
 	u16RequestLength += strlen(dataBodyLength);
 	intToStr(u16RequestLength,requestLength);
 
-	UART_sendString("AT+CIPSEND=");
+	UART_sendString((const uint8*)"AT+CIPSEND=");
 	UART_sendString(requestLength);
-	UART_sendString("\r\n");
+	UART_sendString((const uint8*)"\r\n");
 
 	while(1)
 	{
@@ -326,22 +325,22 @@ void ESP_sendCoordinatesToServer(const uint8* car_id, uint8 *longitude, uint8 *l
 		}
 	}
 
-	UART_sendString("POST /api/carconnect HTTP/1.1\r\n");
-	UART_sendString("Host:");
+	UART_sendString((const uint8*)"POST /api/carconnect HTTP/1.1\r\n");
+	UART_sendString((const uint8*)"Host:");
 	UART_sendString(SERVER_IP);
-	UART_sendString("\r\n");
-	UART_sendString("Content-Type:application/json\r\n");
-	UART_sendString("Content-Length:");
+	UART_sendString((const uint8*)"\r\n");
+	UART_sendString((const uint8*)"Content-Type:application/json\r\n");
+	UART_sendString((const uint8*)"Content-Length:");
 	UART_sendString(dataBodyLength);
-	UART_sendString("\r\n");
-	UART_sendString("\r\n");
-	UART_sendString("{\"carID\":\"");
+	UART_sendString((const uint8*)"\r\n");
+	UART_sendString((const uint8*)"\r\n");
+	UART_sendString((const uint8*)"{\"carID\":\"");
 	UART_sendString(car_id);
-	UART_sendString("\",\"longitude\":\"");
+	UART_sendString((const uint8*)"\",\"longitude\":\"");
 	UART_sendString(longitude);
-	UART_sendString("\",\"latitude\":\"");
+	UART_sendString((const uint8*)"\",\"latitude\":\"");
 	UART_sendString(latitude);
-	UART_sendString("\"}\r\n");
+	UART_sendString((const uint8*)"\"}\r\n");
 
 	while(1)
 	{
@@ -387,9 +386,9 @@ void ESP_sendTiresState(const uint8* car_id, uint32 Temperature, uint32 Pressure
 	u16RequestLength += strlen(dataBodyLength);
 	intToStr(u16RequestLength,requestLength);
 
-	UART_sendString("AT+CIPSEND=");
+	UART_sendString((const uint8*)"AT+CIPSEND=");
 	UART_sendString(requestLength);
-	UART_sendString("\r\n");
+	UART_sendString((const uint8*)"\r\n");
 
 	while(1)
 	{
@@ -401,22 +400,22 @@ void ESP_sendTiresState(const uint8* car_id, uint32 Temperature, uint32 Pressure
 			}
 		}
 	}
-	UART_sendString("POST /api/carconnect HTTP/1.1\r\n");
-	UART_sendString("Host:");
+	UART_sendString((const uint8*)"POST /api/carconnect HTTP/1.1\r\n");
+	UART_sendString((const uint8*)"Host:");
 	UART_sendString(SERVER_IP);
-	UART_sendString("\r\n");
-	UART_sendString("Content-Type:application/json\r\n");
-	UART_sendString("Content-Length:");
+	UART_sendString((const uint8*)"\r\n");
+	UART_sendString((const uint8*)"Content-Type:application/json\r\n");
+	UART_sendString((const uint8*)"Content-Length:");
 	UART_sendString(dataBodyLength);
-	UART_sendString("\r\n");
-	UART_sendString("\r\n");
-	UART_sendString("{\"carID\":\"");
+	UART_sendString((const uint8*)"\r\n");
+	UART_sendString((const uint8*)"\r\n");
+	UART_sendString((const uint8*)"{\"carID\":\"");
 	UART_sendString(car_id);
-	UART_sendString("\",\"FLTT\":\"");
+	UART_sendString((const uint8*)"\",\"FLTT\":\"");
 	UART_sendString(Str_Temp);
-	UART_sendString("\",\"FLTP\":\"");
+	UART_sendString((const uint8*)"\",\"FLTP\":\"");
 	UART_sendString(Str_Press);
-	UART_sendString("\"}\r\n");
+	UART_sendString((const uint8*)"\"}\r\n");
 
 	while(1)
 	{
@@ -452,9 +451,9 @@ void ESP_sendDataToServer(uint8 *JSON_Request)
 	u16RequestLength += strlen(dataBodyLength);
 	intToStr(u16RequestLength,requestLength);
 
-	UART_sendString("AT+CIPSEND=");
+	UART_sendString((const uint8*)"AT+CIPSEND=");
 	UART_sendString(requestLength);
-	UART_sendString("\r\n");
+	UART_sendString((const uint8*)"\r\n");
 
 	while(1)
 	{
@@ -467,13 +466,13 @@ void ESP_sendDataToServer(uint8 *JSON_Request)
 		}
 	}
 
-	UART_sendString("POST /api/carconnect HTTP/1.1\r\n");
-	UART_sendString("Host:35.192.107.191\r\n");
-	UART_sendString("Content-Type:application/json\r\n");
-	UART_sendString("Content-Length:");
+	UART_sendString((const uint8*)"POST /api/carconnect HTTP/1.1\r\n");
+	UART_sendString((const uint8*)"Host:35.192.107.191\r\n");
+	UART_sendString((const uint8*)"Content-Type:application/json\r\n");
+	UART_sendString((const uint8*)"Content-Length:");
 	UART_sendString(dataBodyLength);
-	UART_sendString("\r\n");
-	UART_sendString("\r\n");
+	UART_sendString((const uint8*)"\r\n");
+	UART_sendString((const uint8*)"\r\n");
 	UART_sendString(JSON_Request);
 
 	while(1)

@@ -5,12 +5,8 @@
  *      Author: Mahmoud Qotp
  */
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include "uart.h"
 #include "gps.h"
-#include "gpio.h"
+
 
 /*Module: ublox NEO-6M GPS module
  * UART Frame specs:
@@ -20,6 +16,9 @@
  * 	No Parity.
  * 	No Flow Control.
 */
+
+GPS_Coordinates t_GPS_Coordinates;
+uint8 GPS_DataValidation;
 
 void GPS_init(void)
 {

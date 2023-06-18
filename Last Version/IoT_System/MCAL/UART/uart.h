@@ -6,16 +6,16 @@
  *
  * Description: Header file for the UART AVR driver
  *
- * Author: Mohamed Tarek
+ * Author: Mahmoud Qotp
  *
  *******************************************************************************/
 
 #ifndef UART_H_
 #define UART_H_
 
-#include "std_types.h"
 #include <avr/io.h> /* To use the UART Registers */
-#include "common_macros.h" /* To use the macros like SET_BIT */
+#include "../../UTILITIES/std_types.h"
+#include "../../UTILITIES/common_macros.h" /* To use the macros like SET_BIT */
 
 /*******************************************************************************
  *                      Functions Prototypes                                   *
