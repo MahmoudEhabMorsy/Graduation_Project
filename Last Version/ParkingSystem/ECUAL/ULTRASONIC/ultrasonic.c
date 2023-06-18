@@ -11,7 +11,7 @@
  *******************************************************************************/
 #include "../../MCAL/ICU/icu.h"
 #include "../../UTILITIES/std_types.h"
-#include "../../MCAL/DIO/gpio.h"
+#include "../../MCAL/DIO/dio.h"
 #include "util/delay.h"
 #include <math.h>
 #include "ultrasonic.h"

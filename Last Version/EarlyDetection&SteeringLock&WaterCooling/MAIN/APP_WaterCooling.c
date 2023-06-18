@@ -6,10 +6,10 @@
  */
 
 
-#include "../ECUAL/LCD/lcd.h"
+//#include "../ECUAL/LCD/lcd.h"
 #include "../MCAL/DIO/dio.h"
 #include "../ECUAL/BMP/bmp180.h"
-#include "../ECUAL/keypad/keypad.h"
+//#include "../ECUAL/keypad/keypad.h"
 #include <util/delay.h>
 
 #define WCS_TEMP_HIGH	30

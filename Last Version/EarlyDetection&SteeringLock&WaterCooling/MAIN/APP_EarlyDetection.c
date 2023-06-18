@@ -6,7 +6,7 @@
  */
 
 
-#include "../ECUAL/LCD/lcd.h"
+//#include "../ECUAL/LCD/lcd.h"
 #include "../MCAL/DIO/dio.h"
 #include "../ECUAL/BMP/bmp180.h"
 #include <util/delay.h>

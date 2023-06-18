@@ -8,7 +8,7 @@
 #ifndef ECUAL_LED_LED_H_
 #define ECUAL_LED_LED_H_
 
-#include "../../MCAL/DIO/gpio.h"
+#include "../../MCAL/DIO/dio.h"
 #include "../../UTILITIES/common_macros.h"
 
 #define LED_PIN PIN5_ID

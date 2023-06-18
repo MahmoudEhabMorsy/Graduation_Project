@@ -6,7 +6,7 @@
  */
 
 #include"dio.h"
-#include "../../CommonDef/common_macros.h"
+#include "../../UTILITIES/common_macros.h"
 void DIO_setupPinDirection(uint8 port_number, uint8 pin_number, uint8 direction){
 /*
  * Check if the input port number is greater than NUM_OF_PINS_PER_PORT value.
@@ -288,3 +288,29 @@ uint8 DIO_readPort(uint8 port_number)
 	return value;
 }
 
+void DIO_togglePin(uint8 port_num, uint8 pin_num)
+{
+	if((pin_num >= NUM_OF_PINS_PER_PORT) || (port_num >= NUM_OF_PORTS))
+	{
+		/* Do Nothing */
+	}
+	else
+	{
+		switch(port_num)
+		{
+		case PORTA_ID:
+			TOGGLE_BIT(PORTA,pin_num);
+			break;
+
+		case PORTB_ID:
+			TOGGLE_BIT(PORTB,pin_num);
+			break;
+		case PORTC_ID:
+			TOGGLE_BIT(PORTC,pin_num);
+			break;
+		case PORTD_ID:
+			TOGGLE_BIT(PORTD,pin_num);
+			break;
+		}
+	}
+}
