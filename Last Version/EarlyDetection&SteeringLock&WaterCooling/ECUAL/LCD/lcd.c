@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 #include <util/delay.h> /* For the delay functions */
-#include "../../CommonDef/common_macros.h" /* For GET_BIT Macro */
+#include "../../UTILITIES/common_macros.h" /* For GET_BIT Macro */
 #include "lcd.h"
 #include "../../MCAL/DIO/dio.h"
 
@@ -22,13 +22,14 @@
 /*
  * Description :
  * Initialize the LCD:
- * 1. Setup the LCD pins directions by use the DIO driver.
+ * 1. Setup the LCD pins directions by use the GPIO driver.
  * 2. Setup the LCD Data Mode 4-bits or 8-bits.
  */
 void LCD_init(void)
 {
 	/* Configure the direction for RS and E pins as output pins */
 	DIO_setupPinDirection(LCD_RS_PORT_ID,LCD_RS_PIN_ID,PIN_OUTPUT);
+	DIO_setupPinDirection(LCD_RW_PORT_ID,LCD_RW_PIN_ID,PIN_OUTPUT);
 	DIO_setupPinDirection(LCD_E_PORT_ID,LCD_E_PIN_ID,PIN_OUTPUT);
 
 	_delay_ms(20);		/* LCD Power ON delay always > 15ms */
@@ -49,7 +50,7 @@ void LCD_init(void)
 
 #elif(LCD_DATA_BITS_MODE == 8)
 	/* Configure the data port as output port */
-	DIO_setupPortDirection(LCD_DATA_PORT_ID,PORT_OUTPUT);
+	GPIO_setupPortDirection(LCD_DATA_PORT_ID,PORT_OUTPUT);
 
 	/* use 2-lines LCD + 8-bits Data Mode + 5*7 dot display Mode */
 	LCD_sendCommand(LCD_TWO_LINES_EIGHT_BITS_MODE);
@@ -93,7 +94,7 @@ void LCD_sendCommand(uint8 command)
 	_delay_ms(1); /* delay for processing Th = 13ns */
 
 #elif(LCD_DATA_BITS_MODE == 8)
-	DIO_writePort(LCD_DATA_PORT_ID,command); /* out the required command to the data bus D0 --> D7 */
+	GPIO_writePort(LCD_DATA_PORT_ID,command); /* out the required command to the data bus D0 --> D7 */
 	_delay_ms(1); /* delay for processing Tdsw = 100ns */
 	DIO_writePin(LCD_E_PORT_ID,LCD_E_PIN_ID,LOGIC_LOW); /* Disable LCD E=0 */
 	_delay_ms(1); /* delay for processing Th = 13ns */
@@ -133,7 +134,7 @@ void LCD_displayCharacter(uint8 data)
 	_delay_ms(1); /* delay for processing Th = 13ns */
 
 #elif(LCD_DATA_BITS_MODE == 8)
-	DIO_writePort(LCD_DATA_PORT_ID,data); /* out the required command to the data bus D0 --> D7 */
+	GPIO_writePort(LCD_DATA_PORT_ID,data); /* out the required command to the data bus D0 --> D7 */
 	_delay_ms(1); /* delay for processing Tdsw = 100ns */
 	DIO_writePin(LCD_E_PORT_ID,LCD_E_PIN_ID,LOGIC_LOW); /* Disable LCD E=0 */
 	_delay_ms(1); /* delay for processing Th = 13ns */

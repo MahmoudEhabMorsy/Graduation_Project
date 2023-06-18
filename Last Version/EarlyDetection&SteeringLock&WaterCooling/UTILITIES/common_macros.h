@@ -6,6 +6,8 @@
  *
  * Description: Commonly used Macros
  *
+ * Author: Mohamed Tarek
+ *
  *******************************************************************************/
 
 #ifndef COMMON_MACROS
@@ -31,5 +33,7 @@
 
 /* Check if a specific bit is cleared in any register and return true if yes */
 #define BIT_IS_CLEAR(REG,BIT) ( !(REG & (1<<BIT)) )
+
+#define GET_BIT(REG,BIT) ( ( REG & (1<<BIT) ) >> BIT )
 
 #endif

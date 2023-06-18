@@ -16,7 +16,7 @@
 #include "../../MCAL/TIMER/timer.h"
 #include "../../MCAL/DIO/dio.h"
 #include "a3144_wss.h"
-#include "../../CommonDef/std_types.h"
+#include "../../UTILITIES/std_types.h"
 
 /*------------------------------------------------------------------------------
  |                          Global Variables                                   |

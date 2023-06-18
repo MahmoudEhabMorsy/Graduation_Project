@@ -12,7 +12,7 @@
 
 #include "../../MCAL/TWI/twi.h"
 #include "bmp180.h"
-#include "../../CommonDef/common_macros.h"
+#include "../../UTILITIES/common_macros.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
