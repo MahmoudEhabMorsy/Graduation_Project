@@ -11,7 +11,7 @@
 #ifndef TIMER_H_
 #define TIMER_H_
 
-#include "../../CommonDef/std_types.h"
+#include "../../UTILITIES/std_types.h"
 
 /********************************************************/
 /* Type definitions */
