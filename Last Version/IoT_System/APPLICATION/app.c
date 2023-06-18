@@ -7,7 +7,7 @@
 
 #include "app.h"
 
-// Receive Temperature and Pressure Values.
+/*Dummy Global Variables*/
 uint32 Temperature = 37; // DUMMY
 uint32 Pressure = 1200; //DUMMY
 
@@ -20,8 +20,6 @@ void app_Init(void)
 
 	GPS_init();
 
-	_delay_ms(260);
-	_delay_ms(260);
 	_delay_ms(260);
 	_delay_ms(260);
 
