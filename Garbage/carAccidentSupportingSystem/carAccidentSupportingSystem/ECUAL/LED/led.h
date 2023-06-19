@@ -8,8 +8,8 @@
 #ifndef ECUAL_LED_LED_H_
 #define ECUAL_LED_LED_H_
 
-#include "gpio.h"
-#include "common_macros.h"
+#include "../../MCAL/DIO/gpio.h"
+#include "../../UTILITIES/common_macros.h"
 
 #define LED_PIN PIN3_ID
 #define LED_PORT PORTB_ID

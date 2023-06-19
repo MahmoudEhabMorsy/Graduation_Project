@@ -11,9 +11,9 @@
  *******************************************************************************/
 
 #include <util/delay.h> /* For the delay functions */
-#include "common_macros.h" /* For GET_BIT Macro */
+#include "../../UTILITIES/common_macros.h" /* For GET_BIT Macro */
 #include "lcd.h"
-#include "gpio.h"
+#include "../../MCAL/DIO/gpio.h"
 
 /*******************************************************************************
  *                      Functions Definitions                                  *

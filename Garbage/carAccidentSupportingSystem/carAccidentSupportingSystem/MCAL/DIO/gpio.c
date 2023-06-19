@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 #include "gpio.h"
-#include "common_macros.h" /* To use the macros like SET_BIT */
+#include "../../UTILITIES/common_macros.h" /* To use the macros like SET_BIT */
 #include "avr/io.h" /* To use the IO Ports Registers */
 
 /*

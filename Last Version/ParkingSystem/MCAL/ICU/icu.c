@@ -15,6 +15,7 @@
 #include <avr/io.h> /* To use ICU/Timer1 Registers */
 //#include "dio.h" /* include dio */
 #include <avr/interrupt.h> /* For ICU ISR */
+#include "../DIO/dio.h"
 
 /*******************************************************************************
  *                           Global Variables                                  *
@@ -57,7 +58,7 @@ void Icu_init(const Icu_ConfigType * Config_Ptr)
 
 	/* Configure ICP1/PD6 as i/p pin */
 	//DDRD &= ~(1<<PD6);
-	CLEAR_BIT(DDRD,6);
+	DIO_setupPinDirection(ULTRASONIC_ECHO_PORT_ID,ULTRASONIC_ECHO_PIN_ID,PIN_INPUT);
 
 	/* Timer1 always operates in Normal Mode */
 	TCCR1A = (1<<FOC1A) | (1<<FOC1B);

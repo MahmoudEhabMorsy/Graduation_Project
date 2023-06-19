@@ -11,7 +11,7 @@
  *******************************************************************************/
 
 #include "icu.h"
-#include "common_macros.h" /* To use the macros like SET_BIT */
+#include "../../UTILITIES/common_macros.h" /* To use the macros like SET_BIT */
 #include <avr/io.h> /* To use ICU/Timer1 Registers */
 //#include "dio.h" /* include dio */
 #include <avr/interrupt.h> /* For ICU ISR */

@@ -7,14 +7,14 @@
 
  ================================================================================================
  */
-#include "ultrasonic.h"
-#include "lcd.h"
+#include "../ECUAL/ULTRASONIC/ultrasonic.h"
+#include "../ECUAL/LCD/lcd.h"
 #include <util/delay.h>
 #include <avr/interrupt.h>
-#include "buzzer.h"
-#include "led.h"
-#include "timer.h"
-#include "common_macros.h"
+#include "../ECUAL/BUZZER/buzzer.h"
+#include "../ECUAL/LED/led.h"
+#include "../MCAL/TIMER/timer.h"
+#include "../UTILITIES/common_macros.h"
 #include <avr/io.h>
 
 #define LOW_RISK_DISTANCE_UPPER_LIMIT (40u)
@@ -39,7 +39,7 @@ typedef enum
 
 t_ULTRASONIC_INTERVAL ultrasonicInterval;
 
-void timercallBckFunc(void)
+/*void timercallBckFunc(void)
 {	static uint8 counter=0;
 
 	switch(ultrasonicInterval)
@@ -125,8 +125,8 @@ void timercallBckFunc(void)
 		break;
 	}
 }
-
-Timer_configuration Timer0_Configuration={Timer0,Normal,TIMER_INITIAL_VALUE,NO_COMPARE_VALUE,Prescaler_1024,timercallBckFunc};
+*/
+//Timer_configuration Timer0_Configuration={Timer0,Normal,TIMER_INITIAL_VALUE,NO_COMPARE_VALUE,Prescaler_1024,timercallBckFunc};
 
 
 int main()
@@ -135,10 +135,10 @@ int main()
 	uint16 LCD_distance; /*distance shown on the LCD screen*/
 	LCD_init(); /*initializing LCD*/
 	Ultrasonic_init(); /*initializing Ultrasonic*/
-	Buzzer_init();
-	LED_init();
+	//Buzzer_init();
+	//LED_init();
 	LCD_displayString(" Distance=    cm");
-	Timer_init(&Timer0_Configuration);
+	//Timer_init(&Timer0_Configuration);
 	sei(); /*enabling global interrupt*/
 	while(1)
 	{
