@@ -19,8 +19,18 @@ int main(void) {
 	HC05_init(SLAVE);
 	_delay_ms(300);
 
+	/*INT1 init Function*/
+	DDRD  &= (~(1<<PD3));  // Configure INT1/PD3 as input pin
+	PORTD &=~(1<<PD3); //Initially LOW
+	/*Trigger INT1 with the rising edge*/
+	MCUCR |= (1<<ISC11) | (1 << ISC10);
+	GICR  |= (1<<INT1);    // Enable external interrupt pin INT1
+	/* End of INT1 init Function*/
+
 	DC_Motor_Init();
 	PWM_Timer0_Init(SPEED_50);
+
+	SREG |= (1 << 7);
 	while (1)
 	{
 		if(u8_severeTiresStateFlag)
