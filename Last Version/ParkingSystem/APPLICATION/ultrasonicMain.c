@@ -108,6 +108,11 @@ void timercallBckFunc(void) {
 		break;
 	}
 }
+void delay(uint8 seconds){
+	for(int i=0;i<(4*seconds);i++){
+		_delay_ms(250);
+	}
+}
 
 //Timer_configuration Timer0_Configuration={Timer0,Normal,TIMER_INITIAL_VALUE,NO_COMPARE_VALUE,Prescaler_1024,timercallBckFunc};
 
@@ -121,17 +126,22 @@ int main() {
 	LCD_displayStringRowColumn(0, 0, "FRONT_RIGHT =   m");
 	LCD_displayStringRowColumn(1, 0, "FRONT_LEFT =   m");
 	LCD_displayStringRowColumn(2, 0, "REAR_RIGHT =   m");
+	LCD_displayStringRowColumn(3, 0, "REAR_LEFT =   m");
 	//Timer_init(&Timer0_Configuration);
 	/*enabling global interrupt*/
-	sei();
+	SREG |= (1 << 7);
 	while (1) {
-		_delay_ms(1);
+		//Ultrasonic_buttonCheck(); /*checking if the button is pressed*/
 		if (g_sensorID == FRONT_RIGHT) {
 			LCD_moveCursor(0, 13); /*moving cursor to the first distance position*/
 		} else if (g_sensorID == FRONT_LEFT) {
 			LCD_moveCursor(1, 12); /*moving cursor to the second distance position*/
 		} else if (g_sensorID == REAR_RIGHT) {
 			LCD_moveCursor(2, 13); /*moving cursor to the third distance position*/
+		} else if (g_sensorID == REAR_LEFT) {
+			LCD_moveCursor(3, 12); /*moving cursor to the fourth distance position*/
+		} else {
+			/*Do nothing*/
 		}
 		LCD_distance = Ultrasonic_readDistance(); /*storing the measured distance*/
 
@@ -141,6 +151,7 @@ int main() {
 			LCD_intgerToString(LCD_distance);
 			LCD_displayCharacter(' ');
 		}
+		//_delay_ms(100);
 		//warning(LCD_distance); /*warning function*/
 	}
 }
@@ -165,8 +176,4 @@ void warning(uint16 Distance) {
 		ultrasonicInterval = SAFE_DISTANCE;
 		Timer_reset(Timer0);
 	}
-}
-//delay funtion for atmega 32 using for loop for 1 sec without using built in delay function
-void delay(void){
-
 }
