@@ -1,3 +1,14 @@
+ /******************************************************************************
+ *
+ * Module: Common - Macros
+ *
+ * File Name: Common_Macros.h
+ *
+ * Description: Commonly used Macros
+ *
+ * Author: Mohamed Tarek
+ *
+ *******************************************************************************/
 
 #ifndef COMMON_MACROS
 #define COMMON_MACROS
@@ -24,11 +35,5 @@
 #define BIT_IS_CLEAR(REG,BIT) ( !(REG & (1<<BIT)) )
 
 #define GET_BIT(REG,BIT) ( ( REG & (1<<BIT) ) >> BIT )
-/*** 	NULL DEFINITION		***/
-#define NULL 		( (void*) 0 )
-
-/***   ERRORS DEFINITION    ***/ 
-#define ERROR 		1
-#define NO_ERROR 	0
 
 #endif

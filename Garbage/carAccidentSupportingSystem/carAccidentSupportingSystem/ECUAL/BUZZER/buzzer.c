@@ -6,11 +6,11 @@
  */
 
 
-#include "std_types.h"
-#include "gpio.h"
+#include "../../UTILITIES/std_types.h"
+#include "../../MCAL/DIO/gpio.h"
 #include "buzzer.h"
 #include <avr/io.h>
-#include "common_macros.h"
+#include "../../UTILITIES/common_macros.h"
 
 /*******************************************************************************
  *                      Functions Definitions                                  *

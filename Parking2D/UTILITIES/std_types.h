@@ -1,3 +1,15 @@
+ /******************************************************************************
+ *
+ * Module: Common - Platform Types Abstraction
+ *
+ * File Name: std_types.h
+ *
+ * Description: types for AVR
+ *
+ * Author: Mohamed Tarek
+ *
+ *******************************************************************************/
+
 #ifndef STD_TYPES_H_
 #define STD_TYPES_H_
 
@@ -28,4 +40,4 @@ typedef signed long long      sint64;         /* -9223372036854775808 .. 9223372
 typedef float                 float32;
 typedef double                float64;
 
-#endif 
+#endif /* STD_TYPE_H_ */

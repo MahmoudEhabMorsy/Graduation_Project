@@ -9,9 +9,9 @@
  * Author:
  *
  *******************************************************************************/
-#include "icu.h"
-#include "std_types.h"
-#include "gpio.h"
+#include "../../MCAL/ICU/icu.h"
+#include "../../UTILITIES/std_types.h"
+#include "../../MCAL/DIO/gpio.h"
 #include "util/delay.h"
 #include <math.h>
 #include "ultrasonic.h"

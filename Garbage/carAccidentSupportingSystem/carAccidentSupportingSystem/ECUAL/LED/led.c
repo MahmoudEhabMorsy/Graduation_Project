@@ -11,8 +11,8 @@
 
 void LED_init(uint8 port_number, uint8 pin_number)
 {
-	DIO_setupPinDirection(port_number,pin_number,PIN_OUTPUT);
-	DIO_writePin(port_number,pin_number, LOGIC_LOW); /*Initiate LEDs to OFF*/
+	GPIO_setupPinDirection(port_number,pin_number,PIN_OUTPUT);
+	GPIO_writePin(port_number,pin_number, LOGIC_LOW); /*Initiate LEDs to OFF*/
 }
 
 /*
@@ -23,7 +23,7 @@ void LED_init(uint8 port_number, uint8 pin_number)
  */
 void LED_ON(uint8 port_number, uint8 pin_number)
 {
-	DIO_writePin(port_number,pin_number, LOGIC_HIGH);
+	GPIO_writePin(port_number,pin_number, LOGIC_HIGH);
 }
 
 /*
@@ -34,7 +34,7 @@ void LED_ON(uint8 port_number, uint8 pin_number)
  */
 void LED_OFF(uint8 port_number, uint8 pin_number)
 {
-	DIO_writePin(port_number,pin_number, LOGIC_LOW);
+	GPIO_writePin(port_number,pin_number, LOGIC_LOW);
 }
 
 /*

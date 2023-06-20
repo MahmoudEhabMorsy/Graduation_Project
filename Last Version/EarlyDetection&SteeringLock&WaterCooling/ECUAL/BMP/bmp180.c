@@ -12,7 +12,7 @@
 
 #include "../../MCAL/TWI/twi.h"
 #include "bmp180.h"
-#include "../../CommonDef/common_macros.h"
+#include "../../UTILITIES/common_macros.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -67,7 +67,7 @@ uint32 Get_UP(void) {
 	// array to store the raw pressure data
 	uint8 Pressure_RAW[3] = { 0 };
 
-	uint32 data=0;
+	uint32 data = 0;
 
 	// start the I2C communication with BMP180 by sending its address
 	TWI_Start(BMP180_ADDRESS_W);
@@ -120,19 +120,19 @@ uint32 Get_UP(void) {
 	// stop the I2C communication with BMP180
 
 	// combine the raw pressure data into a single 24-bit value and shift it right to adjust for the oversampling setting
-	data|=((uint32)(Pressure_RAW[0] << 16));
-	data|=(uint32)(Pressure_RAW[1] << 8);
-	data|=(uint32)(Pressure_RAW[2]);
-	data=(data >> (8 - OSS));
+
+	data |= ((uint32_t) Pressure_RAW[0] << 16);
+	data |= ((uint32_t) Pressure_RAW[1] << 8);
+	data |= (uint32_t) Pressure_RAW[2];
+	data = data >> (8 - OSS);
+	//division by 2 power (8-oss which is in datasheet (0,1))
+
 	return data;
-
-	//    data = ((Pressure_RAW[0] << 16) + (Pressure_RAW[1] << 8) + Pressure_RAW[2]) >> (8 - OSS);
-
-	//    return data;
 }
 
 uint32 Get_UT(void) {
-	uint32 data=0;
+	uint32 data = 0;
+
 	uint8 datatowrite = 0x2E;
 	// array to store the raw pressure data
 	uint8 Temperature_RAW[2] = { 0 };
@@ -173,10 +173,10 @@ uint32 Get_UT(void) {
 	delay();
 	TWI_Stop();
 	// stop the I2C communication with BMP180
-	data|=(uint32)(Temperature_RAW[0] << 8);
-	data|=(uint32)Temperature_RAW[1];
-	return data;
 
+	data |= ((uint32_t) Temperature_RAW[0] << 8);
+	data |= (uint32_t) Temperature_RAW[1];
+	return data;
 }
 
 sint32 BMP180_calculateTemperature(void) {
@@ -187,7 +187,7 @@ sint32 BMP180_calculateTemperature(void) {
 
 	X1 = ((UT - AC6) * (AC5 / (pow(2, 15))));
 	X2 = (MC * (pow(2, 11))) / (X1 + MD);
-	B5 = X1 + X2;
+       	B5 = X1 + X2;
 	temperature = (B5 + 8) / (pow(2, 4));
 	return temperature / 10.0;
 }
