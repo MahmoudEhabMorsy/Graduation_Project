@@ -20,8 +20,6 @@ int main(void) {
 
 	/*INT1 init Function*/
 	DDRD  &= (~(1<<PD3));  // Configure INT1/PD3 as input pin
-	DDRD |= (1<<6); //dummy
-	PORTD &=~(1<<6);//dummy
 	PORTD |= (1<<PD3); // Pull Up Resistor
 	/*Trigger INT1 with the falling edge*/
 	MCUCR |= (1<<ISC11);
@@ -41,7 +39,7 @@ int main(void) {
 		if(u8_severeTiresStateFlag)
 		{
 			keep_Car_Safe();
-			PORTD |= (1<<6);//dummy
+			//PORTD |= (1<<6);//dummy
 		}
 		else
 		{
