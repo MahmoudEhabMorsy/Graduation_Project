@@ -355,7 +355,7 @@ void ESP_sendCoordinatesToServer(const uint8* car_id, uint8 *longitude, uint8 *l
 }
 
 
-void ESP_sendTiresState(const uint8* car_id, uint32 Temperature, uint32 Pressure)
+void ESP_sendTiresState(const uint8* car_id, sint32 Temperature, sint32 Pressure)
 {
 	uint8 Str_Temp[MAXIMUM_LENGTH];
 	uint8 Str_Press[MAXIMUM_LENGTH];
