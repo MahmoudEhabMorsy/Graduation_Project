@@ -12,7 +12,7 @@
 
 #include "../../MCAL/TWI/twi.h"
 #include "bmp180.h"
-#include "../../CommonDef/common_macros.h"
+#include "../../UTILITIES/common_macros.h"
 #include <util/delay.h>
 
 
@@ -231,6 +231,3 @@ void BMP180_Start(void) {
 	BMP180_ReadCalb();
 }
 
-void delay(void){
-	_delay_us(10);
-}
