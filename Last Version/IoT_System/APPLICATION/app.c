@@ -31,7 +31,15 @@ void app_Start(void)
 {
 	GPS_sendingCoordinatesTask();
 
+	LCD_displayString("GPS_Task Passed");
+	_delay_ms(260);
+	_delay_ms(260);
+
 	BMP180_sendingDataTask();
+	LCD_displayString("BMP180 Passed");
+	_delay_ms(260);
+	_delay_ms(260);
+
 }
 
 uint8 GPS_sendingCoordinatesTask(void)
@@ -90,6 +98,8 @@ uint8 GPS_sendingCoordinatesTask(void)
 void BMP180_sendingDataTask(void)
 {
 	/*TIRES STATE PART*/
+	GPS_deInit();
+
 	ESP_init();
 
 	ESP_networkConnect(SSID, PASSWORD);
