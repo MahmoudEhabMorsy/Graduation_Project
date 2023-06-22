@@ -39,8 +39,8 @@ ISR(INT1_vect)
 
 void ESP_preInit(void)
 {
-	SPI_initSlave();
 	INT1_Init();
+	SPI_initSlave();
 }
 void ESP_init(void)
 {
