@@ -15,10 +15,6 @@
 #include "../ECUAL/LCD/lcd.h"
 #include "../ECUAL/GPS/gps.h"
 #include "../ECUAL/ESP01/esp.h"
-#include "../MCAL/SPI/spi.h"
-#include <avr/interrupt.h>
-
-
 /*******************************************************************************
  *                                Definitions                                  *
  *******************************************************************************/
@@ -34,20 +30,6 @@
 #define API_KEY (const uint8*) "E3F314CY3VJGPB74"
 #define CAR_ID (const uint8*) "63d5343990599fb5c8ce4c48"
 
-#define TEMPERATURE_VARIABLE_LENGTH 4
-#define PRESSURE_VARIABLE_LENGTH 4
-
-typedef enum
-{
-	FRONT_LEFT_TYRE, FRONT_RIGHT_TYRE, REAR_LEFT_TYRE, REAR_RIGHT_TYRE
-}wheeL_ID;
-
-typedef struct
-{
-	wheeL_ID tyre;
-	sint32 Temperature;
-	sint32 Pressure;
-}tyreState;
 /*******************************************************************************
  *                      Functions Prototypes                                   *
  *******************************************************************************/

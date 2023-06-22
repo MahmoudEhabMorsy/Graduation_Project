@@ -7,6 +7,41 @@
 
 #include "esp.h"
 
+/*Interrupt Service Routine Segment*/
+
+volatile tireState t_frontLeftTire = {FRONT_LEFT_TIRE, 0, 0}; /*Initially*/
+volatile uint8 dummy_Byte = 0;
+volatile uint8 BMP_Data = BMP_DATA_IS_NOT_READY;
+
+ISR(INT1_vect)
+{
+
+	/*Receive Tire Data*/
+	/*First, Receive Tire ID*/
+	t_frontLeftTire.tire = SPI_sendReceiveByte(dummy_Byte);
+
+	/*Second, Receive Tire Temperature Value*/
+	for (uint8 i = 0; i < TEMPERATURE_VARIABLE_LENGTH; i++) {
+		dummy_Byte = SPI_sendReceiveByte(dummy_Byte);
+		t_frontLeftTire.Temperature = (t_frontLeftTire.Temperature | (dummy_Byte << (i * 8)));
+	}
+
+	/*Third, Receive Tire Pressure Value*/
+	for (uint8 i = 0; i < PRESSURE_VARIABLE_LENGTH; i++) {
+		dummy_Byte = SPI_sendReceiveByte(dummy_Byte);
+		t_frontLeftTire.Pressure = (t_frontLeftTire.Pressure | (dummy_Byte << (i * 8)));
+	}
+
+	BMP_Data = BMP_DATA_IS_READY;
+}
+
+/*End of Interrupt Service Routine Segment*/
+
+void ESP_preInit(void)
+{
+	SPI_initSlave();
+	INT1_Init();
+}
 void ESP_init(void)
 {
 //	GPIO_setupPinDirection(ESP_PORT, ESP_VCC_PIN, PIN_OUTPUT);
@@ -280,10 +315,6 @@ Content-Length:14\r\n\r\n
  * 		  Structure of Coordinates
  * 		  String Car ID
 */
-
-/*
- *
- * */
 void ESP_sendCoordinatesToServer(const uint8* car_id, uint8 *longitude, uint8 *latitude)
 {
 	uint8 requestLength[MAXIMUM_LENGTH];
@@ -355,12 +386,13 @@ void ESP_sendCoordinatesToServer(const uint8* car_id, uint8 *longitude, uint8 *l
 }
 
 
-void ESP_sendTiresState(const uint8* car_id, sint32 Temperature, sint32 Pressure)
+//void ESP_sendTiresState(const uint8* car_id, sint32 Temperature, sint32 Pressure)
+void ESP_sendTiresState(const uint8* car_id)
 {
 	uint8 Str_Temp[MAXIMUM_LENGTH];
 	uint8 Str_Press[MAXIMUM_LENGTH];
-	intToStr(Temperature, Str_Temp);
-	intToStr(Pressure, Str_Press);
+	intToStr(t_frontLeftTire.Temperature, Str_Temp);
+	intToStr(t_frontLeftTire.Pressure, Str_Press);
 
 	uint8 requestLength[MAXIMUM_LENGTH];
 	uint8 dataBodyLength[MAXIMUM_LENGTH];
@@ -373,59 +405,67 @@ void ESP_sendTiresState(const uint8* car_id, sint32 Temperature, sint32 Pressure
 			+ strlen("Content-Length:\r\n\r\n")\
 			+ u16DataBodyLength;
 
-	/*
-	AT+CIPSEND=118
-	POST /api/carconnect HTTP/1.1\r\n
-	Host:35.192.107.191\r\n
-	Content-Type:application/json\r\n
-	Content-Length:14\r\n\r\n
-	{\"ID\":\"640005cc524bdbb9e426b4f5\",\"Lon\":\"0.12345\"\"Lat\":63.42145}\r\n
-	*/
-
-	intToStr(u16DataBodyLength,dataBodyLength);
-	u16RequestLength += strlen(dataBodyLength);
-	intToStr(u16RequestLength,requestLength);
-
-	UART_sendString((const uint8*)"AT+CIPSEND=");
-	UART_sendString(requestLength);
-	UART_sendString((const uint8*)"\r\n");
-
-	while(1)
+	if (BMP_Data == BMP_DATA_IS_READY)
 	{
-		if(UART_receiveByte() == 'O')
+		/*
+		AT+CIPSEND=118
+		POST /api/carconnect HTTP/1.1\r\n
+		Host:35.192.107.191\r\n
+		Content-Type:application/json\r\n
+		Content-Length:14\r\n\r\n
+		{\"ID\":\"640005cc524bdbb9e426b4f5\",\"Lon\":\"0.12345\"\"Lat\":63.42145}\r\n
+		*/
+
+		intToStr(u16DataBodyLength,dataBodyLength);
+		u16RequestLength += strlen(dataBodyLength);
+		intToStr(u16RequestLength,requestLength);
+
+		UART_sendString((const uint8*)"AT+CIPSEND=");
+		UART_sendString(requestLength);
+		UART_sendString((const uint8*)"\r\n");
+
+		while(1)
 		{
-			if(UART_receiveByte() == 'K')
+			if(UART_receiveByte() == 'O')
 			{
-				break;
+				if(UART_receiveByte() == 'K')
+				{
+					break;
+				}
 			}
 		}
+		UART_sendString((const uint8*)"POST /api/carconnect HTTP/1.1\r\n");
+		UART_sendString((const uint8*)"Host:");
+		UART_sendString(SERVER_IP);
+		UART_sendString((const uint8*)"\r\n");
+		UART_sendString((const uint8*)"Content-Type:application/json\r\n");
+		UART_sendString((const uint8*)"Content-Length:");
+		UART_sendString(dataBodyLength);
+		UART_sendString((const uint8*)"\r\n");
+		UART_sendString((const uint8*)"\r\n");
+		UART_sendString((const uint8*)"{\"carID\":\"");
+		UART_sendString(car_id);
+		UART_sendString((const uint8*)"\",\"FLTT\":\"");
+		UART_sendString(Str_Temp);
+		UART_sendString((const uint8*)"\",\"FLTP\":\"");
+		UART_sendString(Str_Press);
+		UART_sendString((const uint8*)"\"}\r\n");
+
+		while(1)
+		{
+			if(UART_receiveByte() == 'O')
+			{
+				if(UART_receiveByte() == 'K')
+				{
+					break;
+				}
+			}
+		}
+		BMP_Data = BMP_DATA_IS_NOT_READY;
 	}
-	UART_sendString((const uint8*)"POST /api/carconnect HTTP/1.1\r\n");
-	UART_sendString((const uint8*)"Host:");
-	UART_sendString(SERVER_IP);
-	UART_sendString((const uint8*)"\r\n");
-	UART_sendString((const uint8*)"Content-Type:application/json\r\n");
-	UART_sendString((const uint8*)"Content-Length:");
-	UART_sendString(dataBodyLength);
-	UART_sendString((const uint8*)"\r\n");
-	UART_sendString((const uint8*)"\r\n");
-	UART_sendString((const uint8*)"{\"carID\":\"");
-	UART_sendString(car_id);
-	UART_sendString((const uint8*)"\",\"FLTT\":\"");
-	UART_sendString(Str_Temp);
-	UART_sendString((const uint8*)"\",\"FLTP\":\"");
-	UART_sendString(Str_Press);
-	UART_sendString((const uint8*)"\"}\r\n");
-
-	while(1)
+	else
 	{
-		if(UART_receiveByte() == 'O')
-		{
-			if(UART_receiveByte() == 'K')
-			{
-				break;
-			}
-		}
+		/*Do nothing*/
 	}
 }
 
