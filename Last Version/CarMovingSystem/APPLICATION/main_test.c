@@ -10,32 +10,36 @@ carState t_carState = {BRAKE,SPEED_0};
 ISR(INT1_vect)
 {
 	u8_severeTiresStateFlag = 1;
+	//PORTD |= (1<<6);//dummy
 }
 
 
 
 int main(void) {
 	delay(1);
-	HC05_init(SLAVE);
-	_delay_ms(300);
 
 	/*INT1 init Function*/
 	DDRD  &= (~(1<<PD3));  // Configure INT1/PD3 as input pin
-	PORTD &=~(1<<PD3); //Initially LOW
-	/*Trigger INT1 with the rising edge*/
-	MCUCR |= (1<<ISC11) | (1 << ISC10);
+	PORTD |= (1<<PD3); // Pull Up Resistor
+	/*Trigger INT1 with the falling edge*/
+	MCUCR |= (1<<ISC11);
+	MCUCR &=~  (1 << ISC10);
 	GICR  |= (1<<INT1);    // Enable external interrupt pin INT1
 	/* End of INT1 init Function*/
+
+	HC05_init(SLAVE);
+	_delay_ms(300);
 
 	DC_Motor_Init();
 	PWM_Timer0_Init(SPEED_50);
 
-	SREG |= (1 << 7);
+	SREG |= (1<<7);
 	while (1)
 	{
 		if(u8_severeTiresStateFlag)
 		{
 			keep_Car_Safe();
+			//PORTD |= (1<<6);//dummy
 		}
 		else
 		{
@@ -47,6 +51,8 @@ int main(void) {
 
 void keep_Car_Safe(void)
 {
+	t_carState.gearState = FORWARD;
+	t_carState.carSpeed = SPEED_100;
 	switch(t_carState.gearState)
 	{
 	case FORWARD:

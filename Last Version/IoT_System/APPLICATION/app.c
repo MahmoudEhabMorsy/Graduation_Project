@@ -7,12 +7,10 @@
 
 #include "app.h"
 
-/*Dummy Global Variables*/
-uint32 Temperature = 37; // DUMMY
-uint32 Pressure = 1200; //DUMMY
-
 void app_Init(void)
 {
+	/* Initialize the LCD Driver */
+
 	_delay_ms(260);
 	LCD_init();
 
@@ -24,21 +22,33 @@ void app_Init(void)
 	_delay_ms(260);
 
 	LCD_clearScreen();
-}
 
+	ESP_preInit();
+	sei();
+}
 
 void app_Start(void)
 {
-	LCD_clearScreen();
-
 	GPS_sendingCoordinatesTask();
 
+	LCD_displayString("GPS_Task Passed");
+	_delay_ms(260);
+	_delay_ms(260);
+
 	BMP180_sendingDataTask();
+	LCD_displayString("BMP180 Passed");
+	_delay_ms(260);
+	_delay_ms(260);
+
 }
 
 uint8 GPS_sendingCoordinatesTask(void)
 {
+	GPS_reInit();
+	cli();
 	GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
+	sei();
+
 	if(GPS_DataValidation == VALID_GPS_DATA)
 	{
 		LCD_displayString("Valid Reading");
@@ -88,5 +98,15 @@ uint8 GPS_sendingCoordinatesTask(void)
 void BMP180_sendingDataTask(void)
 {
 	/*TIRES STATE PART*/
-	ESP_sendTiresState(CAR_ID, Temperature, Pressure);
+	GPS_deInit();
+
+	ESP_init();
+
+	ESP_networkConnect(SSID, PASSWORD);
+
+	ESP_serverConnect(SW_TEAM_SERVER_IP, PORT); //AT Command
+
+	ESP_sendTiresState(CAR_ID);
+
+	ESP_deInit();
 }

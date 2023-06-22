@@ -15,8 +15,6 @@
 #include "../ECUAL/LCD/lcd.h"
 #include "../ECUAL/GPS/gps.h"
 #include "../ECUAL/ESP01/esp.h"
-
-
 /*******************************************************************************
  *                                Definitions                                  *
  *******************************************************************************/
@@ -31,7 +29,6 @@
 #define PORT (const uint8*) "80"
 #define API_KEY (const uint8*) "E3F314CY3VJGPB74"
 #define CAR_ID (const uint8*) "63d5343990599fb5c8ce4c48"
-
 
 /*******************************************************************************
  *                      Functions Prototypes                                   *
