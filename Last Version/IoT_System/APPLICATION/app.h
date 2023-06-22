@@ -18,8 +18,8 @@
 /*******************************************************************************
  *                                Definitions                                  *
  *******************************************************************************/
-#define SSID (const uint8*) "MQOTP"
-#define PASSWORD (const uint8*) "90900000"
+#define SSID (const uint8*) "Mahmoud"
+#define PASSWORD (const uint8*) "12345678"
 
 #define THINGSPEAK_SERVER_IP (const uint8*) "184.106.153.149"
 #define THINGSPEAK_SERVER_URL (const uint8*) "api.thingspeak.com"

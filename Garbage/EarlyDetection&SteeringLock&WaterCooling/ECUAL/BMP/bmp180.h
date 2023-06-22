@@ -13,7 +13,7 @@
 #ifndef BMP180_H_
 #define BMP180_H_
 
-#include "../../CommonDef/std_types.h"
+#include "../../UTILITIES/std_types.h"
 
 
 // Register Table From Data Sheet
@@ -38,16 +38,6 @@
 #define P_DISP_FLAG	0
 #define T_DISP_FLAG 1
 
-typedef enum
-{
-	FRONT_LEFT, FRONT_RIGHT, REAR_LEFT, REAR_RIGHT
-}WHEEL_ID;
-
-typedef struct{
-	sint32 temperature;
-	sint32 pressure;
-	WHEEL_ID wheel;
-}tyreState;
 
 void BMP180_ReadCalb(void);
 
@@ -58,8 +48,6 @@ uint32 Get_UT(void);
 sint32 BMP180_calculateTemperature(void);
 
 sint32 BMP180_calculatePressure(void);
-
-void BMP180_calculate(tyreState * readings);
 
 void BMP180_Start(void);
 

@@ -7,7 +7,7 @@
 
 #ifndef DIO_H_
 #define DIO_H_
-#include "../../CommonDef/std_types.h"
+#include "../../UTILITIES/std_types.h"
 #include "io.h"
 
  /*******************************************************************************
