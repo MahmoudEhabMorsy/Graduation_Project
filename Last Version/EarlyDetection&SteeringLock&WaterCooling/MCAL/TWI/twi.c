@@ -10,7 +10,7 @@
 
 #include "twi.h"
 
-#include "../../UTILITIES/common_macros.h"
+#include "../../CommonDef//common_macros.h"
 
 #include "twi_config.h"
 #include "twi_map.h"

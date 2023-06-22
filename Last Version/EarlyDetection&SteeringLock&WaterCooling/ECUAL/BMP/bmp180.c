@@ -12,10 +12,7 @@
 
 #include "../../MCAL/TWI/twi.h"
 #include "bmp180.h"
-#include "../../UTILITIES/common_macros.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
+#include "../../CommonDef/common_macros.h"
 #include <util/delay.h>
 
 
@@ -222,6 +219,12 @@ sint32 BMP180_calculatePressure(void) {
 	P = P / 100;
 
 	return P;
+}
+
+void BMP180_calculate(tyreState * readings) {
+	readings->temperature = BMP180_calculateTemperature();
+	readings->pressure = BMP180_calculatePressure();
+	readings->wheel = FRONT_LEFT;
 }
 
 void BMP180_Start(void) {

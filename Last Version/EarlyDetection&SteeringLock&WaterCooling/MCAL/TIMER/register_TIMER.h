@@ -13,7 +13,7 @@
 #ifndef REGISTER_H_
 #define REGISTER_H_
 
-#include "../../UTILITIES/std_types.h"
+#include "../../CommonDef/std_types.h"
 
 /***************************************************************/
 /*                     TIMER general Register                  */

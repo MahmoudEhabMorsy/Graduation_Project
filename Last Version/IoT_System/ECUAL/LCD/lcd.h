@@ -45,7 +45,7 @@
 #define LCD_DB4_PIN_ID                 PIN0_ID
 #define LCD_DB5_PIN_ID                 PIN1_ID
 #define LCD_DB6_PIN_ID                 PIN2_ID
-#define LCD_DB7_PIN_ID                 PIN4_ID
+#define LCD_DB7_PIN_ID                 PIN3_ID
 
 #endif
 
