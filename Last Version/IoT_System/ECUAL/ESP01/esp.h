@@ -46,6 +46,7 @@ typedef struct
 	sint32 Pressure;
 }tireState;
 
+extern volatile tireState t_frontLeftTire;
 void ESP_preInit(void);
 /*End of "Application Specific Segment"*/
 void ESP_init(void);

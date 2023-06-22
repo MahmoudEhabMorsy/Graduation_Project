@@ -108,5 +108,15 @@ void BMP180_sendingDataTask(void)
 
 	ESP_sendTiresState(CAR_ID);
 
+	LCD_moveCursor(2,0);
+	LCD_displayString("Temp: ");
+	LCD_intgerToString(t_frontLeftTire.Temperature);
+
+	LCD_moveCursor(3,0);
+	LCD_displayString("Pres: ");
+	LCD_intgerToString(t_frontLeftTire.Pressure);
+	_delay_ms(260);
+	_delay_ms(260);
+
 	ESP_deInit();
 }
