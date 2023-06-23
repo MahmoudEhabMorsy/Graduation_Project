@@ -42,9 +42,9 @@ uint8 GPS_sendingCoordinatesTask(void)
 	}
 	/*End of Dummy While Loop*/
 
+	sei();
 	if(GPS_DataValidation == VALID_GPS_DATA)
 	{
-		sei();
 
 		GPS_deInit();
 
