@@ -18,7 +18,7 @@
 */
 
 GPS_Coordinates t_GPS_Coordinates;
-uint8 GPS_DataValidation;
+uint8 GPS_DataValidation = VOID_GPS_DATA;
 
 void GPS_init(void)
 {

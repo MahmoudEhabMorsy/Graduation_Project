@@ -44,11 +44,14 @@ void app_Start(void)
 
 uint8 GPS_sendingCoordinatesTask(void)
 {
-	GPS_reInit();
-	cli();
-	GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
-	sei();
-
+	/*Dummy while loop - for now.*/
+	while(GPS_DataValidation != VALID_GPS_DATA)
+	{
+		GPS_reInit();
+		cli();
+		GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
+		sei();
+	}/*End of Dummy While Loop*/
 	if(GPS_DataValidation == VALID_GPS_DATA)
 	{
 		LCD_displayString("Valid Reading");
