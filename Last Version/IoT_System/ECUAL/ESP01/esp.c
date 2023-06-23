@@ -389,6 +389,12 @@ void ESP_sendCoordinatesToServer(const uint8* car_id, uint8 *longitude, uint8 *l
 //void ESP_sendTiresState(const uint8* car_id, sint32 Temperature, sint32 Pressure)
 void ESP_sendTiresState(const uint8* car_id)
 {
+	/*Dummy Code Segment*/
+	t_frontLeftTire.Temperature = 34;
+	t_frontLeftTire.Pressure = 1123;
+	BMP_Data = BMP_DATA_IS_READY;
+	/*End of Dummy Code Segment*/
+
 	uint8 Str_Temp[MAXIMUM_LENGTH];
 	uint8 Str_Press[MAXIMUM_LENGTH];
 	intToStr(t_frontLeftTire.Temperature, Str_Temp);
