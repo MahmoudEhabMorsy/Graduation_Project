@@ -99,7 +99,7 @@ void Press_state(void)
 
 int main()
 {
-	SREG |= (1<<7);
+	
 
 	TWI_init();
 	BMP180_Start();
@@ -117,7 +117,7 @@ int main()
 	/* Delay until MC2 finish its initialization task */
 	_delay_ms(200);
 	_delay_ms(200);
-
+SREG |= (1<<7);
 	/* Send the string to MC2 */
 
 	/*Required Steps:
