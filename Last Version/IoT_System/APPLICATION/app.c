@@ -22,12 +22,12 @@ void app_Start(void)
 
 uint8 GPS_sendingCoordinatesTask(void)
 {
-	uint32 timeout = 0;
+	uint16 timeout = 0;
 	GPS_reInit();
 	cli();
 
 	/*Dummy while loop - for now.*/
-	while(timeout < 0xffffffff)
+	while(timeout < 0xffff)
 	{
 		GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
 		if(GPS_DataValidation == VALID_GPS_DATA)
@@ -60,6 +60,12 @@ uint8 GPS_sendingCoordinatesTask(void)
 		ESP_deInit();
 
 		GPS_reInit();
+
+		_delay_ms(250);
+		_delay_ms(250);
+		_delay_ms(250);
+		_delay_ms(250);
+
 	}
 	else
 	{
@@ -82,4 +88,11 @@ void BMP180_sendingDataTask(void)
 	ESP_sendTiresState(CAR_ID);
 
 	ESP_deInit();
+
+	GPS_reInit();
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+
 }
