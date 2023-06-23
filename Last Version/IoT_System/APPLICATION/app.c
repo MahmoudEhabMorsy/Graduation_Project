@@ -9,7 +9,20 @@
 
 void app_Init(void)
 {
+	/* Initialize the LCD Driver */
+
+	_delay_ms(260);
+	LCD_init();
+
+	LCD_displayString("Test1");
+
 	GPS_init();
+
+	_delay_ms(260);
+	_delay_ms(260);
+
+	LCD_clearScreen();
+
 	ESP_preInit();
 	sei();
 }
@@ -17,34 +30,34 @@ void app_Init(void)
 void app_Start(void)
 {
 	GPS_sendingCoordinatesTask();
+
+	LCD_displayString("GPS_Task Passed");
+	_delay_ms(260);
+	_delay_ms(260);
+
 	BMP180_sendingDataTask();
+	LCD_displayString("BMP180 Passed");
+	_delay_ms(260);
+	_delay_ms(260);
+
 }
 
 uint8 GPS_sendingCoordinatesTask(void)
 {
-	uint16 timeout = 0;
 	GPS_reInit();
 	cli();
 
 	/*Dummy while loop - for now.*/
-	while(timeout < 0xffff)
+	while(GPS_DataValidation != VALID_GPS_DATA)
 	{
 		GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
-		if(GPS_DataValidation == VALID_GPS_DATA)
-		{
-			break;
-		}
-		else
-		{
-			/*Do Nothing*/
-		}
-		timeout++;
-	}
-	/*End of Dummy While Loop*/
+	}/*End of Dummy While Loop*/
 
 	sei();
 	if(GPS_DataValidation == VALID_GPS_DATA)
 	{
+		LCD_displayString("Valid Reading");
+		_delay_ms(260);
 
 		GPS_deInit();
 
@@ -61,22 +74,35 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 		GPS_reInit();
 
-		_delay_ms(250);
-		_delay_ms(250);
-		_delay_ms(250);
-		_delay_ms(250);
-
+		LCD_clearScreen();
+	}
+	else if(GPS_DataValidation == VOID_GPS_DATA)
+	{
+		LCD_displayString("Void Reading");
+		_delay_ms(260);
+		LCD_clearScreen();
 	}
 	else
 	{
-		/*Do Nothing*/
+		LCD_displayString("Incorrect Reading");
+		_delay_ms(260);
+		LCD_clearScreen();
 	}
+
+	LCD_displayStringRowColumn(0,0,"Lat: ");
+	LCD_displayStringRowColumn(1,0,(const uint8*)t_GPS_Coordinates.Latitude);
+	LCD_displayStringRowColumn(2,0,"Lon: ");
+	LCD_displayStringRowColumn(3,0,(const uint8*)t_GPS_Coordinates.Longitude);
+
+	_delay_ms(260);
+	_delay_ms(260);
 	return GPS_DataValidation;
 }
 
 
 void BMP180_sendingDataTask(void)
 {
+	/*TIRES STATE PART*/
 	GPS_deInit();
 
 	ESP_init();
@@ -87,12 +113,15 @@ void BMP180_sendingDataTask(void)
 
 	ESP_sendTiresState(CAR_ID);
 
+	LCD_moveCursor(2,0);
+	LCD_displayString("Temp: ");
+	LCD_intgerToString(t_frontLeftTire.Temperature);
+
+	LCD_moveCursor(3,0);
+	LCD_displayString("Pres: ");
+	LCD_intgerToString(t_frontLeftTire.Pressure);
+	_delay_ms(260);
+	_delay_ms(260);
+
 	ESP_deInit();
-
-	GPS_reInit();
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-
 }
