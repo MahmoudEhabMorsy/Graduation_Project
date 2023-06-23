@@ -403,7 +403,7 @@ void ESP_sendTiresState(const uint8* car_id)
 	uint8 requestLength[MAXIMUM_LENGTH];
 	uint8 dataBodyLength[MAXIMUM_LENGTH];
 	uint16 u16DataBodyLength = strlen(car_id) + strlen(Str_Temp) + strlen(Str_Press) \
-			+ strlen("{\"carID\":\"\",\"FLTT\":\"\",\"FLTP\":\"\"}\r\n");
+			+ strlen("{\"carID\":\"\"\n,\"FLTT\":\"\"\n,\"FLTP\":\"\"}\r\n");
 
 	uint16 u16RequestLength = strlen("POST /api/carconnect HTTP/1.1\r\n")\
 			+ strlen("Host:35.192.107.191\r\n")\
@@ -451,9 +451,9 @@ void ESP_sendTiresState(const uint8* car_id)
 		UART_sendString((const uint8*)"\r\n");
 		UART_sendString((const uint8*)"{\"carID\":\"");
 		UART_sendString(car_id);
-		UART_sendString((const uint8*)"\",\"FLTT\":\"");
+		UART_sendString((const uint8*)"\",\n\"FLTT\":\"");
 		UART_sendString(Str_Temp);
-		UART_sendString((const uint8*)"\",\"FLTP\":\"");
+		UART_sendString((const uint8*)"\",\n\"FLTP\":\"");
 		UART_sendString(Str_Press);
 		UART_sendString((const uint8*)"\"}\r\n");
 
