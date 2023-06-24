@@ -39,6 +39,9 @@ void app_Start(void)
 	//LCD_displayString("BMP180 Passed");
 	_delay_ms(260);
 	_delay_ms(260);
+	_delay_ms(260);
+	_delay_ms(260);
+
 }
 
 uint8 GPS_sendingCoordinatesTask(void)
