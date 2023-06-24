@@ -102,6 +102,7 @@ void BMP180_sendingDataTask(void)
 	/*TIRES STATE PART*/
 	//GPS_deInit();
 
+	cli();
 	ESP_init();
 
 	ESP_networkConnect(SSID, PASSWORD);
@@ -110,6 +111,7 @@ void BMP180_sendingDataTask(void)
 
 	ESP_sendTiresState(CAR_ID);
 
+	sei();
 	LCD_moveCursor(2,0);
 	LCD_displayString("Temp: ");
 	LCD_intgerToString(t_frontLeftTire.Temperature);

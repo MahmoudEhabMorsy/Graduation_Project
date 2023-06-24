@@ -133,7 +133,7 @@ int main()
 	while (1)
 	{
 		g_temperature = BMP180_calculateTemperature();
-	g_pressure = BMP180_calculatePressure();
+		g_pressure = BMP180_calculatePressure();
 		/*We Put 0 on PD6 so it triggers interrupt on MC2*/
 	PORTD &=~ (1<<6);
 	_delay_ms(1); /*Delay until SPI is initiated on MC2*/
@@ -154,6 +154,10 @@ int main()
 		}
 	PORTD |= (1<<6);
 	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+
 	}
 
 
