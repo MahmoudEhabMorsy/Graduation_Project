@@ -152,9 +152,11 @@ int main()
 		{
 			send_Byte =  (g_pressure>>(i*8));
 			SPI_sendReceiveByte ( send_Byte );
+
 		}
-	}
 	PORTD |= (1<<6);
 	_delay_ms(250);
-	return 0;
+	}
+
+
 }
