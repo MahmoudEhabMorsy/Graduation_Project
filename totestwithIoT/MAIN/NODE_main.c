@@ -99,8 +99,6 @@ void Press_state(void)
 
 int main()
 {
-	
-
 	TWI_init();
 	BMP180_Start();
 	//	WSS_Init();
