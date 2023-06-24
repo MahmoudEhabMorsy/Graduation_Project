@@ -19,7 +19,7 @@
 #include <avr/interrupt.h>
 #include "../MCAL/SPI/spi.h"
 
-void delay(uint8 secs)
+void delay_1(uint8 secs)
 {
 	uint8 i = 0;
 	while(i < secs)
@@ -126,19 +126,16 @@ int main()
 	/*Required Steps:
 	 * 1- Interrupt Signal */
 
-	/*We may add delay 10 seconds to test*/
-	delay(3); /*Delay for 10 seconds*/
+	/*We may add delay_1 10 seconds to test*/
+	delay_1(3); /*Delay for 10 seconds*/
 
 	
 
 
 	while (1)
 	{
-
-//		g_temperature = BMP180_calculateTemperature();
-//		g_pressure = BMP180_calculatePressure();
-		g_temperature = 33;
-		g_pressure = 1200;
+		g_temperature = BMP180_calculateTemperature();
+	g_pressure = BMP180_calculatePressure();
 		/*We Put 0 on PD6 so it triggers interrupt on MC2*/
 	PORTD &=~ (1<<6);
 	_delay_ms(1); /*Delay until SPI is initiated on MC2*/
