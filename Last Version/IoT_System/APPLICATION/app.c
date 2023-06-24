@@ -11,7 +11,7 @@ void app_Init(void)
 {
 	/* Initialize the LCD Driver */
 
-	_delay_ms(260);
+	_delay_ms(250);
 	LCD_init();
 
 	LCD_displayString("Test1");
