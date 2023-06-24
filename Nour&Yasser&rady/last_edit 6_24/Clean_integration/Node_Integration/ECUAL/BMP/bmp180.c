@@ -186,7 +186,8 @@ sint32 BMP180_calculateTemperature(void) {
 	X2 = (MC * (pow(2, 11))) / (X1 + MD);
        	B5 = X1 + X2;
 	temperature = (B5 + 8) / (pow(2, 4));
-	return temperature / 10.0;
+	temperature/=10.0;
+	return temperature;
 }
 
 sint32 BMP180_calculatePressure(void) {
