@@ -16,7 +16,7 @@ void app_Init(void)
 
 	LCD_displayString("Test1");
 
-	//GPS_init();
+	GPS_init();
 
 	_delay_ms(260);
 	_delay_ms(260);

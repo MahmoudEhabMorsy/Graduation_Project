@@ -22,14 +22,14 @@ uint8 GPS_DataValidation = VOID_GPS_DATA;
 
 void GPS_init(void)
 {
-	DIO_setupPinDirection(GPS_PORT, GPS_VCC_PIN, PIN_OUTPUT);
-	DIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_HIGH);
+//	DIO_setupPinDirection(GPS_PORT, GPS_VCC_PIN, PIN_OUTPUT);
+//	DIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_HIGH);
 	UART_init(9600);
 }
 
 void GPS_reInit(void)
 {
-	DIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_HIGH);
+//	DIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_HIGH);
 	UART_init(9600);
 }
 void GPS_deInit(void)
