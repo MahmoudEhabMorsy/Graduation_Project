@@ -113,11 +113,12 @@ int main()
 	uint8 send_Byte=0;
 	/* Initialize the SPI driver as Master */
 	SPI_initMaster();
+	SREG |= (1<<7);
 	//SREG = (1<<7);
 	/* Delay until MC2 finish its initialization task */
 	_delay_ms(200);
 	_delay_ms(200);
-SREG |= (1<<7);
+
 	/* Send the string to MC2 */
 
 	/*Required Steps:
@@ -137,7 +138,7 @@ SREG |= (1<<7);
 		g_pressure = BMP180_calculatePressure();
 		/*We Put 0 on PD6 so it triggers interrupt on MC2*/
 	PORTD &=~ (1<<6);
-	_delay_us(1); /*Delay until SPI is initiated on MC2*/
+	//_delay_us(1); /*Delay until SPI is initiated on MC2*/
 	/*FRONT_LEFT_TIRE is an enum configurated at bmp180.h*/
 	SPI_sendReceiveByte (FRONT_LEFT); /*Wheel ID*/
 	/**/
@@ -152,9 +153,6 @@ SREG |= (1<<7);
 			send_Byte =  (g_pressure>>(i*8));
 			SPI_sendReceiveByte ( send_Byte );
 		}
-
-
-
 	}
 	return 0;
 }
