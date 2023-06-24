@@ -16,7 +16,7 @@ void app_Init(void)
 
 	LCD_displayString("Test1");
 
-	GPS_init();
+	//GPS_init();
 
 	_delay_ms(260);
 	_delay_ms(260);
@@ -29,31 +29,28 @@ void app_Init(void)
 
 void app_Start(void)
 {
-	GPS_sendingCoordinatesTask();
-
-	LCD_displayString("GPS_Task Passed");
-	_delay_ms(260);
-	_delay_ms(260);
-
+//	GPS_sendingCoordinatesTask();
+//
+//	LCD_displayString("GPS_Task Passed");
+//	_delay_ms(260);
+//	_delay_ms(260);
+	LCD_clearScreen();
 	BMP180_sendingDataTask();
 	LCD_displayString("BMP180 Passed");
 	_delay_ms(260);
 	_delay_ms(260);
-
 }
 
 uint8 GPS_sendingCoordinatesTask(void)
 {
-	GPS_reInit();
-	cli();
-
-	/*Dummy while loop - for now.*/
+	/*Dummy While Loop*/
 	while(GPS_DataValidation != VALID_GPS_DATA)
 	{
+		GPS_reInit();
+		cli();
 		GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
+		sei();
 	}/*End of Dummy While Loop*/
-
-	sei();
 	if(GPS_DataValidation == VALID_GPS_DATA)
 	{
 		LCD_displayString("Valid Reading");
@@ -103,7 +100,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 void BMP180_sendingDataTask(void)
 {
 	/*TIRES STATE PART*/
-	GPS_deInit();
+	//GPS_deInit();
 
 	ESP_init();
 
