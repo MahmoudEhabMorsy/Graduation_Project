@@ -14,6 +14,8 @@
 #define BMP180_H_
 
 #include "../../UTILITIES/std_types.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 
 // Register Table From Data Sheet
@@ -44,9 +46,9 @@ typedef enum
 }WHEEL_ID;
 
 typedef struct{
+	WHEEL_ID wheel;
 	sint32 temperature;
 	sint32 pressure;
-	WHEEL_ID wheel;
 }tyreState;
 
 void BMP180_ReadCalb(void);

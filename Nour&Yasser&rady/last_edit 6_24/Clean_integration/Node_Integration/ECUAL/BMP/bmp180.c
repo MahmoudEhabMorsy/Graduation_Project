@@ -10,12 +10,10 @@
  *																		*
  ************************************************************************/
 
-#include "twi.h"
+#include "../../MCAL/TWI/twi.h"
 #include "bmp180.h"
-#include "common_macros.h"
+#include "../../CommonDef/common_macros.h"
 #include <util/delay.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 
 /* Calibration Data */

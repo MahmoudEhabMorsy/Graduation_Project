@@ -14,6 +14,8 @@
 #include "bmp180.h"
 #include "../../UTILITIES/common_macros.h"
 #include <util/delay.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 
 /* Calibration Data */
@@ -231,3 +233,6 @@ void BMP180_Start(void) {
 	BMP180_ReadCalb();
 }
 
+void delay(void){
+	_delay_us(10);
+}
