@@ -59,7 +59,9 @@ uint8 GPS_sendingCoordinatesTask(void)
 		LCD_displayString("Valid Reading");
 		_delay_ms(260);
 
-		GPS_deInit();
+//		GPS_deInit();
+
+		cli();
 
 		ESP_init();
 
@@ -70,7 +72,9 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 		ESP_sendCoordinatesToServer(CAR_ID,t_GPS_Coordinates.Longitude,t_GPS_Coordinates.Latitude);
 
-		ESP_deInit();
+		sei();
+
+//		ESP_deInit();
 
 		GPS_reInit();
 
@@ -105,16 +109,17 @@ void BMP180_sendingDataTask(void)
 	/*TIRES STATE PART*/
 	//GPS_deInit();
 
-//	cli();
-//	ESP_init();
-//
-//	ESP_networkConnect(SSID, PASSWORD);
-//
-//	ESP_serverConnect(SW_TEAM_SERVER_IP, PORT); //AT Command
-//
-//	ESP_sendTiresState(CAR_ID);
-//
-//	sei();
+	cli();
+	ESP_init();
+
+	ESP_networkConnect(SSID, PASSWORD);
+
+	ESP_serverConnect(SW_TEAM_SERVER_IP, PORT); //AT Command
+
+	ESP_sendTiresState(CAR_ID);
+
+	sei();
+
 	LCD_moveCursor(2,0);
 	LCD_displayString("Temp: ");
 	LCD_intgerToString(t_frontLeftTire.Temperature);
@@ -125,5 +130,5 @@ void BMP180_sendingDataTask(void)
 	_delay_ms(260);
 	_delay_ms(260);
 
-//	ESP_deInit();
+	ESP_deInit();
 }
