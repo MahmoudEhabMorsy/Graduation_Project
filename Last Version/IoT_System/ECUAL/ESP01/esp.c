@@ -13,7 +13,10 @@ volatile uint8 dummy_Byte = 0;
 volatile uint8 BMP_Data = BMP_DATA_IS_NOT_READY;
 
 ISR(INT1_vect)
-{
+{	
+	t_frontLeftTire.tire = 0;
+	t_frontLeftTire.Temperature = 0;
+	t_frontLeftTire.Pressure = 0;
 
 	/*Receive Tire Data*/
 	/*First, Receive Tire ID*/

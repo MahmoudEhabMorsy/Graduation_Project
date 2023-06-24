@@ -30,20 +30,20 @@ uint32 B4 = 0, B7 = 0;
 void delay(void);
 void BMP180_ReadCalb(void) {
 
-	uint8_t Callib_Data[22] = { 0 };
-	uint16_t Callib_Start = 0xAA;
+	uint8 Callib_Data[22] = { 0 };
+	uint16 Callib_Start = 0xAA;
 
 	for (int i = 0; i < 22; i++) {
 		TWI_Start_Wait(BMP180_ADDRESS_W);// To write
-		_delay_us(10);
+		delay();
 		TWI_WriteByte(Callib_Start + i);
-		_delay_us(10);
+		delay();
 		TWI_Repeated_start(BMP180_ADDRESS_R);	// To read
-		_delay_us(10);
+		delay();
 		Callib_Data[i] = TWI_ReadByteWithNACK();
-		_delay_us(10);
+		delay();
 		TWI_Stop();
-		_delay_us(10);
+		delay();
 	}
 
 	AC1 = ((Callib_Data[0] << 8) | Callib_Data[1]);
@@ -120,9 +120,9 @@ uint32 Get_UP(void) {
 
 	// combine the raw pressure data into a single 24-bit value and shift it right to adjust for the oversampling setting
 
-	data |= ((uint32_t) Pressure_RAW[0] << 16);
-	data |= ((uint32_t) Pressure_RAW[1] << 8);
-	data |= (uint32_t) Pressure_RAW[2];
+	data |= ((uint32) Pressure_RAW[0] << 16);
+	data |= ((uint32) Pressure_RAW[1] << 8);
+	data |= (uint32) Pressure_RAW[2];
 	data = data >> (8 - OSS);
 	//division by 2 power (8-oss which is in datasheet (0,1))
 
@@ -173,8 +173,8 @@ uint32 Get_UT(void) {
 	TWI_Stop();
 	// stop the I2C communication with BMP180
 
-	data |= ((uint32_t) Temperature_RAW[0] << 8);
-	data |= (uint32_t) Temperature_RAW[1];
+	data |= ((uint32) Temperature_RAW[0] << 8);
+	data |= (uint32) Temperature_RAW[1];
 	return data;
 }
 
@@ -188,7 +188,7 @@ sint32 BMP180_calculateTemperature(void) {
 	X2 = (MC * (pow(2, 11))) / (X1 + MD);
        	B5 = X1 + X2;
 	temperature = (B5 + 8) / (pow(2, 4));
-	return temperature / 10.0;
+	return (temperature / 10.0);
 }
 
 sint32 BMP180_calculatePressure(void) {

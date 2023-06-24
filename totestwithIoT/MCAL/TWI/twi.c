@@ -1,4 +1,4 @@
-/******************************************************************************
+ /******************************************************************************
  *
  * Module: TWI(I2C)
  *
@@ -7,7 +7,7 @@
  * Description: Source file for the TWI(I2C) AVR driver
  *
  *******************************************************************************/
-
+ 
 #include "twi.h"
 
 #include "../../UTILITIES/common_macros.h"
@@ -22,8 +22,9 @@
  * [Return]															*
  *======================================================================*/
 
-void TWI_init(void) {
-	/* Bit Rate Configuration */
+void TWI_init(void)
+{
+   /* Bit Rate Configuration */
 #if BIT_RATE >= MINIMUM_BIT_RATE
 	TWBR = BIT_RATE;
 #else
@@ -47,8 +48,8 @@ void TWI_init(void) {
 #endif
 	/* Slave Address Configuration */
 #if SLAVE_ADDRESS >= MINIMUM_ADDRESS && SLAVE_ADDRESS <= MAXIMUM_ADDRESS
-	TWAR = (SLAVE_ADDRESS << 1);
-
+	TWAR = (SLAVE_ADDRESS<<1);
+	
 #else
 #error "Invalid I2C slave address configuration (out of range)."
 #endif
@@ -61,7 +62,7 @@ void TWI_init(void) {
 #endif
 	/* Enable I2C Peripheral */
 	SET_BIT(TWCR, TWEN);
-}
+	}
 /*======================================================================*
  * [Function Name]:	TWI_start()											*
  * [Description]:	Function responsible for start the TWI communication. *
@@ -70,33 +71,31 @@ void TWI_init(void) {
  * [Return]															*
  *======================================================================*/
 
-uint8 TWI_Start(uint8 slave_write_adress) {
-	uint8 status;
+uint8 TWI_Start(uint8 slave_write_adress)
+{	uint8 status;
 
-	/*
+    /* 
 	 * Clear the TWINT flag before sending the start bit TWINT=1
 	 * send the start bit by TWSTA=1
 	 * Enable TWI Module TWEN=1 
 	 */
-	TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
-
-	/* Wait for TWINT flag set in TWCR Register (start bit is send successfully) */
-	while (BIT_IS_CLEAR(TWCR, TWINT))
-		;
-	status = TWI_getStatus();
-	if (status != TWI_START) /* Check weather start condition transmitted successfully or not? */
-		return 0;
-	TWDR = slave_write_adress; /* If yes then write SLA+W in TWI data register */
-	TWCR = (1 << TWEN) | (1 << TWINT); /* Enable TWI and clear interrupt flag */
-	while (BIT_IS_CLEAR(TWCR, TWINT))
-		;
-	status = TWI_getStatus();
-	if (status == TWI_MT_SLA_W_ACK) /* Check weather SLA+W transmitted & ack received or not? */
-		return 1; /* If yes then return 1 to indicate ack received i.e. ready to accept data byte */
-	if (status == TWI_MT_SLA_W_NACK) /* Check weather SLA+W transmitted & nack received or not? */
-		return 2; /* If yes then return 2 to indicate nack received i.e. device is busy */
+    TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
+    
+    /* Wait for TWINT flag set in TWCR Register (start bit is send successfully) */
+    while(BIT_IS_CLEAR(TWCR,TWINT));
+	status=TWI_getStatus();
+	if (status != TWI_START)										/* Check weather start condition transmitted successfully or not? */
+	return 0;
+	TWDR = slave_write_adress;								/* If yes then write SLA+W in TWI data register */
+	TWCR = (1<<TWEN)|(1<<TWINT);							/* Enable TWI and clear interrupt flag */
+	while(BIT_IS_CLEAR(TWCR,TWINT));
+	status=TWI_getStatus();
+	if (status == TWI_MT_SLA_W_ACK)										/* Check weather SLA+W transmitted & ack received or not? */
+	return 1;												/* If yes then return 1 to indicate ack received i.e. ready to accept data byte */
+	if (status == TWI_MT_SLA_W_NACK)										/* Check weather SLA+W transmitted & nack received or not? */
+	return 2;												/* If yes then return 2 to indicate nack received i.e. device is busy */
 	else
-		return 3; /* Else return 3 to indicate SLA+W failed */
+	return 3;												/* Else return 3 to indicate SLA+W failed */
 }
 
 /*======================================================================*
@@ -106,33 +105,31 @@ uint8 TWI_Start(uint8 slave_write_adress) {
  * [Args]		uint8 slave_write_adress									*
  * [Return]																	*
  *======================================================================*/
-uint8 TWI_Repeated_start(uint8 slave_write_adress) {
-	uint8 status;
+uint8 TWI_Repeated_start(uint8 slave_write_adress)
+{	uint8 status;
 
-	/*
+    /* 
 	 * Clear the TWINT flag before sending the start bit TWINT=1
 	 * send the start bit by TWSTA=1
 	 * Enable TWI Module TWEN=1 
 	 */
-	TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
-
-	/* Wait for TWINT flag set in TWCR Register (start bit is send successfully) */
-	while (BIT_IS_CLEAR(TWCR, TWINT))
-		;
-	status = TWI_getStatus();
-	if (status != TWI_REP_START) /* Check weather start condition transmitted successfully or not? */
+    TWCR = (1 << TWINT) | (1 << TWSTA) | (1 << TWEN);
+    
+    /* Wait for TWINT flag set in TWCR Register (start bit is send successfully) */
+    while(BIT_IS_CLEAR(TWCR,TWINT));
+	status=TWI_getStatus();
+	if (status != TWI_REP_START)										/* Check weather start condition transmitted successfully or not? */
 		return 0;
-	TWDR = slave_write_adress; /* If yes then write SLA+W in TWI data register */
-	TWCR = (1 << TWEN) | (1 << TWINT); /* Enable TWI and clear interrupt flag */
-	while (BIT_IS_CLEAR(TWCR, TWINT))
-		;
-	status = TWI_getStatus();
-	if (status == TWI_MT_SLA_R_ACK) /* Check weather SLA+W transmitted & ack received or not? */
-		return 1; /* If yes then return 1 to indicate ack received i.e. ready to accept data byte */
-	if (status == TWI_MT_SLA_W_NACK) /* Check weather SLA+W transmitted & nack received or not? */
-		return 2; /* If yes then return 2 to indicate nack received i.e. device is busy */
+	TWDR = slave_write_adress;								/* If yes then write SLA+W in TWI data register */
+	TWCR = (1<<TWEN)|(1<<TWINT);							/* Enable TWI and clear interrupt flag */
+	while(BIT_IS_CLEAR(TWCR,TWINT));
+	status=TWI_getStatus();
+	if (status == TWI_MT_SLA_R_ACK)										/* Check weather SLA+W transmitted & ack received or not? */
+		return 1;												/* If yes then return 1 to indicate ack received i.e. ready to accept data byte */
+	if (status == TWI_MT_SLA_W_NACK)										/* Check weather SLA+W transmitted & nack received or not? */
+		return 2;												/* If yes then return 2 to indicate nack received i.e. device is busy */
 	else
-		return 3; /* Else return 3 to indicate SLA+W failed */
+		return 3;												/* Else return 3 to indicate SLA+W failed */
 }
 /*======================================================================*
  * [Function Name]:	TWI_Start_Wait()									*
@@ -141,27 +138,26 @@ uint8 TWI_Repeated_start(uint8 slave_write_adress) {
  * [Args]		uint8 slave_write_adress									*
  * [Return]																	*
  *======================================================================*/
-void TWI_Start_Wait(char slave_write_address) /* I2C start wait function */
+void TWI_Start_Wait(char slave_write_address)				/* I2C start wait function */
 {
-	uint8 status; /* Declare variable */
-	while (1) {
-		TWCR = (1 << TWSTA) | (1 << TWEN) | (1 << TWINT); /* Enable TWI, generate start condition and clear interrupt flag */
-		while (BIT_IS_CLEAR(TWCR, TWINT))
-			; /* Wait until TWI finish its current job (start condition) */
-		status = TWSR & 0xF8; /* Read TWI status register with masking lower three bits */
-		if (status != TWI_START) /* Check weather start condition transmitted successfully or not? */
-			continue; /* If no then continue with start loop again */
-		TWDR = slave_write_address; /* If yes then write SLA+W in TWI data register */
-		TWCR = (1 << TWEN) | (1 << TWINT); /* Enable TWI and clear interrupt flag */
-		while (BIT_IS_CLEAR(TWCR, TWINT))
-			; /* Wait until TWI finish its current job (Write operation) */
-		status = TWSR & 0xF8; /* Read TWI status register with masking lower three bits */
-		if (status != TWI_MT_SLA_W_ACK) /* Check weather SLA+W transmitted & ack received or not? */
+	uint8 status;											/* Declare variable */
+	while (1)
+	{
+		TWCR = (1<<TWSTA)|(1<<TWEN)|(1<<TWINT);				/* Enable TWI, generate start condition and clear interrupt flag */
+		while(BIT_IS_CLEAR(TWCR,TWINT));					/* Wait until TWI finish its current job (start condition) */
+		status = TWSR & 0xF8;								/* Read TWI status register with masking lower three bits */
+		if (status != TWI_START)									/* Check weather start condition transmitted successfully or not? */
+		continue;											/* If no then continue with start loop again */
+		TWDR = slave_write_address;							/* If yes then write SLA+W in TWI data register */
+		TWCR = (1<<TWEN)|(1<<TWINT);						/* Enable TWI and clear interrupt flag */
+		while(BIT_IS_CLEAR(TWCR,TWINT));						/* Wait until TWI finish its current job (Write operation) */
+		status = TWSR & 0xF8;								/* Read TWI status register with masking lower three bits */
+		if (status != TWI_MT_SLA_W_ACK )								/* Check weather SLA+W transmitted & ack received or not? */
 		{
-			TWI_Stop(); /* If not then generate stop condition */
-			continue; /* continue with start loop again */
+			TWI_Stop();										/* If not then generate stop condition */
+			continue;										/* continue with start loop again */
 		}
-		break; /* If yes then break loop */
+		break;												/* If yes then break loop */
 	}
 }
 /*======================================================================*
@@ -171,13 +167,14 @@ void TWI_Start_Wait(char slave_write_address) /* I2C start wait function */
  * [Args]		void											*
  * [Return]			void										*
  *======================================================================*/
-void TWI_Stop(void) {
-	/*
+void TWI_Stop(void)
+{
+    /* 
 	 * Clear the TWINT flag before sending the stop bit TWINT=1
 	 * send the stop bit by TWSTO=1
 	 * Enable TWI Module TWEN=1 
 	 */
-	TWCR = (1 << TWINT) | (1 << TWSTO) | (1 << TWEN);
+    TWCR = (1 << TWINT) | (1 << TWSTO) | (1 << TWEN);
 }
 /*======================================================================*
  * [Function Name]:	TWI_writeByte()									*
@@ -186,17 +183,17 @@ void TWI_Stop(void) {
  * [Args]		uint8 data											*
  * [Return]			void										*
  *======================================================================*/
-void TWI_WriteByte(uint8 data) {
-	/* Put data On TWI data Register */
-	TWDR = data;
-	/*
+void TWI_WriteByte(uint8 data)
+{
+    /* Put data On TWI data Register */
+    TWDR = data;
+    /* 
 	 * Clear the TWINT flag before sending the data TWINT=1
 	 * Enable TWI Module TWEN=1 
-	 */
-	TWCR = (1 << TWINT) | (1 << TWEN);
-	/* Wait for TWINT flag set in TWCR Register(data is send successfully) */
-	while (BIT_IS_CLEAR(TWCR, TWINT))
-		;
+	 */ 
+    TWCR = (1 << TWINT) | (1 << TWEN);
+    /* Wait for TWINT flag set in TWCR Register(data is send successfully) */
+    while(BIT_IS_CLEAR(TWCR,TWINT));
 }
 /*======================================================================*
  * [Function Name]:	TWI_readByteWithACK()									*
@@ -205,18 +202,18 @@ void TWI_WriteByte(uint8 data) {
  * [Args]				void									*
  * [Return]			uint8 data										*
  *======================================================================*/
-uint8 TWI_ReadByteWithACK(void) {
+uint8 TWI_ReadByteWithACK(void)
+{
 	/* 
 	 * Clear the TWINT flag before reading the data TWINT=1
 	 * Enable sending ACK after reading or receiving data TWEA=1
 	 * Enable TWI Module TWEN=1 
-	 */
-	TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWEA);
-	/* Wait for TWINT flag set in TWCR Register (data received successfully) */
-	while (BIT_IS_CLEAR(TWCR, TWINT))
-		;
-	/* Read Data */
-	return TWDR;
+	 */ 
+    TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWEA);
+    /* Wait for TWINT flag set in TWCR Register (data received successfully) */
+    while(BIT_IS_CLEAR(TWCR,TWINT));
+    /* Read Data */
+    return TWDR;
 }
 /*======================================================================*
  * [Function Name]:	TWI_readByteWithNACK()									*
@@ -225,17 +222,17 @@ uint8 TWI_ReadByteWithACK(void) {
  * [Args]				void									*
  * [Return]			uint8 data										*
  *======================================================================*/
-uint8 TWI_ReadByteWithNACK(void) {
+uint8 TWI_ReadByteWithNACK(void)
+{
 	/* 
 	 * Clear the TWINT flag before reading the data TWINT=1
 	 * Enable TWI Module TWEN=1 
 	 */
-	TWCR = (1 << TWINT) | (1 << TWEN);
-	/* Wait for TWINT flag set in TWCR Register (data received successfully) */
-	while (BIT_IS_CLEAR(TWCR, TWINT))
-		;
-	/* Read Data */
-	return TWDR;
+    TWCR = (1 << TWINT) | (1 << TWEN);
+    /* Wait for TWINT flag set in TWCR Register (data received successfully) */
+    while(BIT_IS_CLEAR(TWCR,TWINT));
+    /* Read Data */
+    return TWDR;
 }
 /*======================================================================*
  * [Function Name]:	TWI_getStatus()									*
@@ -244,9 +241,10 @@ uint8 TWI_ReadByteWithNACK(void) {
  * [Args]													*
  * [Return]			uint8 status									*
  *======================================================================*/
-uint8 TWI_getStatus(void) {
-	uint8 status;
-	/* masking to eliminate first 3 bits and get the last 5 bits (status bits) */
-	status = TWSR & 0xF8;
-	return status;
+uint8 TWI_getStatus(void)
+{
+    uint8 status;
+    /* masking to eliminate first 3 bits and get the last 5 bits (status bits) */
+    status = TWSR & 0xF8;
+    return status;
 }

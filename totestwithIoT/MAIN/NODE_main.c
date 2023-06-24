@@ -102,10 +102,8 @@ int main()
 	TWI_init();
 	BMP180_Start();
 	//	WSS_Init();
-	DIO_setupPinDirection(PORTA_ID, PIN1_ID, PIN_OUTPUT);
-	DIO_writePin(PORTA_ID, PIN1_ID, LOGIC_LOW);
 
-	DIO_setupPinDirection(SLL_FLAG_PORT, SLL_FLAG_PIN, PIN_OUTPUT);
+	//DIO_setupPinDirection(SLL_FLAG_PORT, SLL_FLAG_PIN, PIN_OUTPUT);
 
 	DDRD |= (1<<6); /*Configure PD6 as Output pin*/
 	PORTD |= (1<<6); /*Initiate it to be VCCed*/
@@ -125,12 +123,14 @@ int main()
 	 * 1- Interrupt Signal */
 
 	/*We may add delay_1 10 seconds to test*/
-	delay_1(3); /*Delay for 10 seconds*/
+	//delay_1(3); /*Delay for 10 seconds*/
 
 	
 
 
 	while (1) {
+		g_temperature=0;
+		g_pressure=0;
 		g_temperature = BMP180_calculateTemperature();
 		g_pressure = BMP180_calculatePressure();
 		/*We Put 0 on PD6 so it triggers interrupt on MC2*/
