@@ -130,35 +130,30 @@ int main()
 	
 
 
-	while (1)
-	{
+	while (1) {
 		g_temperature = BMP180_calculateTemperature();
 		g_pressure = BMP180_calculatePressure();
 		/*We Put 0 on PD6 so it triggers interrupt on MC2*/
-	PORTD &=~ (1<<6);
-	_delay_ms(1); /*Delay until SPI is initiated on MC2*/
-	/*FRONT_LEFT_TIRE is an enum configurated at bmp180.h*/
-	SPI_sendReceiveByte (FRONT_LEFT); /*Wheel ID*/
-	/**/
-	for(uint8 i=0;i<counter_Bytes;i++)
-	{
-		send_Byte =  (g_temperature>>(i*8));
-		SPI_sendReceiveByte ( send_Byte );
-	}
+		PORTD &= ~(1 << 6);
+		_delay_ms(1); /*Delay until SPI is initiated on MC2*/
+		/*FRONT_LEFT_TIRE is an enum configurated at bmp180.h*/
+		SPI_sendReceiveByte(FRONT_LEFT); /*Wheel ID*/
+		/**/
+		for (uint8 i = 0; i < counter_Bytes; i++) {
+			send_Byte = (g_temperature >> (i * 8));
+			SPI_sendReceiveByte(send_Byte);
+		}
 
-	for(uint8 i=0;i<counter_Bytes;i++)
-		{
-			send_Byte =  (g_pressure>>(i*8));
-			SPI_sendReceiveByte ( send_Byte );
+		for (uint8 i = 0; i < counter_Bytes; i++) {
+			send_Byte = (g_pressure >> (i * 8));
+			SPI_sendReceiveByte(send_Byte);
 
 		}
-	PORTD |= (1<<6);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
+		PORTD |= (1 << 6);
+		_delay_ms(250);
+		_delay_ms(250);
+		_delay_ms(250);
+		_delay_ms(250);
 
 	}
-
-
 }
