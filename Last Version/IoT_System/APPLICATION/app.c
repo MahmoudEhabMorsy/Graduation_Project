@@ -29,15 +29,16 @@ void app_Init(void)
 
 void app_Start(void)
 {
-//	GPS_sendingCoordinatesTask();
-//
-//	LCD_displayString("GPS_Task Passed");
-//	_delay_ms(260);
-//	_delay_ms(260);
+	GPS_sendingCoordinatesTask();
+
 	LCD_clearScreen();
-	BMP180_sendingDataTask();
-	//LCD_displayString("BMP180 Passed");
+	LCD_displayString("GPS_Task Passed");
 	_delay_ms(260);
+	_delay_ms(260);
+	_delay_ms(260);
+	BMP180_sendingDataTask();
+	LCD_clearScreen();
+	LCD_displayString("BMP180 Passed");
 	_delay_ms(260);
 	_delay_ms(260);
 	_delay_ms(260);
@@ -46,14 +47,26 @@ void app_Start(void)
 
 uint8 GPS_sendingCoordinatesTask(void)
 {
+	uint16 timeout = 0;
 	/*Dummy While Loop*/
-	while(GPS_DataValidation != VALID_GPS_DATA)
+	GPS_reInit();
+
+	while(timeout < 0xffff)
 	{
-		GPS_reInit();
 		cli();
 		GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
 		sei();
+		if(GPS_DataValidation == VALID_GPS_DATA)
+		{
+			break;
+		}
+		else
+		{
+			/*Do nothing*/
+		}
+		timeout++;
 	}/*End of Dummy While Loop*/
+
 	if(GPS_DataValidation == VALID_GPS_DATA)
 	{
 		LCD_displayString("Valid Reading");
@@ -79,27 +92,27 @@ uint8 GPS_sendingCoordinatesTask(void)
 		GPS_reInit();
 
 		LCD_clearScreen();
-	}
-	else if(GPS_DataValidation == VOID_GPS_DATA)
-	{
-		LCD_displayString("Void Reading");
+
+		LCD_displayStringRowColumn(0,0,"Lat: ");
+		LCD_displayStringRowColumn(1,0,(const uint8*)t_GPS_Coordinates.Latitude);
+		LCD_displayStringRowColumn(2,0,"Lon: ");
+		LCD_displayStringRowColumn(3,0,(const uint8*)t_GPS_Coordinates.Longitude);
+
 		_delay_ms(260);
-		LCD_clearScreen();
+		_delay_ms(260);
 	}
+//	else if(GPS_DataValidation == VOID_GPS_DATA)
+//	{
+//		LCD_displayString("Void Reading");
+//		_delay_ms(260);
+//		LCD_clearScreen();
+//	}
 	else
 	{
 		LCD_displayString("Incorrect Reading");
 		_delay_ms(260);
 		LCD_clearScreen();
 	}
-
-	LCD_displayStringRowColumn(0,0,"Lat: ");
-	LCD_displayStringRowColumn(1,0,(const uint8*)t_GPS_Coordinates.Latitude);
-	LCD_displayStringRowColumn(2,0,"Lon: ");
-	LCD_displayStringRowColumn(3,0,(const uint8*)t_GPS_Coordinates.Longitude);
-
-	_delay_ms(260);
-	_delay_ms(260);
 	return GPS_DataValidation;
 }
 
