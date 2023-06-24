@@ -6,7 +6,6 @@
  */
 
 #include "esp.h"
-
 /*Interrupt Service Routine Segment*/
 
 volatile tireState t_frontLeftTire = {FRONT_LEFT_TIRE, 0, 0}; /*Initially*/
@@ -18,6 +17,8 @@ ISR(INT1_vect)
 
 	/*Receive Tire Data*/
 	/*First, Receive Tire ID*/
+	DIO_setupPinDirection(PORTA_ID,PIN4_ID,PIN_OUTPUT);
+	DIO_writePin(PORTA_ID,PIN4_ID,LOGIC_HIGH);
 	t_frontLeftTire.tire = SPI_sendReceiveByte(dummy_Byte);
 
 	/*Second, Receive Tire Temperature Value*/

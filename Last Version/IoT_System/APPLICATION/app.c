@@ -36,7 +36,7 @@ void app_Start(void)
 //	_delay_ms(260);
 	LCD_clearScreen();
 	BMP180_sendingDataTask();
-	LCD_displayString("BMP180 Passed");
+	//LCD_displayString("BMP180 Passed");
 	_delay_ms(260);
 	_delay_ms(260);
 }

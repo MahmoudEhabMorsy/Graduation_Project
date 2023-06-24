@@ -109,6 +109,8 @@ int main()
 
 	DIO_setupPinDirection(SLL_FLAG_PORT, SLL_FLAG_PIN, PIN_OUTPUT);
 
+	DDRD |= (1<<6); /*Configure PD6 as Output pin*/
+	PORTD |= (1<<6); /*Initiate it to be VCCed*/
 
 	uint8 send_Byte=0;
 	/* Initialize the SPI driver as Master */
@@ -123,8 +125,7 @@ int main()
 
 	/*Required Steps:
 	 * 1- Interrupt Signal */
-	DDRD |= (1<<6); /*Configure PD6 as Output pin*/
-	PORTD |= (1<<6); /*Initiate it to be VCCed*/
+
 	/*We may add delay 10 seconds to test*/
 	delay(3); /*Delay for 10 seconds*/
 
@@ -138,7 +139,7 @@ int main()
 		g_pressure = BMP180_calculatePressure();
 		/*We Put 0 on PD6 so it triggers interrupt on MC2*/
 	PORTD &=~ (1<<6);
-	//_delay_us(1); /*Delay until SPI is initiated on MC2*/
+	_delay_ms(1); /*Delay until SPI is initiated on MC2*/
 	/*FRONT_LEFT_TIRE is an enum configurated at bmp180.h*/
 	SPI_sendReceiveByte (FRONT_LEFT); /*Wheel ID*/
 	/**/
@@ -154,5 +155,7 @@ int main()
 			SPI_sendReceiveByte ( send_Byte );
 		}
 	}
+	PORTD |= (1<<6);
+	_delay_ms(250);
 	return 0;
 }
