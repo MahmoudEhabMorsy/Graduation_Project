@@ -24,6 +24,24 @@ void app_Init(void)
 	LCD_clearScreen();
 
 	ESP_preInit();
+
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
 	//sei();
 }
 
@@ -51,9 +69,9 @@ uint8 GPS_sendingCoordinatesTask(void)
 	/*Dummy While Loop*/
 	GPS_reInit();
 
-	//cli();
+	cli();
 	GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
-	//sei();
+	sei();
 //	while(timeout < 0xffff)
 //	{
 //		cli();
@@ -77,7 +95,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 		GPS_deInit();
 
-		//cli();
+		cli();
 
 		ESP_init();
 
@@ -88,7 +106,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 		ESP_sendCoordinatesToServer(CAR_ID,t_GPS_Coordinates.Longitude,t_GPS_Coordinates.Latitude);
 
-		//sei();
+		sei();
 
 		ESP_deInit();
 

@@ -116,32 +116,32 @@ int main()
 	/* Delay until MC2 finish its initialization task */
 	_delay_ms(250);
 	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
-//	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
 	/* Send the string to MC2 */
 
 	/*Required Steps:
@@ -160,8 +160,8 @@ int main()
 		g_pressure = BMP180_calculatePressure();
 		/*We Put 0 on PD6 so it triggers interrupt on MC2*/
 		PORTD &= ~(1 << 6);
-		_delay_ms(1); /*Delay until SPI is initiated on MC2*/
-
+		_delay_us(1); /*Delay until SPI is initiated on MC2*/
+		PORTD |= (1 << 6);
 		/*FRONT_LEFT_TIRE is an enum configurated at bmp180.h*/
 		SPI_sendReceiveByte(FRONT_LEFT); /*Wheel ID*/
 		/**/
@@ -175,11 +175,7 @@ int main()
 			SPI_sendReceiveByte(send_Byte);
 
 		}
-		PORTD |= (1 << 6);
 		_delay_ms(250);
 		_delay_ms(250);
-		_delay_ms(250);
-		_delay_ms(250);
-
 	}
 }
