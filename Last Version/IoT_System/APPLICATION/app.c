@@ -27,13 +27,13 @@ void app_Init(void)
 
 	LCD_clearScreen();
 
-//	ESP_preInit();
+	ESP_preInit();
 //	sei();
 }
 
 void app_Start(void)
 {
-//	cli();
+	cli();
 	GPS_sendingCoordinatesTask();
 	LCD_clearScreen();
 	LCD_displayString("GPS_Task Passed");
@@ -44,20 +44,11 @@ void app_Start(void)
 	LCD_displayString("BMP180 Passed");
 	_delay_ms(260);
 	_delay_ms(260);
-//	sei();
+	sei();
 	_delay_ms(260);
 	_delay_ms(260);
 	_delay_ms(260);
 	_delay_ms(260);
-	_delay_ms(260);
-	_delay_ms(260);
-	_delay_ms(260);
-	_delay_ms(260);
-	_delay_ms(260);
-	_delay_ms(260);
-	_delay_ms(260);
-	_delay_ms(260);
-
 }
 
 uint8 GPS_sendingCoordinatesTask(void)
