@@ -6,6 +6,8 @@
  */
 
 #include "esp.h"
+#include "../LCD/lcd.h"
+#include <util/delay.h>
 /*Interrupt Service Routine Segment*/
 
 volatile tireState t_frontLeftTire = {FRONT_LEFT_TIRE, 0, 0}; /*Initially*/
@@ -14,6 +16,9 @@ volatile uint8 BMP_Data = BMP_DATA_IS_NOT_READY;
 
 ISR(INT1_vect)
 {	
+	LCD_clearScreen();
+	LCD_displayString("ISR intro");
+	_delay_ms(50);
 	t_frontLeftTire.tire = 0;
 	t_frontLeftTire.Temperature = 0;
 	t_frontLeftTire.Pressure = 0;
@@ -22,17 +27,25 @@ ISR(INT1_vect)
 	/*First, Receive Tire ID*/
 	t_frontLeftTire.tire = SPI_sendReceiveByte(dummy_Byte);
 
+	LCD_displayCharacter('1');
 	/*Second, Receive Tire Temperature Value*/
 	for (uint8 i = 0; i < TEMPERATURE_VARIABLE_LENGTH; i++) {
 		dummy_Byte = SPI_sendReceiveByte(dummy_Byte);
 		t_frontLeftTire.Temperature = (t_frontLeftTire.Temperature | (dummy_Byte << (i * 8)));
 	}
+	LCD_displayCharacter('2');
 
 	/*Third, Receive Tire Pressure Value*/
 	for (uint8 i = 0; i < PRESSURE_VARIABLE_LENGTH; i++) {
 		dummy_Byte = SPI_sendReceiveByte(dummy_Byte);
 		t_frontLeftTire.Pressure = (t_frontLeftTire.Pressure | (dummy_Byte << (i * 8)));
 	}
+	LCD_displayCharacter('3');
+	_delay_ms(250);
+
+	LCD_clearScreen();
+	LCD_displayString("ISR outro");
+	_delay_ms(50);
 
 	BMP_Data = BMP_DATA_IS_READY;
 }

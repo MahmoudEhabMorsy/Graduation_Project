@@ -47,32 +47,34 @@ void app_Start(void)
 
 uint8 GPS_sendingCoordinatesTask(void)
 {
-	uint16 timeout = 0;
+	uint8 timeout = 0;
 	/*Dummy While Loop*/
 	GPS_reInit();
-
-	while(timeout < 0xffff)
-	{
-		cli();
-		GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
-		sei();
-		if(GPS_DataValidation == VALID_GPS_DATA)
-		{
-			break;
-		}
-		else
-		{
-			/*Do nothing*/
-		}
-		timeout++;
-	}/*End of Dummy While Loop*/
+	cli();
+	GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
+	sei();
+//	while(timeout < 0xff)
+//	{
+//		cli();
+//		GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
+//		sei();
+//		if(GPS_DataValidation == VALID_GPS_DATA)
+//		{
+//			break;
+//		}
+//		else
+//		{
+//			/*Do nothing*/
+//		}
+//		timeout++;
+//	}/*End of Dummy While Loop*/
 
 	if(GPS_DataValidation == VALID_GPS_DATA)
 	{
 		LCD_displayString("Valid Reading");
 		_delay_ms(260);
 
-//		GPS_deInit();
+		GPS_deInit();
 
 		cli();
 
@@ -87,7 +89,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 		sei();
 
-//		ESP_deInit();
+		ESP_deInit();
 
 		GPS_reInit();
 
@@ -101,12 +103,12 @@ uint8 GPS_sendingCoordinatesTask(void)
 		_delay_ms(260);
 		_delay_ms(260);
 	}
-//	else if(GPS_DataValidation == VOID_GPS_DATA)
-//	{
-//		LCD_displayString("Void Reading");
-//		_delay_ms(260);
-//		LCD_clearScreen();
-//	}
+	else if(GPS_DataValidation == VOID_GPS_DATA)
+	{
+		LCD_displayString("Void Reading");
+		_delay_ms(260);
+		LCD_clearScreen();
+	}
 	else
 	{
 		LCD_displayString("Incorrect Reading");

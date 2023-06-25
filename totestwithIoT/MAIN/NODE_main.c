@@ -177,5 +177,14 @@ int main()
 		}
 		_delay_ms(250);
 		_delay_ms(250);
+		_delay_ms(250);
+		_delay_ms(250);
+		_delay_ms(250);
+		_delay_ms(250);
+		_delay_ms(250);
+		_delay_ms(250);
+		_delay_ms(250);
+		_delay_ms(250);
+		_delay_ms(250);
 	}
 }
