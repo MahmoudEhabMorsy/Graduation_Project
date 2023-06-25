@@ -51,7 +51,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 	/*Dummy While Loop*/
 	GPS_reInit();
 
-	cli();
+	//cli();
 	GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
 	//sei();
 //	while(timeout < 0xffff)
@@ -77,7 +77,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 		GPS_deInit();
 
-		cli();
+		//cli();
 
 		ESP_init();
 
@@ -88,7 +88,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 		ESP_sendCoordinatesToServer(CAR_ID,t_GPS_Coordinates.Longitude,t_GPS_Coordinates.Latitude);
 
-		sei();
+		//sei();
 
 		ESP_deInit();
 
@@ -146,6 +146,7 @@ void BMP180_sendingDataTask(void)
 	LCD_moveCursor(3,0);
 	LCD_displayString("Pres: ");
 	LCD_intgerToString(t_frontLeftTire.Pressure);
+	cli();
 	_delay_ms(260);
 	_delay_ms(260);
 
