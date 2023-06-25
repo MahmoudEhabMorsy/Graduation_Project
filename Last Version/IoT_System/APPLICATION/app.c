@@ -51,7 +51,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 	/*Dummy While Loop*/
 	GPS_reInit();
 
-	//cli();
+	cli();
 	GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
 	//sei();
 //	while(timeout < 0xffff)
@@ -133,7 +133,7 @@ void BMP180_sendingDataTask(void)
 
 //	LCD_clearScreen();
 	ESP_serverConnect(SW_TEAM_SERVER_IP, PORT); //AT Command
-//	LCD_displayString("Server Connected");
+	LCD_displayString("Server Connected");
 
 	ESP_sendTiresState(CAR_ID);
 
