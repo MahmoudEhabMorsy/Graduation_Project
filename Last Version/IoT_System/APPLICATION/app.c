@@ -24,7 +24,7 @@ void app_Init(void)
 	LCD_clearScreen();
 
 	ESP_preInit();
-	sei();
+	//sei();
 }
 
 void app_Start(void)
@@ -51,9 +51,9 @@ uint8 GPS_sendingCoordinatesTask(void)
 	/*Dummy While Loop*/
 	GPS_reInit();
 
-	cli();
+	//cli();
 	GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
-	sei();
+	//sei();
 //	while(timeout < 0xffff)
 //	{
 //		cli();
