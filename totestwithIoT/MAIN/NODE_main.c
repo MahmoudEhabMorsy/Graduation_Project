@@ -151,7 +151,7 @@ int main()
 
 		}
 		}
-		else{
+	else{
 			PORTD |= (1 << 6);
 		g_temperature = BMP180_calculateTemperature();
 		g_pressure = BMP180_calculatePressure();
