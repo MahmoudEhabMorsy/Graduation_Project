@@ -51,21 +51,24 @@ uint8 GPS_sendingCoordinatesTask(void)
 	/*Dummy While Loop*/
 	GPS_reInit();
 
-	while(timeout < 0xffff)
-	{
-		cli();
-		GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
-		sei();
-		if(GPS_DataValidation == VALID_GPS_DATA)
-		{
-			break;
-		}
-		else
-		{
-			/*Do nothing*/
-		}
-		timeout++;
-	}/*End of Dummy While Loop*/
+	cli();
+	GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
+	sei();
+//	while(timeout < 0xffff)
+//	{
+//		cli();
+//		GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
+//		sei();
+//		if(GPS_DataValidation == VALID_GPS_DATA)
+//		{
+//			break;
+//		}
+//		else
+//		{
+//			/*Do nothing*/
+//		}
+//		timeout++;
+//	}/*End of Dummy While Loop*/
 
 	if(GPS_DataValidation == VALID_GPS_DATA)
 	{
@@ -91,28 +94,29 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 		GPS_reInit();
 
-		LCD_clearScreen();
-
-		LCD_displayStringRowColumn(0,0,"Lat: ");
-		LCD_displayStringRowColumn(1,0,(const uint8*)t_GPS_Coordinates.Latitude);
-		LCD_displayStringRowColumn(2,0,"Lon: ");
-		LCD_displayStringRowColumn(3,0,(const uint8*)t_GPS_Coordinates.Longitude);
-
-		_delay_ms(260);
-		_delay_ms(260);
 	}
-//	else if(GPS_DataValidation == VOID_GPS_DATA)
-//	{
-//		LCD_displayString("Void Reading");
-//		_delay_ms(260);
-//		LCD_clearScreen();
-//	}
+	else if(GPS_DataValidation == VOID_GPS_DATA)
+	{
+		LCD_displayString("Void Reading");
+		_delay_ms(260);
+		LCD_clearScreen();
+	}
 	else
 	{
 		LCD_displayString("Incorrect Reading");
 		_delay_ms(260);
 		LCD_clearScreen();
 	}
+
+	LCD_clearScreen();
+
+	LCD_displayStringRowColumn(0,0,"Lat: ");
+	LCD_displayStringRowColumn(1,0,(const uint8*)t_GPS_Coordinates.Latitude);
+	LCD_displayStringRowColumn(2,0,"Lon: ");
+	LCD_displayStringRowColumn(3,0,(const uint8*)t_GPS_Coordinates.Longitude);
+
+	_delay_ms(260);
+	_delay_ms(260);
 	return GPS_DataValidation;
 }
 
