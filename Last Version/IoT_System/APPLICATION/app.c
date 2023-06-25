@@ -72,7 +72,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 		LCD_displayString("Valid Reading");
 		_delay_ms(260);
 
-//		GPS_deInit();
+		GPS_deInit();
 
 		cli();
 
@@ -87,7 +87,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 		sei();
 
-//		ESP_deInit();
+		ESP_deInit();
 
 		GPS_reInit();
 
@@ -120,7 +120,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 void BMP180_sendingDataTask(void)
 {
 	/*TIRES STATE PART*/
-	//GPS_deInit();
+	GPS_deInit();
 
 	cli();
 	ESP_init();

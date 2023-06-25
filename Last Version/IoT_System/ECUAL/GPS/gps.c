@@ -6,7 +6,7 @@
  */
 
 #include "gps.h"
-
+#include <util/delay.h>
 
 /*Module: ublox NEO-6M GPS module
  * UART Frame specs:
@@ -22,19 +22,22 @@ uint8 GPS_DataValidation = VOID_GPS_DATA;
 
 void GPS_init(void)
 {
-//	DIO_setupPinDirection(GPS_PORT, GPS_VCC_PIN, PIN_OUTPUT);
-//	DIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_HIGH);
+	DIO_setupPinDirection(GPS_PORT, GPS_VCC_PIN, PIN_OUTPUT);
+	DIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_HIGH);
+	_delay_us(1);
 	UART_init(9600);
 }
 
 void GPS_reInit(void)
 {
-//	DIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_HIGH);
+	DIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_HIGH);
+	_delay_us(1);
 	UART_init(9600);
 }
 void GPS_deInit(void)
 {
 	DIO_writePin(GPS_PORT, GPS_VCC_PIN, LOGIC_LOW);
+	_delay_us(1);
 }
 
 
