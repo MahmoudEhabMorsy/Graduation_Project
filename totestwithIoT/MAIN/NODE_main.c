@@ -7,7 +7,7 @@
  * [DATE CREATED]:	03/05/2023											*
  *																		*
  * [DESCRIPTION]:	Node that responsible for measuring pressure,		*
- * 					temperatur, and distance							*
+ * 					temperature, and distance							*
  *																		*
  ************************************************************************/
 
@@ -112,7 +112,11 @@ int main()
 	uint8 send_Byte=0;
 	/* Initialize the SPI driver as Master */
 	SPI_initMaster();
+<<<<<<< HEAD
+//	SREG |= (1<<7);
+=======
 	//SREG |= (1<<7);
+>>>>>>> fd9405f010156434496f3d8fe6bbf62c2134a741
 	//SREG = (1<<7);
 	/* Delay until MC2 finish its initialization task */
 
@@ -150,6 +154,11 @@ int main()
 			SPI_sendReceiveByte(send_Byte);
 
 		}
+<<<<<<< HEAD
+		
+		_delay_ms(250);
+		PORTD |= (1 << 6);
+=======
 		}
 	else{
 			PORTD |= (1 << 6);
@@ -157,5 +166,6 @@ int main()
 		g_pressure = BMP180_calculatePressure();
 		}
 
+>>>>>>> fd9405f010156434496f3d8fe6bbf62c2134a741
 	}
 }

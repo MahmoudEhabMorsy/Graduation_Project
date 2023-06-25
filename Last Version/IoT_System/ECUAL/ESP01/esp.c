@@ -16,6 +16,11 @@ volatile uint8 BMP_Data = BMP_DATA_IS_NOT_READY;
 
 ISR(INT1_vect)
 {	
+<<<<<<< HEAD
+	LCD_clearScreen();
+	LCD_displayString("ISR intro");
+=======
+>>>>>>> fd9405f010156434496f3d8fe6bbf62c2134a741
 	t_frontLeftTire.tire = 0;
 	t_frontLeftTire.Temperature = 0;
 	t_frontLeftTire.Pressure = 0;
@@ -29,11 +34,25 @@ ISR(INT1_vect)
 		t_frontLeftTire.Temperature = (t_frontLeftTire.Temperature | (dummy_Byte << (i * 8)));
 	
 	}
+<<<<<<< HEAD
+
+=======
+>>>>>>> fd9405f010156434496f3d8fe6bbf62c2134a741
 	/*Third, Receive Tire Pressure Value*/
 	for (uint8 i = 0; i < PRESSURE_VARIABLE_LENGTH; i++) {
 		dummy_Byte = SPI_sendReceiveByte(dummy_Byte);
 		t_frontLeftTire.Pressure = (t_frontLeftTire.Pressure | (dummy_Byte << (i * 8)));
 	}
+<<<<<<< HEAD
+
+	_delay_ms(200);
+
+	LCD_clearScreen();
+	LCD_displayString("ISR outro");
+	_delay_ms(200);
+
+=======
+>>>>>>> fd9405f010156434496f3d8fe6bbf62c2134a741
 	BMP_Data = BMP_DATA_IS_READY;
 	LCD_displayString("INT1 Passed");
 	_delay_ms(260);
@@ -397,11 +416,13 @@ void ESP_sendCoordinatesToServer(const uint8* car_id, uint8 *longitude, uint8 *l
 //void ESP_sendTiresState(const uint8* car_id, sint32 Temperature, sint32 Pressure)
 void ESP_sendTiresState(const uint8* car_id)
 {
+/*
 //Dummy Code Segment
 	t_frontLeftTire.Temperature = 34;
 	t_frontLeftTire.Pressure = 1123;
 	BMP_Data = BMP_DATA_IS_READY;
 //	End of Dummy Code Segment
+*/
 
 	uint8 Str_Temp[MAXIMUM_LENGTH];
 	uint8 Str_Press[MAXIMUM_LENGTH];

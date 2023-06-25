@@ -33,9 +33,6 @@
 #define PRESSURE_VARIABLE_LENGTH 4
 #define BMP_DATA_IS_NOT_READY 0
 #define BMP_DATA_IS_READY 1
-#define SLL_FLAG_PORT				PORTA_ID
-#define SLL_FLAG_PIN				PIN4_ID
-
 
 
 typedef enum
