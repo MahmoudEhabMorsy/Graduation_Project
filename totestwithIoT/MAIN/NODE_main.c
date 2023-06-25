@@ -40,7 +40,7 @@ typedef enum state{
 #define PRESSURE_SEVERE				100000
 #define PRESSURE_MODERATE			10000
 #define PRESSURE_SAFE				300
-#define SLL_FLAG_PORT				PORTB_ID
+#define SLL_FLAG_PORT				PORTD_ID
 #define SLL_FLAG_PIN				PIN7_ID
 #define TEMPERATURE_SEVERE			45
 #define TEMPERATURE_MODERATE		28
@@ -103,7 +103,8 @@ int main()
 	BMP180_Start();
 	//	WSS_Init();
 
-	//DIO_setupPinDirection(SLL_FLAG_PORT, SLL_FLAG_PIN, PIN_OUTPUT);
+	DIO_setupPinDirection(SLL_FLAG_PORT, SLL_FLAG_PIN, PIN_INPUT);
+	DIO_writePin(SLL_FLAG_PORT, SLL_FLAG_PIN, LOGIC_HIGH);//pull up resistor
 
 	DDRD |= (1<<6); /*Configure PD6 as Output pin*/
 	PORTD |= (1<<6); /*Initiate it to be VCCed*/
@@ -111,27 +112,14 @@ int main()
 	uint8 send_Byte=0;
 	/* Initialize the SPI driver as Master */
 	SPI_initMaster();
+<<<<<<< HEAD
 //	SREG |= (1<<7);
+=======
+	//SREG |= (1<<7);
+>>>>>>> fd9405f010156434496f3d8fe6bbf62c2134a741
 	//SREG = (1<<7);
 	/* Delay until MC2 finish its initialization task */
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
+
 	/* Send the string to MC2 */
 
 	/*Required Steps:
@@ -144,15 +132,16 @@ int main()
 
 
 	while (1) {
-		g_temperature=33;
-		g_pressure=1234;
-		//g_temperature = BMP180_calculateTemperature();
-		//g_pressure = BMP180_calculatePressure();
+
+
 		/*We Put 0 on PD6 so it triggers interrupt on MC2*/
-		PORTD &= ~(1 << 6);
+
 		//_delay_us(1); /*Delay until SPI is initiated on MC2*/
 		//PORTD |= (1 << 6);
 		/*FRONT_LEFT_TIRE is an enum configurated at bmp180.h*/
+		
+		if(!DIO_readPin(SLL_FLAG_PORT,SLL_FLAG_PIN)){
+			PORTD &= ~(1 << 6);
 		SPI_sendReceiveByte(FRONT_LEFT); /*Wheel ID*/
 		/**/
 		for (uint8 i = 0; i < counter_Bytes; i++) {
@@ -165,8 +154,18 @@ int main()
 			SPI_sendReceiveByte(send_Byte);
 
 		}
+<<<<<<< HEAD
 		
 		_delay_ms(250);
 		PORTD |= (1 << 6);
+=======
+		}
+	else{
+			PORTD |= (1 << 6);
+		g_temperature = BMP180_calculateTemperature();
+		g_pressure = BMP180_calculatePressure();
+		}
+
+>>>>>>> fd9405f010156434496f3d8fe6bbf62c2134a741
 	}
 }
