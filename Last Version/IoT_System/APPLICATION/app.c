@@ -20,17 +20,11 @@ void app_Init(void)
 	DIO_writePin(PORTA_ID,PIN0_ID,GPS_IS_CONNECTED);
 	
 
-	_delay_ms(250);
-	LCD_init();
 
-	LCD_displayString("Test1");
 
 	GPS_init();
 
-	_delay_ms(260);
-	_delay_ms(260);
 
-	LCD_clearScreen();
 
 	ESP_preInit();
 	sei();
@@ -40,15 +34,9 @@ void app_Start(void)
 {
 	
 	GPS_sendingCoordinatesTask();
-	LCD_clearScreen();
-	LCD_displayString("GPS_Task Passed");
-	_delay_ms(260);
-	_delay_ms(260);
+
 	BMP180_sendingDataTask();
-	LCD_clearScreen();
-	LCD_displayString("BMP180 Passed");
-	_delay_ms(260);
-	_delay_ms(260);
+
 	
 
 
@@ -65,8 +53,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 	if(GPS_DataValidation == VALID_GPS_DATA)
 	{
-		LCD_displayString("Valid Reading");
-		_delay_ms(260);
+
 
 
 
@@ -86,21 +73,11 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 
 
-		LCD_clearScreen();
 
-		LCD_displayStringRowColumn(0,0,"Lat: ");
-		LCD_displayStringRowColumn(1,0,(const uint8*)t_GPS_Coordinates.Latitude);
-		LCD_displayStringRowColumn(2,0,"Lon: ");
-		LCD_displayStringRowColumn(3,0,(const uint8*)t_GPS_Coordinates.Longitude);
-
-		_delay_ms(260);
-		_delay_ms(260);
 	}
 	else
 	{
-		LCD_displayString("Void Reading");
-		_delay_ms(260);
-		LCD_clearScreen();
+
 	}
 	return GPS_DataValidation;
 }
@@ -122,33 +99,15 @@ void BMP180_sendingDataTask(void)
 	ESP_init();
 
 	ESP_networkConnect(SSID, PASSWORD);
-	LCD_clearScreen();
-	LCD_displayString("Network Connected");
-	_delay_ms(260);
-	_delay_ms(260);
+
 
 	ESP_serverConnect(SW_TEAM_SERVER_IP, PORT); //AT Command
-	LCD_clearScreen();
-	LCD_displayString("Server Connected");
-	_delay_ms(260);
-	_delay_ms(260);
+
 
 	ESP_sendTiresState(CAR_ID);
-	LCD_clearScreen();
-	LCD_displayString("Tires State Sent");
-	_delay_ms(260);
-	_delay_ms(260);
 
 
 
-	LCD_moveCursor(2,0);
-	LCD_displayString("Temp: ");
-	LCD_intgerToString(t_frontLeftTire.Temperature);
 
-	LCD_moveCursor(3,0);
-	LCD_displayString("Pres: ");
-	LCD_intgerToString(t_frontLeftTire.Pressure);
-	_delay_ms(260);
-	_delay_ms(260);
 
 }
