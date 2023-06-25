@@ -111,19 +111,9 @@ int main()
 	uint8 send_Byte=0;
 	/* Initialize the SPI driver as Master */
 	SPI_initMaster();
-	SREG |= (1<<7);
+//	SREG |= (1<<7);
 	//SREG = (1<<7);
 	/* Delay until MC2 finish its initialization task */
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
 	_delay_ms(250);
 	_delay_ms(250);
 	_delay_ms(250);
@@ -175,6 +165,7 @@ int main()
 			SPI_sendReceiveByte(send_Byte);
 
 		}
+		PORTD |= (1 << 6);
 		_delay_ms(250);
 		_delay_ms(250);
 		_delay_ms(250);
@@ -182,22 +173,6 @@ int main()
 		_delay_ms(250);
 		_delay_ms(250);
 		_delay_ms(250);
-		_delay_ms(250);
-		_delay_ms(250);
-		_delay_ms(250);
-		_delay_ms(250);
-		_delay_ms(250);
-				_delay_ms(250);
-		_delay_ms(250);
-		_delay_ms(250);
-		_delay_ms(250);
-				_delay_ms(250);
-		_delay_ms(250);
-		_delay_ms(250);
-		_delay_ms(250);
-				PORTD |= (1 << 6);
-				_delay_ms(250);
-
 
 	}
 }

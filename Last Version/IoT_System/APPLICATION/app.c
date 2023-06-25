@@ -29,16 +29,27 @@ void app_Init(void)
 
 void app_Start(void)
 {
+	cli();
 	GPS_sendingCoordinatesTask();
-
 	LCD_clearScreen();
 	LCD_displayString("GPS_Task Passed");
-	_delay_ms(260);
 	_delay_ms(260);
 	_delay_ms(260);
 	BMP180_sendingDataTask();
 	LCD_clearScreen();
 	LCD_displayString("BMP180 Passed");
+	_delay_ms(260);
+	_delay_ms(260);
+	sei();
+	_delay_ms(260);
+	_delay_ms(260);
+	_delay_ms(260);
+	_delay_ms(260);
+	_delay_ms(260);
+	_delay_ms(260);
+	_delay_ms(260);
+	_delay_ms(260);
+	_delay_ms(260);
 	_delay_ms(260);
 	_delay_ms(260);
 	_delay_ms(260);
@@ -50,9 +61,9 @@ uint8 GPS_sendingCoordinatesTask(void)
 	uint8 timeout = 0;
 	/*Dummy While Loop*/
 	GPS_reInit();
-	cli();
+//	cli();
 	GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
-	sei();
+//	sei();
 //	while(timeout < 0xff)
 //	{
 //		cli();
@@ -76,7 +87,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 		GPS_deInit();
 
-		cli();
+//		cli();
 
 		ESP_init();
 
@@ -87,7 +98,7 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 		ESP_sendCoordinatesToServer(CAR_ID,t_GPS_Coordinates.Longitude,t_GPS_Coordinates.Latitude);
 
-		sei();
+//		sei();
 
 		ESP_deInit();
 
@@ -124,7 +135,8 @@ void BMP180_sendingDataTask(void)
 	/*TIRES STATE PART*/
 	GPS_deInit();
 
-	cli();
+//	cli();
+
 	ESP_init();
 
 	ESP_networkConnect(SSID, PASSWORD);
@@ -133,7 +145,7 @@ void BMP180_sendingDataTask(void)
 
 	ESP_sendTiresState(CAR_ID);
 
-	sei();
+//	sei();
 
 	LCD_moveCursor(2,0);
 	LCD_displayString("Temp: ");
