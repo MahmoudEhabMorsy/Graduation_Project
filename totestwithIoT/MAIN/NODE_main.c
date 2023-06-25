@@ -116,32 +116,32 @@ int main()
 	/* Delay until MC2 finish its initialization task */
 	_delay_ms(250);
 	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
-	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
+//	_delay_ms(250);
 	/* Send the string to MC2 */
 
 	/*Required Steps:
