@@ -135,7 +135,9 @@ void BMP180_sendingDataTask(void)
 	ESP_serverConnect(SW_TEAM_SERVER_IP, PORT); //AT Command
 	LCD_displayString("Server Connected");
 
+	LCD_clearScreen();
 	ESP_sendTiresState(CAR_ID);
+	LCD_displayString("TiresStateFn Passed");
 
 	sei();
 
