@@ -48,6 +48,7 @@ ISR(INT1_vect)
 	_delay_ms(50);
 
 	BMP_Data = BMP_DATA_IS_READY;
+	cli();
 }
 
 /*End of Interrupt Service Routine Segment*/
