@@ -7,10 +7,14 @@
 
 #include "app.h"
 
+#define GPS_IS_CONNECTED 0
+#define ESP01_IS_CONNECTED 1
+
 void app_Init(void)
 {
 	/* Initialize the LCD Driver */
-
+	DIO_setupPinDirection(PORTA_ID,PIN0_ID,PIN_OUTPUT);
+	DIO_writePin(PORTA_ID,PIN0_ID,GPS_IS_CONNECTED);
 	_delay_ms(250);
 	LCD_init();
 
@@ -62,6 +66,8 @@ uint8 GPS_sendingCoordinatesTask(void)
 	/*Dummy While Loop*/
 	GPS_reInit();
 //	cli();
+	DIO_writePin(PORTA_ID,PIN0_ID,GPS_IS_CONNECTED);
+	_delay_us(1);
 	GPS_DataValidation = GPS_getCoordinates(&t_GPS_Coordinates);
 //	sei();
 //	while(timeout < 0xff)
@@ -85,10 +91,11 @@ uint8 GPS_sendingCoordinatesTask(void)
 		LCD_displayString("Valid Reading");
 		_delay_ms(260);
 
-		GPS_deInit();
+//		GPS_deInit();
 
 //		cli();
-
+		DIO_writePin(PORTA_ID,PIN0_ID,ESP01_IS_CONNECTED);
+		_delay_us(1);
 		ESP_init();
 
 		ESP_networkConnect(SSID, PASSWORD);
@@ -100,9 +107,9 @@ uint8 GPS_sendingCoordinatesTask(void)
 
 //		sei();
 
-		ESP_deInit();
+//		ESP_deInit();
 
-		GPS_reInit();
+//		GPS_reInit();
 
 		LCD_clearScreen();
 
@@ -133,10 +140,11 @@ uint8 GPS_sendingCoordinatesTask(void)
 void BMP180_sendingDataTask(void)
 {
 	/*TIRES STATE PART*/
-	GPS_deInit();
+//	GPS_deInit();
 
 //	cli();
-
+	DIO_writePin(PORTA_ID,PIN0_ID,ESP01_IS_CONNECTED);
+	_delay_us(1);
 	ESP_init();
 
 	ESP_networkConnect(SSID, PASSWORD);
@@ -157,5 +165,5 @@ void BMP180_sendingDataTask(void)
 	_delay_ms(260);
 	_delay_ms(260);
 
-	ESP_deInit();
+//	ESP_deInit();
 }
