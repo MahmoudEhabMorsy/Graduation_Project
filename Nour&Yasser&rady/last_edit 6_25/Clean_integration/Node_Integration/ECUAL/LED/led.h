@@ -10,8 +10,10 @@
 
 #include "../../MCAL/DIO/dio.h"
 #include "../../CommonDef/common_macros.h"
-
-
+/*
+#define LED_PIN PIN5_ID
+#define LED_PORT PORTA_ID
+*/
 void LED_init(uint8 port_number, uint8 pin_number);
 
 void LED_ON(uint8 port_number, uint8 pin_number);
