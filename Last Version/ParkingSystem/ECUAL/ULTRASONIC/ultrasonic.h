@@ -53,8 +53,10 @@
 #define ULTRASONIC_ECHO_PORT_ID  PORTD_ID
 #define ULTRASONIC_ECHO_PIN_ID	 PIN6_ID
 
-#define BUTTON_PORT_ID  PORTD_ID
-#define BUTTON_PIN_ID	 PIN7_ID
+#define SELECT0_PORT_ID			 PORTC_ID
+#define SELECT0_PIN_ID			 PIN2_ID
+#define SELECT1_PORT_ID			 PORTC_ID
+#define SELECT1_PIN_ID			 PIN3_ID
 
 #define SOUND_SPEED 34000 /*sound speed in cm*/
 #define TIME_OF_INSTRUCTION 0.000001/*time needed to execute on instruction after prescalling*/
@@ -62,12 +64,9 @@
 typedef enum {
 	FRONT_RIGHT, FRONT_LEFT, REAR_RIGHT, REAR_LEFT
 } Ultrasonic_Sensor_ID;
-typedef enum{
-	FORWARD,REVERSE
-}Car_Direction;
+
 
 extern Ultrasonic_Sensor_ID g_sensorID;
-extern Car_Direction g_carDirection;
 /*******************************************************************************
  *                      Functions Prototypes                                   *
  *******************************************************************************/
@@ -98,7 +97,7 @@ void Ultrasonic_edgeProcessing(void);
 
 void Ultrasonic_Starter(void);
 
-void Ultrasonic_Switch(Car_Direction direction);
+
 void Ultrasonic_buttonCheck(void);
 
 #endif /* ULTRASONIC_H_ */

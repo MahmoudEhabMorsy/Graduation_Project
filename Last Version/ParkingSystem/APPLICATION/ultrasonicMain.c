@@ -132,6 +132,9 @@ int main() {
 	SREG |= (1 << 7);
 	while (1) {
 		//Ultrasonic_buttonCheck(); /*checking if the button is pressed*/
+
+
+
 		if (g_sensorID == FRONT_RIGHT) {
 			LCD_moveCursor(0, 13); /*moving cursor to the first distance position*/
 		} else if (g_sensorID == FRONT_LEFT) {
@@ -143,6 +146,8 @@ int main() {
 		} else {
 			/*Do nothing*/
 		}
+		_delay_ms(250);
+
 		LCD_distance = Ultrasonic_readDistance(); /*storing the measured distance*/
 
 		if (LCD_distance >= 100) /*LCD handling*/
