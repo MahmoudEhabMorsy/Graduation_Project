@@ -12,7 +12,7 @@
 /*******************************************************************************
  *                                  Includes                                   *
  *******************************************************************************/
-#include "../ECUAL/LCD/lcd.h"
+#include "../ECUAL/LED/led.h"
 #include "../ECUAL/GPS/gps.h"
 #include "../ECUAL/ESP01/esp.h"
 /*******************************************************************************
@@ -30,12 +30,30 @@
 #define API_KEY (const uint8*) "E3F314CY3VJGPB74"
 #define CAR_ID (const uint8*) "63d5343990599fb5c8ce4c48"
 
+
+#define GPS_CALLIBRATION_SUCCEED 0
+#define GPS_CALLIBRATION_FAILED 1
+
+#define ESP_CONNECTION_SUCCEED 0
+#define ESP_CONNECTION_FAILED 1
+
+#define ESP_CONNECTION_SUCCESS_INDICATION_PORT PORTA_ID
+#define ESP_CONNECTION_SUCCESS_INDICATION_PIN PIN1_ID
+
+#define ESP_CONNECTION_FAIL_INDICATION_PORT PORTA_ID
+#define ESP_CONNECTION_FAIL_INDICATION_PIN PIN2_ID
+
+#define GPS_CALLIBRATION_SUCCESS_INDICATION_PORT PORTA_ID
+#define GPS_CALLIBRATION_SUCCESS_INDICATION_PIN PIN3_ID
+
+#define GPS_CALLIBRATION_FAIL_INDICATION_PORT PORTA_ID
+#define GPS_CALLIBRATION_FAIL_INDICATION_PIN PIN5_ID
 /*******************************************************************************
  *                      Functions Prototypes                                   *
  *******************************************************************************/
 void app_Init(void);
 void app_Start(void);
-uint8 GPS_sendingCoordinatesTask(void);
+void GPS_sendingCoordinatesTask(void);
 void BMP180_sendingDataTask(void);
 
 #endif /* APPLICATION_APP_H_ */

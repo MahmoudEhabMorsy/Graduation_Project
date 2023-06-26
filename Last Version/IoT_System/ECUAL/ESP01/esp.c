@@ -8,6 +8,8 @@
 #include "esp.h"
 #include "../LCD/lcd.h"
 #include <util/delay.h>
+
+
 /*Interrupt Service Routine Segment*/
 
 volatile tireState t_frontLeftTire = {FRONT_LEFT_TIRE, 0, 0}; /*Initially*/
@@ -35,7 +37,7 @@ ISR(INT1_vect)
 		t_frontLeftTire.Pressure = (t_frontLeftTire.Pressure | (dummy_Byte << (i * 8)));
 	}
 	BMP_Data = BMP_DATA_IS_READY;
-	DIO_writePin(SLL_FLAG_PORT, SLL_FLAG_PIN, LOGIC_HIGH);
+	DIO_writePin(REQUEST_SIGNAL_PORT, REQUEST_SIGNAL_PIN, LOGIC_HIGH);
 	//cli();
 }
 
@@ -43,13 +45,20 @@ ISR(INT1_vect)
 
 void ESP_preInit(void)
 {
+	DIO_setupPinDirection(REQUEST_SIGNAL_PORT, REQUEST_SIGNAL_PIN, PIN_OUTPUT);
+
+	DIO_setupPinDirection(ESP_DEVICE_SELECTOR_PORT,ESP_DEVICE_SELECTOR_PIN,PIN_OUTPUT);
+	/*Direction Initiated in GPS Driver*/
+
+	DIO_writePin(REQUEST_SIGNAL_PORT, REQUEST_SIGNAL_PIN, LOGIC_HIGH);
 	INT1_Init();
 	SPI_initSlave();
 }
 void ESP_init(void)
 {
-//	GPIO_setupPinDirection(ESP_PORT, ESP_VCC_PIN, PIN_OUTPUT);
-//	GPIO_writePin(ESP_PORT, ESP_VCC_PIN, LOGIC_HIGH);
+	DIO_writePin(ESP_DEVICE_SELECTOR_PORT,ESP_DEVICE_SELECTOR_PIN,ESP_IS_CONNECTED);
+	_delay_us(1);
+
 	/*Initialize UART*/
 	UART_init(BAUD_RATE);
 
@@ -87,8 +96,9 @@ void ESP_deInit(void)
 	_delay_us(1);
 	UART_init(DEFAULT_APP_BAUD_RATE);
 }
-void ESP_networkConnect(const uint8 *Username, const uint8 *Password)
+uint8 ESP_networkConnect(const uint8 *Username, const uint8 *Password)
 {
+	uint8 i = 0;
 	/*connect to Wi-Fi*/
 	/*AT+CWJAP_CUR="WiFi_Name","WiFi_Pass"*/
 	UART_sendString((const uint8*)"AT+CWJAP_CUR=\"");
@@ -97,39 +107,56 @@ void ESP_networkConnect(const uint8 *Username, const uint8 *Password)
 	UART_sendString(Password);
 	UART_sendString((const uint8*)"\"\r\n");
 
-	while(1)
+	while(i < MAXIMUM_RECEIVED_LENGTH)
 	{
 		if(UART_receiveByte() == 'O')
 		{
 			if(UART_receiveByte() == 'K')
 			{
-				break;
+				return ESP_NETWORK_CONNECTED_SUCCESSFULLY;
+			}
+			else
+			{
+				/*Do Nothing*/
 			}
 		}
+		i++;
 	}
+	return ESP_NETWORK_DIDNT_CONNECT_SUCCESSFULLY;
 }
 
-void ESP_serverConnect(const uint8 *IP, const uint8 *Port)
+void ESP_requestingData(void)
 {
-	uint8 c;
+	DIO_writePin(REQUEST_SIGNAL_PORT, REQUEST_SIGNAL_PIN, LOGIC_LOW);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+}
+uint8 ESP_serverConnect(const uint8 *IP, const uint8 *Port)
+{
+	uint8 c, i;
 	/*connect to server*/
 	/*8: AT+CIPSTART="mode","IP",Port*/
 	/*TCP Mode By Default*/
 	UART_sendString((const uint8*)"AT+CIPSTATUS\r\n");
 
-	while(1)
+	i = 0;
+	while(i < MAXIMUM_RECEIVED_LENGTH)
 	{
 		if(UART_receiveByte() == ':')
 		{
 			c = UART_receiveByte();
 			break;
 		}
+		i++;
 	}
 
 	if(c == '3')
 	{
 		UART_sendString((const uint8*)"AT+CIPCLOSE\r\n");
-		while(1)
+		i = 0;
+		while(i < MAXIMUM_RECEIVED_LENGTH)
 		{
 			if(UART_receiveByte() == 'O')
 			{
@@ -138,6 +165,7 @@ void ESP_serverConnect(const uint8 *IP, const uint8 *Port)
 					break;
 				}
 			}
+			i++;
 		}
 	}
 
@@ -147,16 +175,19 @@ void ESP_serverConnect(const uint8 *IP, const uint8 *Port)
 	UART_sendString(Port);
 	UART_sendString((const uint8*)"\r\n");
 
-	while(1)
+	i = 0;
+	while(i < MAXIMUM_RECEIVED_LENGTH)
 	{
 		if(UART_receiveByte() == 'O')
 		{
 			if(UART_receiveByte() == 'K')
 			{
-				break;
+				return ESP_SERVER_CONNECTED_SUCCESSFULLY;
 			}
 		}
+		i++;
 	}
+	return ESP_SERVER_DIDNT_CONNECT_SUCCESSFULLY;
 }
 
 /* String = "GET http://mahmoud.freevar.com/status.txt\r\n" */

@@ -33,10 +33,35 @@
 #define PRESSURE_VARIABLE_LENGTH 4
 #define BMP_DATA_IS_NOT_READY 0
 #define BMP_DATA_IS_READY 1
-#define SLL_FLAG_PORT				PORTA_ID
-#define SLL_FLAG_PIN				PIN4_ID
+
+#define REQUEST_SIGNAL_PORT				PORTA_ID
+#define REQUEST_SIGNAL_PIN				PIN4_ID
+
+#define ESP_CONNECTED_SUCCESSFULLY_PORT PORTA_ID
+#define ESP_CONNECTED_SUCCESSFULLY_PIN PIN1_ID
+
+#define ESP_DID_NOT_CONNECT_SUCCESSFULLY_PORT PORTA_ID
+#define ESP_DID_NOT_CONNECT_SUCCESSFULLY_PIN PIN2_ID
+
+#define ESP_DEVICE_SELECTOR_PORT PORTA_ID
+#define ESP_DEVICE_SELECTOR_PIN PIN0_ID
 
 
+
+#define ESP_DEVICE_SELECTOR_PORT PORTA_ID
+#define ESP_DEVICE_SELECTOR_PIN PIN0_ID
+
+
+#define ESP_IS_CONNECTED LOGIC_HIGH
+
+
+#define ESP_NETWORK_CONNECTED_SUCCESSFULLY 1
+#define ESP_NETWORK_DIDNT_CONNECT_SUCCESSFULLY 0
+
+#define ESP_SERVER_CONNECTED_SUCCESSFULLY 1
+#define ESP_SERVER_DIDNT_CONNECT_SUCCESSFULLY 0
+
+#define MAXIMUM_RECEIVED_LENGTH 35
 
 typedef enum
 {
@@ -57,9 +82,11 @@ void ESP_init(void);
 
 void ESP_deInit(void);
 
-void ESP_networkConnect(const uint8 *Username, const uint8 *Password);
+void ESP_requestingData(void);
 
-void ESP_serverConnect(const uint8 *IP,const uint8 *Port);
+uint8 ESP_networkConnect(const uint8 *Username, const uint8 *Password);
+
+uint8 ESP_serverConnect(const uint8 *IP,const uint8 *Port);
 
 void ESP_serverDisconnect(void);
 
