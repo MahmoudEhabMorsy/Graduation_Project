@@ -131,6 +131,7 @@ void Ultrasonic_edgeProcessing(void)
 
 void Ultrasonic_init(void) {
 
+
 	DIO_setupPinDirection(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, PIN_OUTPUT);
 	DIO_setupPinDirection(FRONT_LEFT_ULTRASONIC_VCC_PORT_ID,FRONT_LEFT_ULTRASONIC_VCC_PIN_ID, PIN_OUTPUT);
 	DIO_setupPinDirection(REAR_RIGHT_ULTRASONIC_VCC_PORT_ID,REAR_RIGHT_ULTRASONIC_VCC_PIN_ID, PIN_OUTPUT);
@@ -215,9 +216,9 @@ void Ultrasonic_Trigger(void) {
  *******************************************************************************/
 
 uint16 Ultrasonic_readDistance(void) {
-	static uint32 distance;
+	 uint32 distance=0;
 	/*for calibrating the reading due to ultrasonic tolerance*/
-	static uint32 distance_calibration;
+	 uint32 distance_calibration=0;
 
 	//Ultrasonic_Starter();
 	//_delay_ms(10);
@@ -290,29 +291,28 @@ uint16 Ultrasonic_readDistance(void) {
 	else {
 		return distance;
 	}
-	return 1;
 }
 
-void Ultrasonic_Starter(void){
-	switch(g_sensorID){
-		case FRONT_RIGHT:
-		DIO_writePin(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,
-				FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
-		break;
-		case FRONT_LEFT:
-		DIO_writePin(FRONT_LEFT_ULTRASONIC_VCC_PORT_ID,
-				FRONT_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
-		break;
-		case REAR_RIGHT:
-		DIO_writePin(REAR_RIGHT_ULTRASONIC_VCC_PORT_ID,
-				REAR_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
-		break;
-		case REAR_LEFT:
-		DIO_writePin(REAR_LEFT_ULTRASONIC_VCC_PORT_ID,
-				REAR_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
-		break;
-		default:
-		/*Do nothing*/
-		break;
-	}
-}
+// void Ultrasonic_Starter(void){
+// 	switch(g_sensorID){
+// 		case FRONT_RIGHT:
+// 		DIO_writePin(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,
+// 				FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
+// 		break;
+// 		case FRONT_LEFT:
+// 		DIO_writePin(FRONT_LEFT_ULTRASONIC_VCC_PORT_ID,
+// 				FRONT_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
+// 		break;
+// 		case REAR_RIGHT:
+// 		DIO_writePin(REAR_RIGHT_ULTRASONIC_VCC_PORT_ID,
+// 				REAR_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
+// 		break;
+// 		case REAR_LEFT:
+// 		DIO_writePin(REAR_LEFT_ULTRASONIC_VCC_PORT_ID,
+// 				REAR_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
+// 		break;
+// 		default:
+// 		/*Do nothing*/
+// 		break;
+// 	}
+// }

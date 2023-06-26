@@ -6,11 +6,9 @@
  */
 
 
-#include "../../UTILITIES/std_types.h"
-#include "../../MCAL/DIO/gpio.h"
 #include "buzzer.h"
 #include <avr/io.h>
-#include "../../UTILITIES/common_macros.h"
+
 
 /*******************************************************************************
  *                      Functions Definitions                                  *
@@ -25,8 +23,8 @@
 
 void Buzzer_init(void)
 {
-	GPIO_setupPinDirection(BUZZER_PORT,BUZZER_PIN,PIN_OUTPUT);
-	GPIO_writePin(BUZZER_PORT,BUZZER_PIN,LOGIC_LOW);
+	DIO_setupPinDirection(BUZZER_PORT,BUZZER_PIN,PIN_OUTPUT);
+	DIO_writePin(BUZZER_PORT,BUZZER_PIN,LOGIC_LOW);
 }
 
 /*
@@ -37,7 +35,7 @@ void Buzzer_init(void)
 
 void Buzzer_on(void)
 {
-	GPIO_writePin(BUZZER_PORT,BUZZER_PIN,LOGIC_HIGH);
+	DIO_writePin(BUZZER_PORT,BUZZER_PIN,LOGIC_HIGH);
 }
 
 
@@ -48,11 +46,11 @@ void Buzzer_on(void)
  */
 void Buzzer_off(void)
 {
-	GPIO_writePin(BUZZER_PORT,BUZZER_PIN,LOGIC_LOW);
+	DIO_writePin(BUZZER_PORT,BUZZER_PIN,LOGIC_LOW);
 }
 
 void Buzzer_toggle(void)
 {
-	GPIO_togglePin(BUZZER_PORT,BUZZER_PIN);
+	DIO_togglePin(BUZZER_PORT,BUZZER_PIN);
 }
 

@@ -13,8 +13,7 @@
 #include <util/delay.h> /* For the delay functions */
 #include "../../UTILITIES/common_macros.h" /* For GET_BIT Macro */
 #include "lcd.h"
-#include "../../MCAL/DIO/dio.h"
-
+#include "../../MCAL/DIO/gpio.h"
 
 /*******************************************************************************
  *                      Functions Definitions                                  *

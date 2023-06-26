@@ -99,5 +99,6 @@ void Ultrasonic_Starter(void);
 
 
 void Ultrasonic_buttonCheck(void);
+void displaysensorid(void);
 
 #endif /* ULTRASONIC_H_ */

@@ -11,7 +11,7 @@
  *******************************************************************************/
 #include "../../MCAL/ICU/icu.h"
 #include "../../UTILITIES/std_types.h"
-#include "../../MCAL/DIO/gpio.h"
+#include "../../MCAL/DIO/dio.h"
 #include "util/delay.h"
 #include <math.h>
 #include "ultrasonic.h"
@@ -75,15 +75,21 @@ void Ultrasonic_edgeProcessing(void)
 
 void Ultrasonic_init(void)
 {
+	DIO_setupPinDirection(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, PIN_OUTPUT);
+		DIO_setupPinDirection(SELECT0_PORT_ID,SELECT0_PIN_ID, PIN_OUTPUT);
+	DIO_setupPinDirection(SELECT1_PORT_ID,SELECT1_PIN_ID,PIN_OUTPUT);
+	DIO_writePin(SELECT0_PORT_ID,SELECT0_PIN_ID, LOGIC_LOW);
+	DIO_writePin(SELECT1_PORT_ID,SELECT1_PIN_ID,LOGIC_LOW);
+	DIO_writePin(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
 	Icu_ConfigType Icu_Config = {F_CPU_8,RISING};
 	/* Set the Call back function pointer in the ICU driver */
 	Icu_setCallBack(Ultrasonic_edgeProcessing);
 	/* Initialize the ICU driver */
 	Icu_init(&Icu_Config);
 	/*setup the direction of the trigger pin as output pin through the gpio driver*/
-	GPIO_setupPinDirection(PORTB_ID,PIN5_ID,PIN_OUTPUT);
+	DIO_setupPinDirection(FRONT_RIGHT_ULTRASONIC_TRIGGER_PORT_ID,FRONT_RIGHT_ULTRASONIC_TRIGGER_PIN_ID, PIN_OUTPUT);
 	/*disabling trigger pin*/
-	GPIO_writePin(PORTB_ID,PIN5_ID,LOGIC_LOW);
+	DIO_writePin(FRONT_RIGHT_ULTRASONIC_TRIGGER_PORT_ID,FRONT_RIGHT_ULTRASONIC_TRIGGER_PIN_ID, LOGIC_LOW);
 
 }
 /*******************************************************************************
@@ -95,9 +101,10 @@ void Ultrasonic_init(void)
  *******************************************************************************/
 void Ultrasonic_Trigger(void)
 {
-	GPIO_writePin(PORTB_ID,PIN5_ID,1);
-	_delay_us(1);
-	GPIO_writePin(PORTB_ID,PIN5_ID,0);
+		DIO_writePin(FRONT_RIGHT_ULTRASONIC_TRIGGER_PORT_ID,FRONT_RIGHT_ULTRASONIC_TRIGGER_PIN_ID, LOGIC_HIGH);
+		_delay_us(10);
+		DIO_writePin(FRONT_RIGHT_ULTRASONIC_TRIGGER_PORT_ID,FRONT_RIGHT_ULTRASONIC_TRIGGER_PIN_ID, LOGIC_LOW);
+		
 
 }
 /*******************************************************************************

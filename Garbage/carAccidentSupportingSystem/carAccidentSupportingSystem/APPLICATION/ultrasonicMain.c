@@ -11,9 +11,9 @@
 #include "../ECUAL/LCD/lcd.h"
 #include <util/delay.h>
 #include <avr/interrupt.h>
-#include "../ECUAL/BUZZER/buzzer.h"
-#include "../ECUAL/LED/led.h"
-#include "../MCAL/TIMER/timer.h"
+// #include "../ECUAL/BUZZER/buzzer.h"
+// #include "../ECUAL/LED/led.h"
+// #include "../MCAL/TIMER/timer.h"
 #include "../UTILITIES/common_macros.h"
 #include <avr/io.h>
 
@@ -151,36 +151,37 @@ int main()
 			LCD_intgerToString(LCD_distance);
 			LCD_displayCharacter(' ');
 		}
-		warning(LCD_distance); /*warning function*/
+		_delay_ms(250);
+		//warning(LCD_distance); /*warning function*/
 	}
 }
 
 
-void warning(uint16 Distance)
-{
-	if(Distance <= LOW_RISK_DISTANCE_UPPER_LIMIT && Distance > LOW_RISK_DISTANCE_LOWER_LIMIT)
-	{
-		ultrasonicInterval = LOW_RISK_DISTANCE;
-		Timer_reset(Timer0);
-	}
-	else if(Distance <= MODERATE_RISK_DISTANCE_UPPER_LIMIT && Distance > MODERATE_RISK_DISTANCE_LOWER_LIMIT)
-	{
-		ultrasonicInterval = MODERATE_RISK_DISTANCE;
-		Timer_reset(Timer0);
-	}
-	else if(Distance <= HIGH_RISK_DISTANCE_UPPER_LIMIT && Distance > HIGH_RISK_DISTANCE_LOWER_LIMIT)
-	{
-		ultrasonicInterval = HIGH_RISK_DISTANCE;
-		Timer_reset(Timer0);
-	}
-	else if(Distance <= EXTREME_RISK_DISTANCE_UPPER_LIMIT)
-	{
-		ultrasonicInterval = EXTREME_RISK_DISTANCE;
-		Timer_reset(Timer0);
-	}
-	else
-	{
-		ultrasonicInterval = SAFE_DISTANCE;
-		Timer_reset(Timer0);
-	}
-}
+// void warning(uint16 Distance)
+// {
+// 	if(Distance <= LOW_RISK_DISTANCE_UPPER_LIMIT && Distance > LOW_RISK_DISTANCE_LOWER_LIMIT)
+// 	{
+// 		ultrasonicInterval = LOW_RISK_DISTANCE;
+// 		Timer_reset(Timer0);
+// 	}
+// 	else if(Distance <= MODERATE_RISK_DISTANCE_UPPER_LIMIT && Distance > MODERATE_RISK_DISTANCE_LOWER_LIMIT)
+// 	{
+// 		ultrasonicInterval = MODERATE_RISK_DISTANCE;
+// 		Timer_reset(Timer0);
+// 	}
+// 	else if(Distance <= HIGH_RISK_DISTANCE_UPPER_LIMIT && Distance > HIGH_RISK_DISTANCE_LOWER_LIMIT)
+// 	{
+// 		ultrasonicInterval = HIGH_RISK_DISTANCE;
+// 		Timer_reset(Timer0);
+// 	}
+// 	else if(Distance <= EXTREME_RISK_DISTANCE_UPPER_LIMIT)
+// 	{
+// 		ultrasonicInterval = EXTREME_RISK_DISTANCE;
+// 		Timer_reset(Timer0);
+// 	}
+// 	else
+// 	{
+// 		ultrasonicInterval = SAFE_DISTANCE;
+// 		Timer_reset(Timer0);
+// 	}
+// }
