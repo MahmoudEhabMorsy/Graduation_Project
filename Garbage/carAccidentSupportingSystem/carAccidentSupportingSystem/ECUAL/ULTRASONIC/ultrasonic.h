@@ -21,6 +21,16 @@
 
 
 
+#define FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID  PORTD_ID
+#define FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID	 PIN2_ID
+
+#define FRONT_RIGHT_ULTRASONIC_TRIGGER_PORT_ID  PORTD_ID
+#define FRONT_RIGHT_ULTRASONIC_TRIGGER_PIN_ID	 PIN3_ID
+
+#define SELECT0_PORT_ID			 PORTC_ID
+#define SELECT0_PIN_ID			 PIN2_ID
+#define SELECT1_PORT_ID			 PORTC_ID
+#define SELECT1_PIN_ID			 PIN3_ID
 
 /*******************************************************************************
  *                      Functions Prototypes                                   *

@@ -25,7 +25,6 @@ uint16 g_rearLeftTimeHigh = 0;
 uint16 g_rearRightTimeHigh = 0;
 
 Ultrasonic_Sensor_ID g_sensorID = FRONT_RIGHT;
-Car_Direction g_carDirection = FORWARD;
 
 /*******************************************************************************
  * [Function Name] : Ultrasonic_edgeProcessing
@@ -41,12 +40,7 @@ void Ultrasonic_edgeProcessing(void)
 
 {
 	g_edgeCount++;
-	switch(g_carDirection)
-	{
-		case FORWARD:
-		DIO_writePin(REAR_RIGHT_ULTRASONIC_VCC_PORT_ID,REAR_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_LOW);
-		DIO_writePin(REAR_LEFT_ULTRASONIC_VCC_PORT_ID,REAR_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_LOW);
-		switch (g_edgeCount)
+	switch (g_edgeCount)
 	{
 	case 1:
 		/*
@@ -67,7 +61,6 @@ void Ultrasonic_edgeProcessing(void)
 		//DIO_togglePin(FRONT_ULTRASONIC_VCC_PORT_ID,FRONT_ULTRASONIC_VCC_PIN_ID);
 		//DIO_togglePin(REAR_ULTRASONIC_VCC_PORT_ID,REAR_ULTRASONIC_VCC_PIN_ID);
 		DIO_writePin(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_LOW);
-
 		break;
 		case 3:
 		/*
@@ -85,15 +78,8 @@ void Ultrasonic_edgeProcessing(void)
 		/* Detect rising edge */
 		Icu_setEdgeDetectionType(RISING);
 		DIO_writePin(FRONT_LEFT_ULTRASONIC_VCC_PORT_ID,FRONT_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_LOW);
-		g_edgeCount = 0;
 		break;
-	}
-	break;
-	case REVERSE:
-		DIO_writePin(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_LOW);
-		DIO_writePin(FRONT_LEFT_ULTRASONIC_VCC_PORT_ID,FRONT_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_LOW);
-	switch(g_edgeCount){
-		case 1:
+		case 5:
 		/*
 		 * Clear the timer counter register to start measurements from the
 		 * first detected rising edge
@@ -102,16 +88,15 @@ void Ultrasonic_edgeProcessing(void)
 		/* Detect falling edge */
 		Icu_setEdgeDetectionType(FALLING);
 		break;
-		case 2:
+		case 6:
 		/* storing the value of the 'ICR1' register in the g_timerValue variable where it's global *
 		 * as it will be used again in another function which is called "ULTRASONIC_readDistance". */
 		g_rearRightTimeHigh = Icu_getInputCaptureValue();
 		/* Detect rising edge */
 		Icu_setEdgeDetectionType(RISING);
 		DIO_writePin(REAR_RIGHT_ULTRASONIC_VCC_PORT_ID,REAR_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_LOW);
-
 		break;
-		case 3:
+		case 7:
 		/*
 		 * Clear the timer counter register to start measurements from the
 		 * first detected rising edge
@@ -120,18 +105,18 @@ void Ultrasonic_edgeProcessing(void)
 		/* Detect falling edge */
 		Icu_setEdgeDetectionType(FALLING);
 		break;
-		case 4:
+		case 8:
 		/* storing the value of the 'ICR1' register in the g_timerValue variable where it's global *
 		 * as it will be used again in another function which is called "ULTRASONIC_readDistance". */
 		g_rearLeftTimeHigh = Icu_getInputCaptureValue();
 		/* Detect rising edge */
 		Icu_setEdgeDetectionType(RISING);
 		DIO_writePin(REAR_LEFT_ULTRASONIC_VCC_PORT_ID,REAR_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_LOW);
-
 		g_edgeCount = 0;
 		break;
-	}
-	break;
+
+		default:
+		break;
 	}
 }
 /*******************************************************************************
@@ -146,18 +131,23 @@ void Ultrasonic_edgeProcessing(void)
 
 void Ultrasonic_init(void) {
 
+
 	DIO_setupPinDirection(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, PIN_OUTPUT);
 	DIO_setupPinDirection(FRONT_LEFT_ULTRASONIC_VCC_PORT_ID,FRONT_LEFT_ULTRASONIC_VCC_PIN_ID, PIN_OUTPUT);
 	DIO_setupPinDirection(REAR_RIGHT_ULTRASONIC_VCC_PORT_ID,REAR_RIGHT_ULTRASONIC_VCC_PIN_ID, PIN_OUTPUT);
 	DIO_setupPinDirection(REAR_LEFT_ULTRASONIC_VCC_PORT_ID,REAR_LEFT_ULTRASONIC_VCC_PIN_ID, PIN_OUTPUT);
-	DIO_setupPinDirection(BUTTON_PORT_ID,BUTTON_PIN_ID, PIN_INPUT);
-	//DIO_writePin(BUTTON_PORT_ID,BUTTON_PIN_ID, LOGIC_HIGH);/*pull up*/
-	DIO_writePin(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_LOW);
+	DIO_setupPinDirection(SELECT0_PORT_ID,SELECT0_PIN_ID, PIN_OUTPUT);
+	DIO_setupPinDirection(SELECT1_PORT_ID,SELECT1_PIN_ID,PIN_OUTPUT);
+	DIO_writePin(SELECT0_PORT_ID,SELECT0_PIN_ID, LOGIC_LOW);
+	DIO_writePin(SELECT1_PORT_ID,SELECT1_PIN_ID,LOGIC_LOW);
+	DIO_writePin(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
 	DIO_writePin(FRONT_LEFT_ULTRASONIC_VCC_PORT_ID,FRONT_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_LOW);
 	DIO_writePin(REAR_RIGHT_ULTRASONIC_VCC_PORT_ID,REAR_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_LOW);
 	DIO_writePin(REAR_LEFT_ULTRASONIC_VCC_PORT_ID,REAR_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_LOW);
 	/* ICU Configurations Structure */
 	Icu_ConfigType Icu_Config = {F_CPU_8,RISING};
+	/* Set the Call back function pointer in the ICU driver */
+	Icu_setCallBack(Ultrasonic_edgeProcessing);
 	/* Initialize the ICU driver */
 	Icu_init(&Icu_Config);
 	/*setup the direction of the trigger pin as output pin through the gpio driver*/
@@ -226,14 +216,14 @@ void Ultrasonic_Trigger(void) {
  *******************************************************************************/
 
 uint16 Ultrasonic_readDistance(void) {
-	static uint32 distance;
+	 uint32 distance=0;
 	/*for calibrating the reading due to ultrasonic tolerance*/
-	static uint32 distance_calibration;
+	 uint32 distance_calibration=0;
 
 	//Ultrasonic_Starter();
 	//_delay_ms(10);
 	/*enabling triggering*/
-	
+	Ultrasonic_Trigger();
 	/*  Sound velocity =   343.00 m/s = 34300 cm/s
 	 The distance of Object (in cm) = (soundVelocity * TimerValue)/2
 	 Now, here we have selected an internal 16 MHz oscillator frequency for ATmega32, with prescaler FCPU/8
@@ -245,37 +235,45 @@ uint16 Ultrasonic_readDistance(void) {
 	 distance is divided by 2 because it is distance of going and return back*/
 	//_delay_ms(10);
 	/******** distance =(g_timeHigh*0.01715)*(Prescaler/FCPU)+1  ***********/
-	switch(g_carDirection){
-		case FORWARD:
-switch (g_sensorID)
+	switch (g_sensorID)
 	{
 	case FRONT_RIGHT:
 		distance = (((SOUND_SPEED * g_frontRightTimeHigh) / 2 + 1)* TIME_OF_INSTRUCTION);
+		DIO_writePin(SELECT0_PORT_ID,SELECT0_PIN_ID,LOGIC_HIGH);
+		DIO_writePin(SELECT1_PORT_ID,SELECT1_PIN_ID,LOGIC_LOW);
+		_delay_ms(1);
 		DIO_writePin(FRONT_LEFT_ULTRASONIC_VCC_PORT_ID,FRONT_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
+		_delay_ms(1);
 		g_sensorID = FRONT_LEFT;
 		break;
 	case FRONT_LEFT:
 		distance = (((SOUND_SPEED * g_frontLeftTimeHigh) / 2 + 1)* TIME_OF_INSTRUCTION);
-		DIO_writePin(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
-		g_sensorID = FRONT_RIGHT;
+		DIO_writePin(SELECT0_PORT_ID,SELECT0_PIN_ID,LOGIC_LOW);
+		DIO_writePin(SELECT1_PORT_ID,SELECT1_PIN_ID,LOGIC_HIGH);
+		_delay_ms(1);
+		DIO_writePin(REAR_RIGHT_ULTRASONIC_VCC_PORT_ID,REAR_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
+		_delay_ms(1);
+		g_sensorID = REAR_RIGHT;
 		break;
-	}
-	break;
-	case REVERSE:
-switch (g_sensorID)
-	{
 	case REAR_RIGHT:
 		distance = (((SOUND_SPEED * g_rearRightTimeHigh) / 2 + 1)* TIME_OF_INSTRUCTION);
+		DIO_writePin(SELECT0_PORT_ID,SELECT0_PIN_ID,LOGIC_HIGH);
+		DIO_writePin(SELECT1_PORT_ID,SELECT1_PIN_ID,LOGIC_HIGH);
+		_delay_ms(1);
 		DIO_writePin(REAR_LEFT_ULTRASONIC_VCC_PORT_ID,REAR_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
+		_delay_ms(1);
 		g_sensorID = REAR_LEFT;
 		break;
 	case REAR_LEFT:
 		distance = (((SOUND_SPEED * g_rearLeftTimeHigh) / 2 + 1)* TIME_OF_INSTRUCTION);
-		DIO_writePin(REAR_RIGHT_ULTRASONIC_VCC_PORT_ID,REAR_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
-		g_sensorID = REAR_RIGHT;
-
+		DIO_writePin(SELECT0_PORT_ID,SELECT0_PIN_ID,LOGIC_LOW);
+		DIO_writePin(SELECT1_PORT_ID,SELECT1_PIN_ID,LOGIC_LOW);
+		_delay_ms(1);
+		DIO_writePin(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
+		_delay_ms(1);
+		g_sensorID = FRONT_RIGHT;
 		break;
-	}
+	default:
 		break;
 	}
 	// distance = (g_timeHigh*0.01715)/2+1;
@@ -293,60 +291,28 @@ switch (g_sensorID)
 	else {
 		return distance;
 	}
-	return 1;
 }
 
-void Ultrasonic_Starter(void){
-	switch(g_sensorID){
-		case FRONT_RIGHT:
-		DIO_writePin(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,
-				FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
-		break;
-		case FRONT_LEFT:
-		DIO_writePin(FRONT_LEFT_ULTRASONIC_VCC_PORT_ID,
-				FRONT_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
-		break;
-		case REAR_RIGHT:
-		DIO_writePin(REAR_RIGHT_ULTRASONIC_VCC_PORT_ID,
-				REAR_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
-		break;
-		case REAR_LEFT:
-		DIO_writePin(REAR_LEFT_ULTRASONIC_VCC_PORT_ID,
-				REAR_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
-		break;
-		default:
-		/*Do nothing*/
-		break;
-	}
-}
-void Ultrasonic_Switch(Car_Direction direction){
-	switch(direction){
-		case FORWARD:
-		if(g_edgeCount!=0){
-			g_edgeCount=0;
-		}
-		g_carDirection=direction;
-	/* Set the Call back function pointer in the ICU driver */
-	Icu_setCallBack(Ultrasonic_edgeProcessing);
-		break;
-		case REVERSE:
-				if(g_edgeCount!=0){
-			g_edgeCount=0;
-		}
-		g_carDirection=direction;
-	/* Set the Call back function pointer in the ICU driver */
-	Icu_setCallBack(Ultrasonic_edgeProcessing);
-		break;
-
-	}
-}
-void Ultrasonic_buttonCheck(void){
-	uint8 buttonState;
-	buttonState=DIO_readPin(BUTTON_PORT_ID,BUTTON_PIN_ID);
-	if(buttonState==LOGIC_HIGH){
-		Ultrasonic_Switch(REVERSE);
-	}
-	else{
-		Ultrasonic_Switch(FORWARD);
-	}
-}
+// void Ultrasonic_Starter(void){
+// 	switch(g_sensorID){
+// 		case FRONT_RIGHT:
+// 		DIO_writePin(FRONT_RIGHT_ULTRASONIC_VCC_PORT_ID,
+// 				FRONT_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
+// 		break;
+// 		case FRONT_LEFT:
+// 		DIO_writePin(FRONT_LEFT_ULTRASONIC_VCC_PORT_ID,
+// 				FRONT_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
+// 		break;
+// 		case REAR_RIGHT:
+// 		DIO_writePin(REAR_RIGHT_ULTRASONIC_VCC_PORT_ID,
+// 				REAR_RIGHT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
+// 		break;
+// 		case REAR_LEFT:
+// 		DIO_writePin(REAR_LEFT_ULTRASONIC_VCC_PORT_ID,
+// 				REAR_LEFT_ULTRASONIC_VCC_PIN_ID, LOGIC_HIGH);
+// 		break;
+// 		default:
+// 		/*Do nothing*/
+// 		break;
+// 	}
+// }
