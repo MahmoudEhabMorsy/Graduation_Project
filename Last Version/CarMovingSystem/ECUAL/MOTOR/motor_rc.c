@@ -1,16 +1,31 @@
 #include "motor_rc.h"
-//static uint8 g_direction_current_state = "S" ;
-//static uint8 g_direction_previous_state = "S" ;
 
+/*******************************************************************************
+*                            Variables Definitions                             *
+*******************************************************************************/
 uint8 u8_speedIsLimited = SPEED_IS_NOT_LIMITED;
+volatile uint8 u8_severeTiresStateFlag = 0;
+carState t_carState = {BRAKE,SPEED_0};
 
 
+/*******************************************************************************
+*                      Interrupt Service Routine (ISR)                         *
+*******************************************************************************/
+ISR(INT1_vect)
+{
+	u8_severeTiresStateFlag = 1;
+}
+
+/*******************************************************************************
+*                           Functions Definitions                              *
+*******************************************************************************/
 void PWM_Timer0_Init(unsigned char set_duty_cycle) {
-	TCNT0 = 0; //Set Timer Initial v	alue
+	TCNT0 = 0; //Set Timer Initial value
 
 	OCR0 = set_duty_cycle; // Set Compare Value
 
-	DDRB = DDRB | (1 << PB3); //set PB3/OC0 as output pin --> pin where the PWM signal is generated from MC.
+	//set PB3/OC0 as output pin --> pin where the PWM signal is generated from MC.
+	DIO_setupPinDirection(PORTB_ID,PIN3_ID,PIN_OUTPUT);
 
 	/* Configure timer control register
 	 * 1. Fast PWM mode FOC0=0
@@ -25,19 +40,26 @@ void DC_Motor_Init(void) {
 	/*setup the direction for REAR_RIGHT_MOTOR pins through the GPIO driver.*/
 	DIO_setupPinDirection(DC_MOTOR_PORT, REAR_RIGHT_MOTOR_PIN1, PIN_OUTPUT);
 	DIO_setupPinDirection(DC_MOTOR_PORT, REAR_RIGHT_MOTOR_PIN2, PIN_OUTPUT);
+
 	/*setup the direction for REAR_LEFT_MOTOR pins through the GPIO driver.*/
 	DIO_setupPinDirection(DC_MOTOR_PORT, REAR_LEFT_MOTOR_PIN1, PIN_OUTPUT);
 	DIO_setupPinDirection(DC_MOTOR_PORT, REAR_LEFT_MOTOR_PIN2, PIN_OUTPUT);
+
 	/*setup the direction for FRONT_RIGHT_MOTOR pins through the GPIO driver.*/
 	DIO_setupPinDirection(DC_MOTOR_PORT, FRONT_RIGHT_MOTOR_PIN1, PIN_OUTPUT);
 	DIO_setupPinDirection(DC_MOTOR_PORT, FRONT_RIGHT_MOTOR_PIN2, PIN_OUTPUT);
+
 	/*setup the direction for FRONT_LEFT_MOTOR pins through the GPIO driver.*/
 	DIO_setupPinDirection(DC_MOTOR_PORT, FRONT_LEFT_MOTOR_PIN1, PIN_OUTPUT);
 	DIO_setupPinDirection(DC_MOTOR_PORT, FRONT_LEFT_MOTOR_PIN2, PIN_OUTPUT);
 
 	/*Stop at the DC-Motor at the beginning through the GPIO driver.*/
 	set_car_direction(BRAKE);
+
+	INT1_Init();
 }
+
+
 void set_motor_direction(Motor_ID motor, Wheel_directions direction) {
 		switch (motor) {
 	case REAR_RIGHT_MOTOR:
@@ -307,6 +329,14 @@ carState move_car(void) {
 		}
 		break;
 
+	case 'X':
+	case 'x':
+			u8_speedIsLimited = SPEED_IS_NOT_LIMITED;
+		break;
+
+	default:
+		/*All other symbols are ignored.*/
+		break;
 	}
 	return state;
 }
@@ -316,4 +346,91 @@ void set_Car_State(carState state)
 {
 	set_car_direction(state.gearState);
 	PWM_Timer0_Init(state.carSpeed);
+}
+
+void keep_Car_Safe(void)
+{
+	switch(t_carState.gearState)
+	{
+	case FORWARD:
+	case LEFT:
+	case RIGHT:
+		// Set Gear: FORWARD
+		t_carState.gearState = FORWARD;
+		set_Car_State(t_carState);
+		// Limit the speed to 50%.
+		break;
+	case BACKWARD:
+	case LEFT_BACK:
+	case RIGHT_BACK:
+		t_carState.gearState = BACKWARD;
+		set_Car_State(t_carState);
+		// Limit the speed to 50%.
+		break;
+	case BRAKE:
+	default:
+		// Only Limit The Car Speed Until return to Safe or Moderate State.
+		break;
+	}
+
+	switch(t_carState.carSpeed)
+	{
+	case SPEED_100:
+		t_carState.carSpeed = SPEED_90;
+		set_Car_State(t_carState);
+		_delay_ms(250);
+		_delay_ms(250);
+	case SPEED_90:
+		t_carState.carSpeed = SPEED_80;
+		set_Car_State(t_carState);
+		_delay_ms(250);
+		_delay_ms(250);
+	case SPEED_80:
+		t_carState.carSpeed = SPEED_70;
+		set_Car_State(t_carState);
+		_delay_ms(250);
+		_delay_ms(250);
+	case SPEED_70:
+		t_carState.carSpeed = SPEED_60;
+		set_Car_State(t_carState);
+		_delay_ms(250);
+		_delay_ms(250);
+	case SPEED_60:
+		t_carState.carSpeed = SPEED_50;
+		set_Car_State(t_carState);
+		_delay_ms(250);
+		_delay_ms(250);
+	case SPEED_50:
+		t_carState.carSpeed = SPEED_40;
+		set_Car_State(t_carState);
+		_delay_ms(250);
+		_delay_ms(250);
+	case SPEED_40:
+		t_carState.carSpeed = SPEED_30;
+		set_Car_State(t_carState);
+		_delay_ms(250);
+		_delay_ms(250);
+	case SPEED_30:
+		t_carState.carSpeed = SPEED_20;
+		set_Car_State(t_carState);
+		_delay_ms(250);
+		_delay_ms(250);
+	case SPEED_20:
+		t_carState.carSpeed = SPEED_10;
+		set_Car_State(t_carState);
+		_delay_ms(250);
+		_delay_ms(250);
+	case SPEED_10:
+		t_carState.carSpeed = SPEED_0;
+		set_Car_State(t_carState);
+		_delay_ms(250);
+		_delay_ms(250);
+	case SPEED_0:
+		delay(10); /*Time estimated to give back the control to the driver*/
+	default:
+		// Do Nothing.
+		break;
+	}
+	u8_speedIsLimited = SPEED_IS_LIMITED;
+	u8_severeTiresStateFlag = 0;
 }
