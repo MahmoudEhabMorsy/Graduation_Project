@@ -12,6 +12,7 @@
 #include "../ECUAL/BMP/bmp180.h"
 #include "../ECUAL/WATERPUMP/waterpump.h"
 #include "../ECUAL/ULTRASONIC/ultrasonic.h"
+#include "../MCAL/SPI/spi.h"
 #include "../ECUAL/LED/led.h"
 #include "../ECUAL/BUZZER/buzzer.h"
 #include "../UTILITIES/common_macros.h"
@@ -40,6 +41,15 @@ typedef enum
 	EXTREME_RISK_DISTANCE /*Less Than or Equal to 10 CMs*/
 } t_ULTRASONIC_INTERVAL;
 
+/* Test Cases */
+typedef enum
+{
+	TEST_DEFAULT,
+	TEST_SAFE,
+	TEST_MODERATE,
+	TEST_SEVERE
+} TEST_CASE;
+
 
 
 /*******************************************************************************
@@ -47,11 +57,11 @@ typedef enum
  *******************************************************************************/
 
 /* Pressure and Temperature Ranges (Minimum Value) */
-#define PRESSURE_SEVERE				100000	/* Severe Pressure Range: 700 - MAX */
-#define PRESSURE_MODERATE			10000	/* Moderate Pressure Range: 500 - 700 */
+#define PRESSURE_SEVERE				10000	/* Severe Pressure Range: 700 - MAX */
+#define PRESSURE_MODERATE			2000	/* Moderate Pressure Range: 500 - 700 */
 #define PRESSURE_SAFE				300		/* Safe Pressure Range: 300 - 500 */
-#define TEMPERATURE_SEVERE			45		/* Severe Temperature Range: 40 - Max */
-#define TEMPERATURE_MODERATE		35		/* Moderate Temperature Range: 20 - 40 */
+#define TEMPERATURE_SEVERE			40		/* Severe Temperature Range: 40 - Max */
+#define TEMPERATURE_MODERATE		30		/* Moderate Temperature Range: 20 - 40 */
 #define TEMPERATURE_SAFE			0		/* Safe Temperature Range: 0 - 20 */
 
 /* Ultrasonic Ranges */
@@ -72,6 +82,10 @@ typedef enum
 /* Steering Lock System Flag which is sent to Car Node */
 #define SLS_FLAG_PORT_ID			PORTD_ID
 #define SLS_FLAG_PIN_ID				PIN2_ID
+
+
+#define SLL_FLAG_PORT				PORTD_ID
+#define SLL_FLAG_PIN				PIN7_ID
 
 /* Early Detection System/Steering Lock System LED and Buzzer */
 #define BMP_LED_PORT_ID				PORTD_ID
@@ -97,6 +111,10 @@ uint16 g_distance = 0; /* Measured by Ultrasonic */
 STATE g_pressure_state = SAFE;
 STATE g_temperature_state = SAFE;
 t_ULTRASONIC_INTERVAL ultrasonicInterval = SAFE_DISTANCE;
+TEST_CASE g_testCase = TEST_DEFAULT;
+
+unsigned int counter_Bytes = 4;
+
 
 
 
@@ -120,6 +138,18 @@ void Detection_LED_init(void);
  *                              Function Definitions                           *
  *******************************************************************************/
 
+ISR(INT2_vect)
+{
+	if (g_testCase == TEST_SEVERE)
+	{
+		g_testCase = TEST_DEFAULT;
+	}
+	else
+	{
+		g_testCase++;
+	}
+}
+
 void timercallBckFunc(void)
 {
 	static uint8 counter=0;
@@ -135,10 +165,10 @@ void timercallBckFunc(void)
 		//	Buzzer_on(WARNING_FRONT_PORT_ID,WARNING_FRONT_BUZZER_PIN_ID);
 		//	LED_ON(WARNING_FRONT_PORT_ID,WARNING_FRONT_LOW_RISK_LED_PIN_ID);
 
-//		if(counter > 24)
-//		{
-//			counter = 0;
-//		}
+		//		if(counter > 24)
+		//		{
+		//			counter = 0;
+		//		}
 		if(counter == 24)
 		{
 			BUZZER_TOGGLE(WARNING_FRONT_PORT_ID,WARNING_FRONT_BUZZER_PIN_ID);
@@ -351,8 +381,17 @@ void Detection_LED_init(void)
 	BUZZER_init(BMP_LED_PORT_ID,BMP_LED_PIN_ID);
 }
 
+void INT2_init(void)
+{
+	DDRB   &= (~(1<<PB2));   // Configure INT2/PB2 as input pin
+	MCUCSR |= (1<<ISC2);     // Trigger INT2 with the raising edge
+	GICR   |= (1<<INT2);	 // Enable external interrupt pin INT2
+}
+
 int main()
 {
+	uint8 send_Byte=0;
+
 	Timer_configuration Timer0_Configuration={Timer0,Normal,TIMER_INITIAL_VALUE,NO_COMPARE_VALUE,Prescaler_1024,timercallBckFunc};
 
 	_delay_ms(250);
@@ -365,38 +404,87 @@ int main()
 	Timer_init(&Timer0_Configuration);
 	DIO_setupPinDirection(SLS_FLAG_PORT_ID, SLS_FLAG_PIN_ID, PIN_OUTPUT);
 
+	DIO_setupPinDirection(SLL_FLAG_PORT, SLL_FLAG_PIN, PIN_INPUT);
+	DIO_writePin(SLL_FLAG_PORT, SLL_FLAG_PIN, LOGIC_HIGH);//pull up resistor
+
+	DDRC |= (1<<2); /*Configure PC2 as Output pin*/
+	PORTC |= (1<<2); /*Initiate it to be VCCed*/
+
+	/* Initialize the SPI driver as Master */
+	SPI_initMaster();
+
+
 	Ultrasonic_init(); /*initializing Ultrasonic*/
 	WATERPUMP_init();
 
+	INT2_init();
 	sei();
 
 	while(1)
 	{
-		Temp_state();
-		Press_state();
-		if (g_pressure_state == SEVERE || g_temperature_state == SEVERE)
-		{
-			Action_severe();
-		}
-		else if (g_pressure_state == MODERATE || g_temperature_state == MODERATE)
-		{
-			Action_moderate();
-		}
-		else if (g_pressure_state == SAFE || g_temperature_state == SAFE)
-		{
-			Action_safe();
+		if(!DIO_readPin(SLL_FLAG_PORT,SLL_FLAG_PIN)){
+			PORTC &= ~(1 << 2);
+			SPI_sendReceiveByte(FRONT_LEFT); /*Wheel ID*/
+			/**/
+			for (uint8 i = 0; i < counter_Bytes; i++) {
+				send_Byte = (g_BMP180_readings.temperature >> (i * 8));
+				SPI_sendReceiveByte(send_Byte);
+			}
+
+			for (uint8 i = 0; i < counter_Bytes; i++) {
+				send_Byte = (g_BMP180_readings.pressure >> (i * 8));
+				SPI_sendReceiveByte(send_Byte);
+			}
 		}
 		else
 		{
-			BUZZER_OFF(BMP_BUZZER_PORT_ID,BMP_BUZZER_PIN_ID);
-			WATERPUMP_off();
+			PORTC |= (1 << 2);
+
+			switch(g_testCase)
+			{
+			case TEST_DEFAULT:
+				BMP180_calculate(&g_BMP180_readings);
+				break;
+			case TEST_SAFE:
+				g_BMP180_readings.temperature = 25;
+				g_BMP180_readings.pressure = 900;
+				break;
+			case TEST_MODERATE:
+				g_BMP180_readings.temperature = 35;
+				g_BMP180_readings.pressure = 3000;
+				break;
+			case TEST_SEVERE:
+				g_BMP180_readings.temperature = 45;
+				g_BMP180_readings.pressure = 12000;
+				break;
+			}
+
+			Temp_state();
+			Press_state();
+
+			if (g_pressure_state == SEVERE || g_temperature_state == SEVERE)
+			{
+				Action_severe();
+			}
+			else if (g_pressure_state == MODERATE || g_temperature_state == MODERATE)
+			{
+				Action_moderate();
+			}
+			else if (g_pressure_state == SAFE || g_temperature_state == SAFE)
+			{
+				Action_safe();
+			}
+			else
+			{
+				BUZZER_OFF(BMP_BUZZER_PORT_ID,BMP_BUZZER_PIN_ID);
+				WATERPUMP_off();
+			}
+
+			g_distance = Ultrasonic_readDistance(); /*storing the measured distance*/
+			warning(g_distance);
+
+			//		_delay_ms(100);
 		}
-
-		g_distance = Ultrasonic_readDistance(); /*storing the measured distance*/
-		warning(g_distance);
-
-		BMP180_calculate(&g_BMP180_readings);
-//		_delay_ms(100);
 	}
 	return 0;
 
