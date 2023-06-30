@@ -12,7 +12,11 @@
 
 
 void app_Init(void)
-{
+{	/*delay to overcome synchronization error between the two node*/
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
+	_delay_ms(250);
 	/*LEDs Initialization to Indicate the state of each task*/
 	LED_init(ESP_CONNECTION_SUCCESS_INDICATION_PORT,ESP_CONNECTION_SUCCESS_INDICATION_PIN);
 	LED_init(ESP_CONNECTION_FAIL_INDICATION_PORT,ESP_CONNECTION_FAIL_INDICATION_PIN);
