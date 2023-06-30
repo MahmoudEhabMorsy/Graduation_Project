@@ -14,6 +14,7 @@ carState t_carState = {BRAKE,SPEED_0};
 ISR(INT1_vect)
 {
 	u8_severeTiresStateFlag = 1;
+	cli();
 }
 
 /*******************************************************************************
@@ -427,6 +428,7 @@ void keep_Car_Safe(void)
 		_delay_ms(250);
 	case SPEED_0:
 		delay(10); /*Time estimated to give back the control to the driver*/
+		sei();
 	default:
 		// Do Nothing.
 		break;
