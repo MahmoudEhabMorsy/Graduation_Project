@@ -52,6 +52,8 @@ void DC_Motor_Init(void) {
 	/*setup the direction for FRONT_LEFT_MOTOR pins through the GPIO driver.*/
 	DIO_setupPinDirection(DC_MOTOR_PORT, FRONT_LEFT_MOTOR_PIN1, PIN_OUTPUT);
 	DIO_setupPinDirection(DC_MOTOR_PORT, FRONT_LEFT_MOTOR_PIN2, PIN_OUTPUT);
+	DIO_setupPinDirection(INTERRUPT_TESTCASE_PORT,INTERRUPT_TESTCASE_PIN,PIN_OUTPUT);
+	DIO_writePin(INTERRUPT_TESTCASE_PORT,INTERRUPT_TESTCASE_PIN,LOGIC_HIGH);
 
 	/*Stop at the DC-Motor at the beginning through the GPIO driver.*/
 	set_car_direction(BRAKE);
@@ -332,6 +334,12 @@ carState move_car(void) {
 	case 'X':
 	case 'x':
 			u8_speedIsLimited = SPEED_IS_NOT_LIMITED;
+		break;
+		case 'V':
+		DIO_writePin(INTERRUPT_TESTCASE_PORT, INTERRUPT_TESTCASE_PIN, LOGIC_LOW);
+		break;
+		case 'v':
+		DIO_writePin(INTERRUPT_TESTCASE_PORT, INTERRUPT_TESTCASE_PIN, LOGIC_HIGH);
 		break;
 
 	default:
