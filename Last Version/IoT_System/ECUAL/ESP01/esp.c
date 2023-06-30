@@ -56,11 +56,11 @@ void ESP_preInit(void)
 }
 void ESP_init(void)
 {
-	/*Initialize UART*/
-	UART_init(BAUD_RATE);
-
 	DIO_writePin(ESP_DEVICE_SELECTOR_PORT,ESP_DEVICE_SELECTOR_PIN,ESP_IS_CONNECTED);
 	_delay_us(1);
+
+	/*Initialize UART*/
+	UART_init(BAUD_RATE);
 
 	/*Disable Echo*/
 	UART_sendString(DISABLE_ECHO);

@@ -4,8 +4,8 @@
  */
 
 #include "timer.h"
-#include "../../CommonDef/common_macros.h"
 #include <avr/interrupt.h>
+#include "../../UTILITIES/common_macros.h"
 
 
 /********************************************************/

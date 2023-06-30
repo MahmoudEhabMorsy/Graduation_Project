@@ -1,4 +1,4 @@
- /******************************************************************************
+/******************************************************************************
  *
  * Module: UltraSonic
  *
@@ -10,11 +10,12 @@
  *
  *******************************************************************************/
 #include "../../MCAL/ICU/icu.h"
-#include "../../CommonDef/std_types.h"
 #include "../../MCAL/DIO/dio.h"
 #include "util/delay.h"
 #include <math.h>
 #include "ultrasonic.h"
+
+#include "../../UTILITIES/std_types.h"
 /*******************************************************************************
  *                      global variables                                 *
  *******************************************************************************/
@@ -37,29 +38,29 @@ uint16 g_timeHigh = 0;
 void Ultrasonic_edgeProcessing(void)
 
 {
-		g_edgeCount++;
-		if(g_edgeCount == 1)
-		{
-			/*
-			 * Clear the timer counter register to start measurements from the
-			 * first detected rising edge
-			 */
-			Icu_clearTimerValue();
-			/* Detect falling edge */
-			Icu_setEdgeDetectionType(FALLING);
-		}
-		else if(g_edgeCount == 2)
-		{
-			/* storing the value of the 'ICR1' register in the g_timerValue variable where it's global *
-		 	* as it will be used again in another function which is called "ULTRASONIC_readDistance". */
+	g_edgeCount++;
+	if(g_edgeCount == 1)
+	{
+		/*
+		 * Clear the timer counter register to start measurements from the
+		 * first detected rising edge
+		 */
+		Icu_clearTimerValue();
+		/* Detect falling edge */
+		Icu_setEdgeDetectionType(FALLING);
+	}
+	else if(g_edgeCount == 2)
+	{
+		/* storing the value of the 'ICR1' register in the g_timerValue variable where it's global *
+		 * as it will be used again in another function which is called "ULTRASONIC_readDistance". */
 
-			g_timeHigh = Icu_getInputCaptureValue();
-			/* Detect rising edge */
-			
+		g_timeHigh = Icu_getInputCaptureValue();
+		/* Detect rising edge */
 
-			Icu_setEdgeDetectionType(RISING);
-			g_edgeCount=0;
-		}
+
+		Icu_setEdgeDetectionType(RISING);
+		g_edgeCount=0;
+	}
 
 
 }
@@ -81,9 +82,9 @@ void Ultrasonic_init(void)
 	/* Initialize the ICU driver */
 	Icu_init(&Icu_Config);
 	/*setup the direction of the trigger pin as output pin through the gpio driver*/
-	DIO_setupPinDirection(PORTB_ID,PIN5_ID,PIN_OUTPUT);
+	DIO_setupPinDirection(TRIGGER_PORT_ID,TRIGGER_PIN_ID,PIN_OUTPUT);
 	/*disabling trigger pin*/
-	DIO_writePin(PORTB_ID,PIN5_ID,LOGIC_LOW);
+	DIO_writePin(TRIGGER_PORT_ID,TRIGGER_PIN_ID,LOGIC_LOW);
 
 }
 /*******************************************************************************
@@ -95,10 +96,9 @@ void Ultrasonic_init(void)
  *******************************************************************************/
 void Ultrasonic_Trigger(void)
 {
-	DIO_writePin(PORTB_ID,PIN5_ID,1);
+	DIO_writePin(TRIGGER_PORT_ID,TRIGGER_PIN_ID,LOGIC_HIGH);
 	_delay_us(1);
-	DIO_writePin(PORTB_ID,PIN5_ID,0);
-
+	DIO_writePin(TRIGGER_PORT_ID,TRIGGER_PIN_ID,LOGIC_LOW);
 }
 /*******************************************************************************
  * [Function Name] : Ultrasonic_readDistance
@@ -132,25 +132,23 @@ uint16 Ultrasonic_readDistance(void)
 
 	/******** distance =(g_timeHigh*0.01715)*(Prescaler/FCPU)+1  ***********/
 
-	 distance = (g_timeHigh*0.01715)/2+1;
-	 /* (+1) because of ultrasonic tolerence*/
-	 /*Also for calibration*/
+	distance = (g_timeHigh*0.01715)/2+1;
+	/* (+1) because of ultrasonic tolerence*/
+	/*Also for calibration*/
 
-	 if(distance>=342){
-	 		distance_calibration=distance+2;
-	 		return distance_calibration;
-	 	}
-	 	else if(distance>=154&&distance<342){
-	 		distance_calibration=distance+1;
-	 		return distance_calibration;
-	 	}
+	if(distance>=342){
+		distance_calibration=distance+2;
+		return distance_calibration;
+	}
+	else if(distance>=154&&distance<342){
+		distance_calibration=distance+1;
+		return distance_calibration;
+	}
 
-	 	else{
-	 	return distance;}
+	else{
+		return distance;
+	}
 
-	 	return 1;
-
-
-
+	return 1;
 }
 

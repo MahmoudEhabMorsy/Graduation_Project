@@ -7,6 +7,7 @@
 
 #include"dio.h"
 #include "../../UTILITIES/common_macros.h"
+
 void DIO_setupPinDirection(uint8 port_number, uint8 pin_number, uint8 direction){
 /*
  * Check if the input port number is greater than NUM_OF_PINS_PER_PORT value.

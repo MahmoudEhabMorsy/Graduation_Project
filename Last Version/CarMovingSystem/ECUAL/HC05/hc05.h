@@ -8,13 +8,17 @@
 #ifndef HC05_H_
 #define HC05_H_
 
-/*Includes*/
+/*******************************************************************************
+*                               File Dependency                                *
+*******************************************************************************/
 #include <util/delay.h>
 #include "../../MCAL/UART/uart.h"
 #include "../../MCAL/DIO/dio.h"
 
 
-/*Definitions*/
+/*******************************************************************************
+*                                 Definitions                                  *
+*******************************************************************************/
 #define HC05_COMMANDS_BAUD_RATE 38400
 #define DEFAULT_BAUD_RATE 115200
 #define AT_COMMAND_CHECK_MODE (const uint8*)"AT\r\n"
@@ -33,14 +37,19 @@
 #define VCC_PORT PORTD_ID
 #define EN_PORT PORTD_ID
 
-/*Types definitions*/
+/*******************************************************************************
+*                             Types Definitions                                *
+*******************************************************************************/
 typedef enum
 {
 	SLAVE,
 	MASTER
 }role;
 
-/*Function Prototypes*/
+
+/*******************************************************************************
+*                            Functions Prototypes                              *
+*******************************************************************************/
 void delay(uint8 seconds);
 
 void HC05_init(role Role);
