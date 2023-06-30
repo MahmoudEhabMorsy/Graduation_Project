@@ -6,7 +6,6 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
-#include "../CommonDef/common_macros.h"
 #include "../MCAL/TWI/twi.h"
 #include "../MCAL/DIO/dio.h"
 #include "../MCAL/TIMER/timer.h"
@@ -15,6 +14,7 @@
 #include "../ECUAL/ULTRASONIC/ultrasonic.h"
 #include "../ECUAL/LED/led.h"
 #include "../ECUAL/BUZZER/buzzer.h"
+#include "../UTILITIES/common_macros.h"
 
 
 
@@ -47,21 +47,21 @@ typedef enum
  *******************************************************************************/
 
 /* Pressure and Temperature Ranges (Minimum Value) */
-#define PRESSURE_SEVERE				700		/* Severe Pressure Range: 700 - MAX */
-#define PRESSURE_MODERATE			500		/* Moderate Pressure Range: 500 - 700 */
+#define PRESSURE_SEVERE				100000	/* Severe Pressure Range: 700 - MAX */
+#define PRESSURE_MODERATE			10000	/* Moderate Pressure Range: 500 - 700 */
 #define PRESSURE_SAFE				300		/* Safe Pressure Range: 300 - 500 */
-#define TEMPERATURE_SEVERE			40		/* Severe Temperature Range: 40 - Max */
-#define TEMPERATURE_MODERATE		20		/* Moderate Temperature Range: 20 - 40 */
+#define TEMPERATURE_SEVERE			45		/* Severe Temperature Range: 40 - Max */
+#define TEMPERATURE_MODERATE		35		/* Moderate Temperature Range: 20 - 40 */
 #define TEMPERATURE_SAFE			0		/* Safe Temperature Range: 0 - 20 */
 
 /* Ultrasonic Ranges */
-#define LOW_RISK_DISTANCE_UPPER_LIMIT		(40u)
-#define LOW_RISK_DISTANCE_LOWER_LIMIT		(30u)
-#define MODERATE_RISK_DISTANCE_UPPER_LIMIT	(30u)
-#define MODERATE_RISK_DISTANCE_LOWER_LIMIT	(20u)
-#define HIGH_RISK_DISTANCE_UPPER_LIMIT		(20u)
-#define HIGH_RISK_DISTANCE_LOWER_LIMIT		(10u)
-#define EXTREME_RISK_DISTANCE_UPPER_LIMIT	(10u)
+#define LOW_RISK_DISTANCE_UPPER_LIMIT		(20u)
+#define LOW_RISK_DISTANCE_LOWER_LIMIT		(15u)
+#define MODERATE_RISK_DISTANCE_UPPER_LIMIT	(15u)
+#define MODERATE_RISK_DISTANCE_LOWER_LIMIT	(10u)
+#define HIGH_RISK_DISTANCE_UPPER_LIMIT		(10u)
+#define HIGH_RISK_DISTANCE_LOWER_LIMIT		(5u)
+#define EXTREME_RISK_DISTANCE_UPPER_LIMIT	(5u)
 
 
 
@@ -135,6 +135,10 @@ void timercallBckFunc(void)
 		//	Buzzer_on(WARNING_FRONT_PORT_ID,WARNING_FRONT_BUZZER_PIN_ID);
 		//	LED_ON(WARNING_FRONT_PORT_ID,WARNING_FRONT_LOW_RISK_LED_PIN_ID);
 
+//		if(counter > 24)
+//		{
+//			counter = 0;
+//		}
 		if(counter == 24)
 		{
 			BUZZER_TOGGLE(WARNING_FRONT_PORT_ID,WARNING_FRONT_BUZZER_PIN_ID);
@@ -392,7 +396,7 @@ int main()
 		warning(g_distance);
 
 		BMP180_calculate(&g_BMP180_readings);
-		_delay_ms(1000);
+//		_delay_ms(100);
 	}
 	return 0;
 
