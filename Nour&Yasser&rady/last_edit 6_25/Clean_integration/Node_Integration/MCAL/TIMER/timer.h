@@ -11,7 +11,7 @@
 #ifndef TIMER_H_
 #define TIMER_H_
 
-#include "../../CommonDef/std_types.h"
+#include "../../UTILITIES/std_types.h"
 
 #define TIMER_INITIAL_VALUE 0
 #define NO_COMPARE_VALUE 0

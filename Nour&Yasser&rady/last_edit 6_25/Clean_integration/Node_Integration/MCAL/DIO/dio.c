@@ -6,7 +6,8 @@
  */
 
 #include"dio.h"
-#include "../../CommonDef/common_macros.h"
+
+#include "../../UTILITIES/common_macros.h"
 
 
 void DIO_setupPinDirection(uint8 port_num, uint8 pin_num, GPIO_PinDirectionType direction)

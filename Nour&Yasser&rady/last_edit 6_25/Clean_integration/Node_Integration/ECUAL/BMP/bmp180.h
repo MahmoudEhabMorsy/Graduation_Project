@@ -13,7 +13,7 @@
 #ifndef BMP180_H_
 #define BMP180_H_
 
-#include "../../CommonDef/std_types.h"
+#include "../../UTILITIES/std_types.h"
 
 
 // Register Table From Data Sheet

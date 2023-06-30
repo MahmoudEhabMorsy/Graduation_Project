@@ -12,8 +12,8 @@
 
 #include "../../MCAL/TWI/twi.h"
 #include "bmp180.h"
-#include "../../CommonDef/common_macros.h"
 #include <util/delay.h>
+#include "../../UTILITIES/common_macros.h"
 
 
 /* Calibration Data */

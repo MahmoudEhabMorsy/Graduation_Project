@@ -16,9 +16,11 @@
 /*******************************************************************************
  *                                Definitions                                  *
  *******************************************************************************/
-#include "../../CommonDef/std_types.h"
+#include "../../UTILITIES/std_types.h"
 #define CPUFREQ 			8
 
+#define TRIGGER_PORT_ID			PORTD_ID
+#define TRIGGER_PIN_ID			PIN5_ID
 
 
 
