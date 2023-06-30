@@ -28,7 +28,7 @@ void app_Start(void)
 {
 	GPS_sendingCoordinatesTask();
 
-	BMP180_sendingDataTask();
+	//BMP180_sendingDataTask();
 }
 
 void GPS_sendingCoordinatesTask(void)
