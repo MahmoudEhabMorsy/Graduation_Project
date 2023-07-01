@@ -35,10 +35,10 @@
 #define FRONT_RIGHT_MOTOR_PIN2 PIN5_ID
 #define FRONT_LEFT_MOTOR_PIN1 PIN6_ID
 #define FRONT_LEFT_MOTOR_PIN2 PIN7_ID
-#define INTERRUPT_TESTCASE_PORT1 PORTD		//Will change later
-#define INTERRUPT_TESTCASE_PIN1 PIN2_ID		//will change later
-#define INTERRUPT_TESTCASE_PORT2 PORTD		//Will change later
-#define INTERRUPT_TESTCASE_PIN2 PIN3_ID		//will change later
+#define INTERRUPT_TESTCASE_PORT1 PORTD_ID	//Will change later
+#define INTERRUPT_TESTCASE_PIN1 PIN5_ID		//will change later
+#define INTERRUPT_TESTCASE_PORT2 PORTD_ID	//Will change later
+#define INTERRUPT_TESTCASE_PIN2 PIN6_ID		//will change later
 
 #define SPEED_0 0
 #define SPEED_10 16
