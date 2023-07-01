@@ -6,6 +6,7 @@
 uint8 u8_speedIsLimited = SPEED_IS_NOT_LIMITED;
 volatile uint8 u8_severeTiresStateFlag = 0;
 carState t_carState = {BRAKE,SPEED_0};
+uint8 g_testCase = 0;
 
 
 /*******************************************************************************
@@ -53,8 +54,8 @@ void DC_Motor_Init(void) {
 	/*setup the direction for FRONT_LEFT_MOTOR pins through the GPIO driver.*/
 	DIO_setupPinDirection(DC_MOTOR_PORT, FRONT_LEFT_MOTOR_PIN1, PIN_OUTPUT);
 	DIO_setupPinDirection(DC_MOTOR_PORT, FRONT_LEFT_MOTOR_PIN2, PIN_OUTPUT);
-	DIO_setupPinDirection(INTERRUPT_TESTCASE_PORT,INTERRUPT_TESTCASE_PIN,PIN_OUTPUT);
-	DIO_writePin(INTERRUPT_TESTCASE_PORT,INTERRUPT_TESTCASE_PIN,LOGIC_HIGH);
+	DIO_setupPinDirection(INTERRUPT_TESTCASE_PORT1,INTERRUPT_TESTCASE_PIN1,PIN_OUTPUT);
+	DIO_setupPinDirection(INTERRUPT_TESTCASE_PORT2,INTERRUPT_TESTCASE_PIN2,PIN_OUTPUT);
 
 	/*Stop at the DC-Motor at the beginning through the GPIO driver.*/
 	set_car_direction(BRAKE);
@@ -337,12 +338,37 @@ carState move_car(void) {
 			u8_speedIsLimited = SPEED_IS_NOT_LIMITED;
 		break;
 		case 'V':
-		DIO_writePin(INTERRUPT_TESTCASE_PORT, INTERRUPT_TESTCASE_PIN, LOGIC_LOW);
-		break;
-		case 'v':
-		DIO_writePin(INTERRUPT_TESTCASE_PORT, INTERRUPT_TESTCASE_PIN, LOGIC_HIGH);
-		break;
+		if (g_testCase == 3)
+		{
+			g_testCase = 0;
+		}
+		else
+		{
+			g_testCase++;
+		}
 
+		switch(g_testCase)
+		{
+		case 0:
+			DIO_writePin(INTERRUPT_TESTCASE_PORT1, INTERRUPT_TESTCASE_PIN1, LOGIC_LOW);
+			DIO_writePin(INTERRUPT_TESTCASE_PORT2, INTERRUPT_TESTCASE_PIN2, LOGIC_LOW);
+			break;
+		case 1:
+			DIO_writePin(INTERRUPT_TESTCASE_PORT1, INTERRUPT_TESTCASE_PIN1, LOGIC_LOW);
+			DIO_writePin(INTERRUPT_TESTCASE_PORT2, INTERRUPT_TESTCASE_PIN2, LOGIC_HIGH);
+			break;
+		case 2:
+			DIO_writePin(INTERRUPT_TESTCASE_PORT1, INTERRUPT_TESTCASE_PIN1, LOGIC_HIGH);
+			DIO_writePin(INTERRUPT_TESTCASE_PORT2, INTERRUPT_TESTCASE_PIN2, LOGIC_LOW);
+			break;
+		case 3:
+			DIO_writePin(INTERRUPT_TESTCASE_PORT1, INTERRUPT_TESTCASE_PIN1, LOGIC_HIGH);
+			DIO_writePin(INTERRUPT_TESTCASE_PORT2, INTERRUPT_TESTCASE_PIN2, LOGIC_HIGH);
+			break;
+		default:
+		break;
+		}
+		break;
 	default:
 		/*All other symbols are ignored.*/
 		break;

@@ -2,6 +2,7 @@
     "files.associations": {
         "bmp180.h": "c",
         "std_types.h": "c",
-        "common_macros.h": "c"
+        "common_macros.h": "c",
+        "motor_rc.h": "c"
     }
 }
