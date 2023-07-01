@@ -38,7 +38,7 @@
 #define INTERRUPT_TESTCASE_PORT1 PORTD		//Will change later
 #define INTERRUPT_TESTCASE_PIN1 PIN2_ID		//will change later
 #define INTERRUPT_TESTCASE_PORT2 PORTD		//Will change later
-#define INTERRUPT_TESTCASE_PIN2 PIN2_ID		//will change later
+#define INTERRUPT_TESTCASE_PIN2 PIN3_ID		//will change later
 
 #define SPEED_0 0
 #define SPEED_10 16
