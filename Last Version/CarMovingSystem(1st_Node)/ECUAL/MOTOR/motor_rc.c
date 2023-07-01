@@ -161,20 +161,20 @@ void set_car_direction(Car_directions Car_direction) {
 		set_motor_direction(REAR_RIGHT_MOTOR, CLOCKWISE);
 		set_motor_direction(REAR_LEFT_MOTOR, CLOCKWISE);
 		set_motor_direction(FRONT_LEFT_MOTOR, CLOCKWISE);
-		set_motor_direction(FRONT_RIGHT_MOTOR, STOP);
+		set_motor_direction(FRONT_RIGHT_MOTOR, ANTI_CLOCKWISE);
 		break;
 	}
 	case LEFT: {
 		set_motor_direction(REAR_RIGHT_MOTOR, CLOCKWISE);
 		set_motor_direction(REAR_LEFT_MOTOR, CLOCKWISE);
-		set_motor_direction(FRONT_LEFT_MOTOR, STOP);
+		set_motor_direction(FRONT_LEFT_MOTOR, ANTI_CLOCKWISE);
 		set_motor_direction(FRONT_RIGHT_MOTOR, CLOCKWISE);
 		break;
 	}
 	case LEFT_BACK: {
 		set_motor_direction(REAR_RIGHT_MOTOR, ANTI_CLOCKWISE);
 		set_motor_direction(REAR_LEFT_MOTOR, ANTI_CLOCKWISE);
-		set_motor_direction(FRONT_LEFT_MOTOR, STOP);
+		set_motor_direction(FRONT_LEFT_MOTOR, ANTI_CLOCKWISE);
 		set_motor_direction(FRONT_RIGHT_MOTOR, ANTI_CLOCKWISE);
 		
 		break;
@@ -182,7 +182,7 @@ void set_car_direction(Car_directions Car_direction) {
 	case RIGHT_BACK: {
 			set_motor_direction(REAR_RIGHT_MOTOR, ANTI_CLOCKWISE);
 			set_motor_direction(REAR_LEFT_MOTOR, ANTI_CLOCKWISE);
-			set_motor_direction(FRONT_RIGHT_MOTOR, STOP);
+			set_motor_direction(FRONT_RIGHT_MOTOR, ANTI_CLOCKWISE);
 			set_motor_direction(FRONT_LEFT_MOTOR, ANTI_CLOCKWISE);
 			break;
 		}
