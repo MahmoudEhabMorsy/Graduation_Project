@@ -338,7 +338,7 @@ carState move_car(void) {
 			u8_speedIsLimited = SPEED_IS_NOT_LIMITED;
 		break;
 		case 'V':
-		if (g_testCase == 3)
+		if (g_testCase >= 3)
 		{
 			g_testCase = 0;
 		}
@@ -368,6 +368,8 @@ carState move_car(void) {
 		default:
 		break;
 		}
+		break;
+		case 'v':
 		break;
 	default:
 		/*All other symbols are ignored.*/
