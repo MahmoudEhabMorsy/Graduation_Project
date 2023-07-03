@@ -84,8 +84,8 @@ typedef enum
 #define SLS_FLAG_PIN_ID				PIN2_ID
 
 
-#define SLL_FLAG_PORT				PORTD_ID
-#define SLL_FLAG_PIN				PIN7_ID
+#define INTERRUPT_ACTIVATION_FLAG_PORT				PORTD_ID
+#define INTERRUPT_ACTIVATION_FLAG_PIN				PIN7_ID
 
 /* Early Detection System/Steering Lock System LED and Buzzer */
 #define BMP_LED_PORT_ID				PORTD_ID
@@ -433,8 +433,8 @@ int main()
 	DIO_setupPinDirection(INTERRUPT_TESTCASE_PORT1, INTERRUPT_TESTCASE_PIN1, PIN_INPUT);
 	DIO_setupPinDirection(INTERRUPT_TESTCASE_PORT2, INTERRUPT_TESTCASE_PIN2, PIN_INPUT);
 
-	DIO_setupPinDirection(SLL_FLAG_PORT, SLL_FLAG_PIN, PIN_INPUT);
-	DIO_writePin(SLL_FLAG_PORT, SLL_FLAG_PIN, LOGIC_HIGH);//pull up resistor
+	DIO_setupPinDirection(INTERRUPT_ACTIVATION_FLAG_PORT, INTERRUPT_ACTIVATION_FLAG_PIN, PIN_INPUT);
+	DIO_writePin(INTERRUPT_ACTIVATION_FLAG_PORT, INTERRUPT_ACTIVATION_FLAG_PIN, LOGIC_HIGH);//pull up resistor
 
 	DDRC |= (1<<2); /*Configure PC2 as Output pin*/
 	PORTC |= (1<<2); /*Initiate it to be VCCed*/
@@ -452,7 +452,7 @@ int main()
 
 	while(1)
 	{
-		if(!DIO_readPin(SLL_FLAG_PORT,SLL_FLAG_PIN)){
+		if(!DIO_readPin(INTERRUPT_ACTIVATION_FLAG_PORT,INTERRUPT_ACTIVATION_FLAG_PIN)){
 			PORTC &= ~(1 << 2);
 			SPI_sendReceiveByte(FRONT_LEFT); /*Wheel ID*/
 			/**/
