@@ -276,16 +276,9 @@ carState move_car(void) {
 		break;
 
 	case '6':
-		if(u8_speedIsLimited == SPEED_IS_LIMITED)
-		{
-			PWM_Timer0_Init(SPEED_SAFE_LIMIT);
-			state.carSpeed = SPEED_SAFE_LIMIT;
-		}
-		else
-		{
-			PWM_Timer0_Init(SPEED_60);
-			state.carSpeed = SPEED_60;
-		}
+		
+		PWM_Timer0_Init(SPEED_60);
+		state.carSpeed = SPEED_60;
 		break;
 
 	case '7':
@@ -402,14 +395,14 @@ void keep_Car_Safe(void)
 		// Set Gear: FORWARD
 		t_carState.gearState = FORWARD;
 		set_Car_State(t_carState);
-		// Limit the speed to 50%.
+		// Limit the speed to 70%.
 		break;
 	case BACKWARD:
 	case LEFT_BACK:
 	case RIGHT_BACK:
 		t_carState.gearState = BACKWARD;
 		set_Car_State(t_carState);
-		// Limit the speed to 50%.
+		// Limit the speed to 70%.
 		break;
 	case BRAKE:
 	default:
